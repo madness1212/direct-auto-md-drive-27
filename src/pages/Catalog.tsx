@@ -134,6 +134,7 @@ const Catalog = () => {
          .replace(/-+/g, '-') // Elimină liniuțele multiple
          .trim();
     
+    // Păstrează ID-ul la sfârșit, separat de restul informațiilor
     return `${cleanString(brand)}-${cleanString(model)}-${year}-${id}`;
   };
 

@@ -58,8 +58,9 @@ const CarDetails = () => {
       if (!slug) return;
       
       try {
-        // Extrage ID-ul din slug (ultimele caractere după ultima liniuță)
-        const carId = slug.split('-').pop();
+        // Extrage ID-ul din slug - ultimele 36 de caractere (UUID standard)
+        // Format slug: marca-model-an-uuid
+        const carId = slug.slice(-36); // UUID-ul are întotdeauna 36 de caractere
         
         const { data, error } = await supabase
           .from('car_listings')
