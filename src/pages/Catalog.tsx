@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -41,6 +42,8 @@ const Catalog = () => {
   const [priceRange, setPriceRange] = useState([0, 100000]);
   const [mileageRange, setMileageRange] = useState([0, 200000]);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [cars, setCars] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // Mock data pentru filtre
   const brands = ["Toate", "Toyota", "BMW", "Mercedes-Benz", "Audi", "Ford", "Hyundai", "Kia", "Nissan", "Mazda", "Volkswagen", "Skoda"];
@@ -50,189 +53,47 @@ const Catalog = () => {
   const transmissions = ["Toate", "Manuală", "Automată", "CVT"];
   const bodyTypes = ["Toate", "SUV", "Sedan", "Hatchback", "Combi", "Coupe", "Cabriolet"];
 
-  // Mock cars data - mai multe mașini pentru catalog
-  const cars = [
-    {
-      id: 1,
-      brand: "Toyota",
-      model: "Camry",
-      year: 2022,
-      price: 28500,
-      mileage: 15000,
-      fuel: "Benzină",
-      transmission: "Automată",
-      bodyType: "Sedan",
-      image: "/placeholder.svg",
-      isTopOffer: true,
-      rating: 4.8,
-      phone: "+373 69 123 456"
-    },
-    {
-      id: 2,
-      brand: "BMW",
-      model: "X3",
-      year: 2021,
-      price: 45000,
-      mileage: 25000,
-      fuel: "Diesel",
-      transmission: "Automată",
-      bodyType: "SUV",
-      image: "/placeholder.svg",
-      isTopOffer: true,
-      rating: 4.9,
-      phone: "+373 69 123 456"
-    },
-    {
-      id: 3,
-      brand: "Mercedes-Benz",
-      model: "E-Class",
-      year: 2020,
-      price: 42000,
-      mileage: 35000,
-      fuel: "Diesel",
-      transmission: "Automată",
-      bodyType: "Sedan",
-      image: "/placeholder.svg",
-      isTopOffer: false,
-      rating: 4.7,
-      phone: "+373 69 123 456"
-    },
-    {
-      id: 4,
-      brand: "Audi",
-      model: "A4",
-      year: 2023,
-      price: 38000,
-      mileage: 12000,
-      fuel: "Benzină",
-      transmission: "Automată",
-      bodyType: "Sedan",
-      image: "/placeholder.svg",
-      isTopOffer: false,
-      rating: 4.6,
-      phone: "+373 69 123 456"
-    },
-    {
-      id: 5,
-      brand: "Toyota",
-      model: "Corolla",
-      year: 2022,
-      price: 22000,
-      mileage: 18000,
-      fuel: "Hibrid",
-      transmission: "CVT",
-      bodyType: "Hatchback",
-      image: "/placeholder.svg",
-      isTopOffer: false,
-      rating: 4.5,
-      phone: "+373 69 123 456"
-    },
-    {
-      id: 6,
-      brand: "Ford",
-      model: "Focus",
-      year: 2021,
-      price: 18500,
-      mileage: 28000,
-      fuel: "Benzină",
-      transmission: "Manuală",
-      bodyType: "Hatchback",
-      image: "/placeholder.svg",
-      isTopOffer: false,
-      rating: 4.4,
-      phone: "+373 69 123 456"
-    },
-    {
-      id: 7,
-      brand: "Hyundai",
-      model: "Tucson",
-      year: 2023,
-      price: 32000,
-      mileage: 8000,
-      fuel: "Benzină",
-      transmission: "Automată",
-      bodyType: "SUV",
-      image: "/placeholder.svg",
-      isTopOffer: true,
-      rating: 4.8,
-      phone: "+373 69 123 456"
-    },
-    {
-      id: 8,
-      brand: "Volkswagen",
-      model: "Golf",
-      year: 2020,
-      price: 24000,
-      mileage: 45000,
-      fuel: "Diesel",
-      transmission: "Manuală",
-      bodyType: "Hatchback",
-      image: "/placeholder.svg",
-      isTopOffer: false,
-      rating: 4.3,
-      phone: "+373 69 123 456"
-    },
-    {
-      id: 9,
-      brand: "Kia",
-      model: "Sportage",
-      year: 2022,
-      price: 29000,
-      mileage: 20000,
-      fuel: "Benzină",
-      transmission: "Automată",
-      bodyType: "SUV",
-      image: "/placeholder.svg",
-      isTopOffer: false,
-      rating: 4.6,
-      phone: "+373 69 123 456"
-    },
-    {
-      id: 10,
-      brand: "Nissan",
-      model: "Qashqai",
-      year: 2021,
-      price: 26500,
-      mileage: 30000,
-      fuel: "Benzină",
-      transmission: "CVT",
-      bodyType: "SUV",
-      image: "/placeholder.svg",
-      isTopOffer: false,
-      rating: 4.4,
-      phone: "+373 69 123 456"
-    },
-    {
-      id: 11,
-      brand: "Skoda",
-      model: "Octavia",
-      year: 2023,
-      price: 25000,
-      mileage: 5000,
-      fuel: "Diesel",
-      transmission: "Automată",
-      bodyType: "Combi",
-      image: "/placeholder.svg",
-      isTopOffer: true,
-      rating: 4.7,
-      phone: "+373 69 123 456"
-    },
-    {
-      id: 12,
-      brand: "Mazda",
-      model: "CX-5",
-      year: 2022,
-      price: 31000,
-      mileage: 16000,
-      fuel: "Benzină",
-      transmission: "Automată",
-      bodyType: "SUV",
-      image: "/placeholder.svg",
-      isTopOffer: false,
-      rating: 4.5,
-      phone: "+373 69 123 456"
-    }
-  ];
+  // Funcție pentru încărcarea datelor din Supabase
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('car_listings')
+          .select('*')
+          .eq('status', 'active');
+        
+        if (error) {
+          console.error('Error fetching cars:', error);
+          return;
+        }
+        
+        // Transformă datele pentru a fi compatibile cu UI-ul
+        const transformedCars = data?.map(car => ({
+          id: car.id,
+          brand: car.marca,
+          model: car.model,
+          year: car.an_fabricatie,
+          price: car.pret,
+          mileage: car.kilometraj || 0,
+          fuel: car.tip_motor,
+          transmission: car.cutie_viteze,
+          bodyType: car.caroserie || 'N/A',
+          image: car.images && car.images.length > 0 ? car.images[0] : "/placeholder.svg",
+          isTopOffer: false, // Poți adăuga logică pentru acest câmp
+          rating: 4.5, // Placeholder rating
+          phone: "+373 69 123 456" // Placeholder phone
+        })) || [];
+        
+        setCars(transformedCars);
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCars();
+  }, []);
 
   const filteredCars = cars.filter(car => {
     const matchesSearch = car.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -459,8 +320,20 @@ const Catalog = () => {
               </div>
 
               {/* Cars Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {filteredCars.map((car) => (
+              {loading ? (
+                <div className="text-center py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-auto-green mx-auto"></div>
+                  <p className="mt-4 text-muted-foreground">Se încarcă automobilele...</p>
+                </div>
+              ) : filteredCars.length === 0 ? (
+                <div className="text-center py-12">
+                  <Car className="h-24 w-24 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-foreground mb-2">Nu au fost găsite automobile</h3>
+                  <p className="text-muted-foreground">Încercați să modificați filtrele pentru a găsi mai multe rezultate.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {filteredCars.map((car) => (
                   <Card key={car.id} className="group hover:shadow-xl transition-all duration-300 bg-background border-0 shadow-md">
                     <CardContent className="p-0">
                       {/* Image Container */}
@@ -561,15 +434,18 @@ const Catalog = () => {
                       </div>
                     </CardContent>
                   </Card>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
 
-              {/* Load More */}
-              <div className="text-center mt-12">
-                <Button size="lg" variant="outline" className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white px-8">
-                  Încarcă Mai Multe Automobile
-                </Button>
-              </div>
+              {/* Load More - doar dacă avem rezultate */}
+              {!loading && filteredCars.length > 0 && (
+                <div className="text-center mt-12">
+                  <Button size="lg" variant="outline" className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white px-8">
+                    Încarcă Mai Multe Automobile
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>
