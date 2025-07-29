@@ -14,6 +14,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { 
   Calendar, 
   Gauge, 
@@ -27,7 +37,8 @@ import {
   SlidersHorizontal,
   Phone,
   Mail,
-  Car
+  Car,
+  X
 } from "lucide-react";
 
 import Layout from "@/components/Layout/Layout";
@@ -45,6 +56,7 @@ const Catalog = () => {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [cars, setCars] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   // Mock data pentru filtre
   const brands = ["Toate", "Toyota", "BMW", "Mercedes-Benz", "Audi", "Ford", "Hyundai", "Kia", "Nissan", "Mazda", "Volkswagen", "Skoda"];
@@ -125,6 +137,10 @@ const Catalog = () => {
     setMileageRange([0, 200000]);
   };
 
+  const handleFiltersApply = () => {
+    setIsFiltersOpen(false);
+  };
+
   // Funcție pentru generarea slug-ului
   const generateSlug = (brand: string, model: string, year: number, id: string) => {
     const cleanString = (str: string) => 
@@ -154,8 +170,189 @@ const Catalog = () => {
           </div>
 
           <div className="flex flex-col lg:flex-row gap-8">
-            {/* Filters Sidebar */}
-            <div className="lg:w-1/4">
+            {/* Mobile Filter Button - Only visible on mobile */}
+            <div className="lg:hidden sticky top-20 z-40 bg-background pb-4">
+              <Drawer open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
+                <DrawerTrigger asChild>
+                  <Button className="w-full bg-auto-green hover:bg-auto-green-dark text-white flex items-center justify-center gap-2">
+                    <Filter className="h-4 w-4" />
+                    Filtrează
+                  </Button>
+                </DrawerTrigger>
+                <DrawerContent className="h-[90vh]">
+                  <DrawerHeader>
+                    <DrawerTitle className="flex items-center justify-between">
+                      <span className="flex items-center">
+                        <Filter className="h-5 w-5 mr-2 text-auto-green" />
+                        Filtrează Rezultatele
+                      </span>
+                      <DrawerClose asChild>
+                        <Button variant="ghost" size="sm">
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </DrawerClose>
+                    </DrawerTitle>
+                  </DrawerHeader>
+                  
+                  <div className="px-4 overflow-y-auto flex-1">
+                    <div className="space-y-6 pb-6">
+                      {/* Search */}
+                      <div className="space-y-2">
+                        <Label htmlFor="search-mobile">Caută mașina</Label>
+                        <div className="relative">
+                          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                          <Input
+                            id="search-mobile"
+                            placeholder="Marcă, model..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="pl-10"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Brand Filter */}
+                      <div className="space-y-2">
+                        <Label>Marca</Label>
+                        <Select value={selectedBrand} onValueChange={setSelectedBrand}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selectează marca" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {brands.map((brand) => (
+                              <SelectItem key={brand} value={brand}>
+                                {brand}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Model Filter */}
+                      <div className="space-y-2">
+                        <Label>Modelul</Label>
+                        <Select value={selectedModel} onValueChange={setSelectedModel}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selectează modelul" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {models.map((model) => (
+                              <SelectItem key={model} value={model}>
+                                {model}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Year Filter */}
+                      <div className="space-y-2">
+                        <Label>Anul</Label>
+                        <Select value={selectedYear} onValueChange={setSelectedYear}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selectează anul" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {years.map((year) => (
+                              <SelectItem key={year} value={year}>
+                                {year}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Fuel Type Filter */}
+                      <div className="space-y-2">
+                        <Label>Tip Motor</Label>
+                        <Select value={selectedFuel} onValueChange={setSelectedFuel}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selectează tipul motorului" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {fuelTypes.map((fuel) => (
+                              <SelectItem key={fuel} value={fuel}>
+                                {fuel}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Transmission Filter */}
+                      <div className="space-y-2">
+                        <Label>Cutie de Viteze</Label>
+                        <Select value={selectedTransmission} onValueChange={setSelectedTransmission}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selectează cutia de viteze" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {transmissions.map((transmission) => (
+                              <SelectItem key={transmission} value={transmission}>
+                                {transmission}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Body Type Filter */}
+                      <div className="space-y-2">
+                        <Label>Caroserie</Label>
+                        <Select value={selectedBodyType} onValueChange={setSelectedBodyType}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selectează caroseria" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {bodyTypes.map((bodyType) => (
+                              <SelectItem key={bodyType} value={bodyType}>
+                                {bodyType}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Price Range */}
+                      <div className="space-y-2">
+                        <Label>Preț (USD): ${priceRange[0].toLocaleString()} - ${priceRange[1].toLocaleString()}</Label>
+                        <Slider
+                          value={priceRange}
+                          onValueChange={setPriceRange}
+                          max={100000}
+                          step={1000}
+                          className="w-full"
+                        />
+                      </div>
+
+                      {/* Mileage Range */}
+                      <div className="space-y-2">
+                        <Label>Kilometraj: {mileageRange[0].toLocaleString()} - {mileageRange[1].toLocaleString()} km</Label>
+                        <Slider
+                          value={mileageRange}
+                          onValueChange={setMileageRange}
+                          max={200000}
+                          step={5000}
+                          className="w-full"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <DrawerFooter className="flex flex-row gap-2">
+                    <Button variant="outline" onClick={clearFilters} className="flex-1">
+                      Resetează
+                    </Button>
+                    <Button onClick={handleFiltersApply} className="flex-1 bg-auto-green hover:bg-auto-green-dark text-white">
+                      Aplică Filtrele
+                    </Button>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
+            </div>
+
+            {/* Desktop Filters Sidebar - Hidden on mobile */}
+            <div className="hidden lg:block lg:w-1/4">
               <Card className="border-0 shadow-card sticky top-4">
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
@@ -314,7 +511,7 @@ const Catalog = () => {
             </div>
 
             {/* Main Content */}
-            <div className="lg:w-3/4">
+            <div className="lg:w-3/4 w-full">
               {/* Results Count and Sort */}
               <div className="flex justify-between items-center mb-6">
                 <p className="text-muted-foreground">
