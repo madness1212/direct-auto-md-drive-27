@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+/* Direct Auto Design System - Inspired by automotive excellence
+Primary: Verde #367f48, Neutral tones for professional automotive experience
 All colors MUST be HSL.
 */
 
@@ -17,17 +18,38 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 147 37% 39%;
+    --primary-foreground: 0 0% 98%;
+    --primary-light: 147 37% 45%;
+    --primary-dark: 147 45% 25%;
 
-    --secondary: 210 40% 96.1%;
+    --secondary: 210 16% 93%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 147 37% 39%;
+    --accent-foreground: 0 0% 98%;
+    
+    /* Direct Auto specific colors */
+    --auto-green: 147 37% 39%;
+    --auto-green-light: 147 37% 45%;
+    --auto-green-dark: 147 45% 25%;
+    --auto-neutral: 210 16% 93%;
+    --auto-gray: 220 14% 96%;
+    --auto-dark: 222.2 47.4% 11.2%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--auto-green)), hsl(var(--auto-green-light)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--auto-green)) 0%, hsl(var(--auto-green-dark)) 100%);
+    
+    /* Shadows */
+    --shadow-card: 0 4px 6px -1px hsl(var(--auto-green) / 0.1);
+    --shadow-hero: 0 20px 25px -5px hsl(var(--auto-green) / 0.1);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
