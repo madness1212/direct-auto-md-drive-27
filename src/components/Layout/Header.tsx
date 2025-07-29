@@ -108,22 +108,12 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
             <a href="/contact" className="text-foreground hover:text-auto-green transition-colors">
               Contact
             </a>
-            <div className="flex items-center space-x-3">
-              <Button 
-                className="bg-gradient-primary hover:bg-auto-green-dark shadow-card"
-                onClick={() => window.location.href = '/catalog'}
-              >
-                Vezi Stocul
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                className="text-muted-foreground hover:text-auto-green transition-colors"
-                onClick={() => window.location.href = '/auth'}
-              >
-                Admin
-              </Button>
-            </div>
+            <Button 
+              className="bg-gradient-primary hover:bg-auto-green-dark shadow-card"
+              onClick={() => window.location.href = '/catalog'}
+            >
+              Vezi Stocul
+            </Button>
           </nav>
 
           {/* Mobile Menu Button */}
