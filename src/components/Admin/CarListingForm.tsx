@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/use-auth';
-import { Upload, X, Loader2 } from 'lucide-react';
+import { Upload, X, Loader2, GripVertical, Star } from 'lucide-react';
 
 interface CarListingFormData {
   marca: string;
@@ -28,6 +30,7 @@ interface CarListingFormData {
   descriere_en?: string;
   video_url?: string;
   status: string;
+  is_top_offer: boolean;
 }
 
 interface CarListingFormProps {
@@ -41,14 +44,17 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedImages, setUploadedImages] = useState<string[]>(initialData?.images || []);
   const [isUploadingImages, setIsUploadingImages] = useState(false);
+  const [isTopOffer, setIsTopOffer] = useState(initialData?.is_top_offer || false);
   const { toast } = useToast();
   const { user } = useAuth();
 
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<CarListingFormData>({
-    defaultValues: initialData || {
-      status: 'active',
-      tip_motor: 'benzina',
-      cutie_viteze: 'manuala',
+    defaultValues: {
+      ...initialData,
+      status: initialData?.status || 'active',
+      tip_motor: initialData?.tip_motor || 'benzina',
+      cutie_viteze: initialData?.cutie_viteze || 'manuala',
+      is_top_offer: initialData?.is_top_offer || false,
     },
   });
 
@@ -100,6 +106,16 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
     setUploadedImages(uploadedImages.filter((_, index) => index !== indexToRemove));
   };
 
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) return;
+
+    const items = Array.from(uploadedImages);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setUploadedImages(items);
+  };
+
   const onSubmit = async (data: CarListingFormData) => {
     if (!user) return;
 
@@ -108,10 +124,12 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
       const carData = {
         ...data,
         images: uploadedImages,
+        images_order: uploadedImages.map((_, index) => index), // Salvează ordinea imaginilor
         created_by: user.id,
         an_fabricatie: Number(data.an_fabricatie),
         pret: Number(data.pret),
         kilometraj: data.kilometraj ? Number(data.kilometraj) : null,
+        is_top_offer: isTopOffer,
       };
 
       let result;
@@ -156,11 +174,12 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <Tabs defaultValue="basic" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="basic">Informații de bază</TabsTrigger>
               <TabsTrigger value="details">Detalii tehnice</TabsTrigger>
               <TabsTrigger value="descriptions">Descrieri</TabsTrigger>
               <TabsTrigger value="media">Media</TabsTrigger>
+              <TabsTrigger value="settings">Setări</TabsTrigger>
             </TabsList>
             
             <TabsContent value="basic" className="space-y-4">
@@ -378,35 +397,107 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                 </div>
                 
                 {uploadedImages.length > 0 && (
-                  <div className="grid grid-cols-4 gap-4 mt-4">
-                    {uploadedImages.map((imageUrl, index) => (
-                      <div key={index} className="relative group">
-                        <img
-                          src={imageUrl}
-                          alt={`Preview ${index + 1}`}
-                          className="w-full h-24 object-cover rounded-md"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeImage(index)}
-                          className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                          <X className="h-3 w-3" />
-                        </button>
-                      </div>
-                    ))}
+                  <div className="mt-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <GripVertical className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm text-muted-foreground">
+                        Trage și mută pentru a reordona imaginile. Prima imagine va fi imaginea principală.
+                      </span>
+                    </div>
+                    
+                    <DragDropContext onDragEnd={handleDragEnd}>
+                      <Droppable droppableId="images" direction="horizontal">
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className="grid grid-cols-4 gap-4"
+                          >
+                            {uploadedImages.map((imageUrl, index) => (
+                              <Draggable key={`image-${index}`} draggableId={`image-${index}`} index={index}>
+                                {(provided, snapshot) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    className={`relative group rounded-md border ${
+                                      snapshot.isDragging ? 'border-auto-green bg-auto-green/10' : 'border-border'
+                                    }`}
+                                  >
+                                    <div className="relative">
+                                      <img
+                                        src={imageUrl}
+                                        alt={`Preview ${index + 1}`}
+                                        className="w-full h-24 object-cover rounded-md"
+                                      />
+                                      {index === 0 && (
+                                        <div className="absolute top-1 left-1 bg-auto-green text-white text-xs px-2 py-1 rounded">
+                                          <Star className="h-3 w-3 inline mr-1" />
+                                          Principală
+                                        </div>
+                                      )}
+                                      <div
+                                        {...provided.dragHandleProps}
+                                        className="absolute top-1 right-6 bg-background/80 rounded p-1 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity"
+                                      >
+                                        <GripVertical className="h-3 w-3" />
+                                      </div>
+                                      <button
+                                        type="button"
+                                        onClick={() => removeImage(index)}
+                                        className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                      >
+                                        <X className="h-3 w-3" />
+                                      </button>
+                                    </div>
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
                   </div>
                 )}
               </div>
               
               <div>
-                <Label htmlFor="video_url">Link video (YouTube, Vimeo)</Label>
+                <Label htmlFor="video_url">Link video (YouTube, Vimeo, TikTok)</Label>
                 <Input
                   id="video_url"
                   {...register('video_url')}
                   placeholder="https://www.youtube.com/watch?v=..."
                 />
               </div>
+            </TabsContent>
+
+            <TabsContent value="settings" className="space-y-4">
+              <Card className="border-auto-green/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-auto-green">
+                    <Star className="h-5 w-5" />
+                    Top Oferte
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-1">
+                      <Label htmlFor="top-offer" className="text-base font-medium">
+                        Afișează ca Top Ofertă pe pagina principală
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
+                        Când este activat, această mașină va apărea în secțiunea "Top Oferte" de pe homepage.
+                      </p>
+                    </div>
+                    <Switch
+                      id="top-offer"
+                      checked={isTopOffer}
+                      onCheckedChange={setIsTopOffer}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
           </Tabs>
 
