@@ -108,7 +108,10 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
             <a href="/contact" className="text-foreground hover:text-auto-green transition-colors">
               Contact
             </a>
-            <Button className="bg-gradient-primary hover:bg-auto-green-dark shadow-card">
+            <Button 
+              className="bg-gradient-primary hover:bg-auto-green-dark shadow-card"
+              onClick={() => window.location.href = '/catalog'}
+            >
               Vezi Stocul
             </Button>
           </nav>
@@ -143,7 +146,10 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
               <a href="/contact" className="text-foreground hover:text-auto-green transition-colors py-2">
                 Contact
               </a>
-              <Button className="bg-gradient-primary hover:bg-auto-green-dark shadow-card mt-4">
+              <Button 
+                className="bg-gradient-primary hover:bg-auto-green-dark shadow-card mt-4"
+                onClick={() => window.location.href = '/catalog'}
+              >
                 Vezi Stocul
               </Button>
             </div>
