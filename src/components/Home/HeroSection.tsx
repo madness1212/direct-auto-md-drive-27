@@ -18,9 +18,9 @@ const HeroSection = () => {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center text-primary-foreground">
         <div className="max-w-4xl mx-auto space-y-6">
-          <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+          <h1 className="text-4xl md:text-6xl font-bold leading-tight text-white">
             Automobile de Calitate
-            <span className="block text-auto-green-light">pentru Moldova</span>
+            <span className="block text-white">pentru Moldova</span>
           </h1>
           
           <p className="text-lg md:text-xl text-primary-foreground/90 max-w-2xl mx-auto">
@@ -28,20 +28,14 @@ const HeroSection = () => {
             Calitate garantată, prețuri competitive și servicii complete.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
+          <div className="flex justify-center items-center mt-8">
             <Button 
               size="lg" 
               className="bg-primary-foreground text-auto-green hover:bg-auto-neutral shadow-hero text-lg px-8 py-3"
+              onClick={() => window.location.href = '/catalog'}
             >
               Vezi Catalogul
               <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-auto-green text-lg px-8 py-3"
-            >
-              Calculează Finanțarea
             </Button>
           </div>
 
