@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -122,6 +123,18 @@ const Catalog = () => {
     setSelectedBodyType("");
     setPriceRange([0, 100000]);
     setMileageRange([0, 200000]);
+  };
+
+  // Funcție pentru generarea slug-ului
+  const generateSlug = (brand: string, model: string, year: number, id: string) => {
+    const cleanString = (str: string) => 
+      str.toLowerCase()
+         .replace(/[^\w\s-]/g, '') // Elimină caractere speciale
+         .replace(/\s+/g, '-') // Înlocuiește spațiile cu liniuțe
+         .replace(/-+/g, '-') // Elimină liniuțele multiple
+         .trim();
+    
+    return `${cleanString(brand)}-${cleanString(model)}-${year}-${id}`;
   };
 
   return (
@@ -419,9 +432,11 @@ const Catalog = () => {
 
                         {/* Action Buttons */}
                         <div className="flex space-x-2">
-                          <Button className="flex-1 bg-auto-green hover:bg-auto-green-dark text-white">
-                            Vezi Detalii
-                          </Button>
+                          <Link to={`/catalog/${generateSlug(car.brand, car.model, car.year, car.id)}`} className="flex-1">
+                            <Button className="w-full bg-auto-green hover:bg-auto-green-dark text-white">
+                              Vezi Detalii
+                            </Button>
+                          </Link>
                           <Button 
                             variant="outline" 
                             className="flex-1 border-auto-green text-auto-green hover:bg-auto-green hover:text-white"

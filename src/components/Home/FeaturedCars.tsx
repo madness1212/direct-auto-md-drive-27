@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -200,9 +201,11 @@ const FeaturedCars = () => {
         </div>
 
         <div className="text-center">
-          <Button size="lg" variant="outline" className="border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
-            Vezi Toate Ofertele
-          </Button>
+          <Link to="/catalog">
+            <Button size="lg" variant="outline" className="border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
+              Vezi Toate Ofertele
+            </Button>
+          </Link>
         </div>
       </div>
     </section>
