@@ -28,6 +28,18 @@ export default function Auth() {
     const formData = new FormData(event.currentTarget);
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
+    const adminCode = formData.get('adminCode') as string;
+
+    // Verifică codul de administrator
+    if (adminCode !== 'NicolaeVicol1983/Direct') {
+      toast({
+        title: 'Cod administrator incorect',
+        description: 'Codul de administrator introdus nu este valid.',
+        variant: 'destructive',
+      });
+      setIsLoading(false);
+      return;
+    }
 
     const { error } = await signIn(email, password);
 
@@ -56,6 +68,18 @@ export default function Auth() {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     const fullName = formData.get('fullName') as string;
+    const adminCode = formData.get('adminCode') as string;
+
+    // Verifică codul de administrator
+    if (adminCode !== 'NicolaeVicol1983/Direct') {
+      toast({
+        title: 'Cod administrator incorect',
+        description: 'Codul de administrator introdus nu este valid.',
+        variant: 'destructive',
+      });
+      setIsLoading(false);
+      return;
+    }
 
     const { error } = await signUp(email, password, fullName);
 
@@ -112,6 +136,16 @@ export default function Auth() {
                     required
                   />
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="signin-admin-code">Cod Administrator</Label>
+                  <Input
+                    id="signin-admin-code"
+                    name="adminCode"
+                    type="password"
+                    placeholder="Introdu codul de administrator"
+                    required
+                  />
+                </div>
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Conectează-te
@@ -147,6 +181,16 @@ export default function Auth() {
                     id="signup-password"
                     name="password"
                     type="password"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="signup-admin-code">Cod Administrator</Label>
+                  <Input
+                    id="signup-admin-code"
+                    name="adminCode"
+                    type="password"
+                    placeholder="Introdu codul de administrator"
                     required
                   />
                 </div>
