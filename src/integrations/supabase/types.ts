@@ -14,7 +14,105 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      car_listings: {
+        Row: {
+          an_fabricatie: number
+          caroserie: string | null
+          created_at: string
+          created_by: string | null
+          cutie_viteze: string
+          descriere: string | null
+          descriere_en: string | null
+          descriere_ro: string | null
+          descriere_ru: string | null
+          id: string
+          images: string[] | null
+          kilometraj: number | null
+          marca: string
+          model: string
+          pret: number
+          status: string | null
+          tip_motor: string
+          tractiune: string | null
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          an_fabricatie: number
+          caroserie?: string | null
+          created_at?: string
+          created_by?: string | null
+          cutie_viteze: string
+          descriere?: string | null
+          descriere_en?: string | null
+          descriere_ro?: string | null
+          descriere_ru?: string | null
+          id?: string
+          images?: string[] | null
+          kilometraj?: number | null
+          marca: string
+          model: string
+          pret: number
+          status?: string | null
+          tip_motor: string
+          tractiune?: string | null
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          an_fabricatie?: number
+          caroserie?: string | null
+          created_at?: string
+          created_by?: string | null
+          cutie_viteze?: string
+          descriere?: string | null
+          descriere_en?: string | null
+          descriere_ro?: string | null
+          descriere_ru?: string | null
+          id?: string
+          images?: string[] | null
+          kilometraj?: number | null
+          marca?: string
+          model?: string
+          pret?: number
+          status?: string | null
+          tip_motor?: string
+          tractiune?: string | null
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          role: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          role?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          role?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
