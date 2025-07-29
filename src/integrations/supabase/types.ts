@@ -27,12 +27,15 @@ export type Database = {
           descriere_ru: string | null
           id: string
           images: string[] | null
+          images_order: Json | null
+          is_top_offer: boolean | null
           kilometraj: number | null
           marca: string
           model: string
           pret: number
           status: string | null
           tip_motor: string
+          top_offer_position: number | null
           tractiune: string | null
           updated_at: string
           video_url: string | null
@@ -49,12 +52,15 @@ export type Database = {
           descriere_ru?: string | null
           id?: string
           images?: string[] | null
+          images_order?: Json | null
+          is_top_offer?: boolean | null
           kilometraj?: number | null
           marca: string
           model: string
           pret: number
           status?: string | null
           tip_motor: string
+          top_offer_position?: number | null
           tractiune?: string | null
           updated_at?: string
           video_url?: string | null
@@ -71,12 +77,15 @@ export type Database = {
           descriere_ru?: string | null
           id?: string
           images?: string[] | null
+          images_order?: Json | null
+          is_top_offer?: boolean | null
           kilometraj?: number | null
           marca?: string
           model?: string
           pret?: number
           status?: string | null
           tip_motor?: string
+          top_offer_position?: number | null
           tractiune?: string | null
           updated_at?: string
           video_url?: string | null
