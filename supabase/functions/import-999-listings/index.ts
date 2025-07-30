@@ -95,10 +95,27 @@ serve(async (req) => {
       });
     }
 
-    // Initialize Supabase client
+    // Get the current user from the JWT token
+    const authHeader = req.headers.get('authorization');
+    if (!authHeader) {
+      throw new Error('Authorization header missing');
+    }
+    
+    // Initialize Supabase client for admin operations
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
+    
+    // Create a client with the user's JWT to get user info
+    const supabaseAnon = Deno.env.get('SUPABASE_ANON_KEY')!;
+    const userClient = createClient(supabaseUrl, supabaseAnon, {
+      global: { headers: { authorization: authHeader } }
+    });
+    
+    const { data: { user }, error: userError } = await userClient.auth.getUser();
+    if (userError || !user) {
+      throw new Error('Failed to get user information');
+    }
 
     // Process and insert car listings
     const insertedListings = [];
@@ -145,7 +162,8 @@ serve(async (req) => {
           tractiune: capitalizeText('fata'), // default value
           video_url: '',
           is_top_offer: false,
-          is_coming_soon: false
+          is_coming_soon: false,
+          created_by: user.id // Add the user ID for RLS policies
         };
 
         const { data, error } = await supabase
