@@ -43,7 +43,7 @@ serve(async (req) => {
     console.log('Making request to Firecrawl API...');
     
     // Use Firecrawl to scrape the website
-    const firecrawlResponse = await fetch('https://api.firecrawl.dev/v0/scrape', {
+    const firecrawlResponse = await fetch('https://api.firecrawl.dev/v1/scrape', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${firecrawlApiKey}`,
@@ -51,13 +51,9 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         url: url,
-        pageOptions: {
-          onlyMainContent: true,
-          includeHtml: false,
-        },
-        extractorOptions: {
-          mode: 'llm-extraction',
-          extractionSchema: {
+        formats: ['extract'],
+        extract: {
+          schema: {
             type: "object",
             properties: {
               listings: {
@@ -102,14 +98,12 @@ serve(async (req) => {
     let carListings: CarListing[] = [];
     
     try {
-      if (firecrawlData.llm_extraction) {
-        const extractedData = JSON.parse(firecrawlData.llm_extraction);
-        carListings = extractedData.listings || [];
-      } else if (firecrawlData.data?.llm_extraction) {
-        const extractedData = JSON.parse(firecrawlData.data.llm_extraction);
-        carListings = extractedData.listings || [];
+      if (firecrawlData.extract) {
+        carListings = firecrawlData.extract.listings || [];
+      } else if (firecrawlData.data?.extract) {
+        carListings = firecrawlData.data.extract.listings || [];
       } else {
-        console.log('No LLM extraction found, trying to parse content manually...');
+        console.log('No extraction found, trying to parse content manually...');
         // Fallback: try to extract basic info from content
         const content = firecrawlData.data?.content || firecrawlData.content || '';
         carListings = parseContentManually(content);
