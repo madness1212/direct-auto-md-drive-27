@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Phone, 
   Mail, 
@@ -25,6 +27,8 @@ const Contact = () => {
     subject: "",
     message: ""
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -34,18 +38,42 @@ const Contact = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aici ar fi logica de trimitere a formularului
-    console.log("Form submitted:", formData);
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      subject: "",
-      message: ""
-    });
+    setIsSubmitting(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: formData
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Mesaj trimis cu succes!",
+        description: "Vă vom contacta în curând. Mulțumim pentru încredere!",
+      });
+
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: ""
+      });
+    } catch (error: any) {
+      console.error("Error sending email:", error);
+      toast({
+        title: "Eroare la trimiterea mesajului",
+        description: "Vă rugăm să încercați din nou sau să ne contactați telefonic.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
@@ -170,9 +198,10 @@ const Contact = () => {
                     type="submit" 
                     size="lg" 
                     className="w-full bg-gradient-primary hover:bg-auto-green-dark shadow-card"
+                    disabled={isSubmitting}
                   >
                     <Send className="h-4 w-4 mr-2" />
-                    Trimite Mesajul
+                    {isSubmitting ? "Se trimite..." : "Trimite Mesajul"}
                   </Button>
                 </form>
               </CardContent>
