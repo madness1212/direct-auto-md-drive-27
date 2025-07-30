@@ -152,7 +152,7 @@ const ComingSoon = () => {
               <div className="flex">
                 {cars.map((car) => (
                   <div key={car.id} className="flex-[0_0_90%] min-w-0 md:flex-[0_0_45%] lg:flex-[0_0_30%] xl:flex-[0_0_22%] pl-4">
-                    <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 mr-4">
+                    <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 mr-4 shadow-sm">
                       <CardContent className="p-0">
                         {/* Image Container */}
                         <div className="relative overflow-hidden rounded-t-lg">
