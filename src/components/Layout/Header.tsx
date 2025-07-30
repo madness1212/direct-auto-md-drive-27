@@ -15,6 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useLanguage } from "@/contexts/LanguageContext";
 import logo from "@/assets/logo.png";
 
 interface HeaderProps {
@@ -24,6 +25,7 @@ interface HeaderProps {
 
 const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { t } = useLanguage();
 
   const languages = [
     { code: 'ro', name: 'Română', flag: '🇷🇴' },
@@ -102,32 +104,32 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
             <img src={logo} alt="Direct Auto" className="h-12 w-12" />
             <div>
               <h1 className="text-2xl font-bold text-auto-green">Direct Auto</h1>
-              <p className="text-sm text-muted-foreground hidden md:block">Automobile pentru Moldova</p>
+              <p className="text-sm text-muted-foreground hidden md:block">{t('header.companySlogan')}</p>
             </div>
           </a>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <a href="/" className="text-foreground hover:text-auto-green transition-colors">
-              Acasă
+              {t('header.home')}
             </a>
             <a href="/catalog" className="text-foreground hover:text-auto-green transition-colors">
-              Catalog Auto
+              {t('header.catalog')}
             </a>
             <a href="/finantare" className="text-foreground hover:text-auto-green transition-colors">
-              Finanțare
+              {t('header.financing')}
             </a>
             <a href="/despre" className="text-foreground hover:text-auto-green transition-colors">
-              Despre Noi
+              {t('header.about')}
             </a>
             <a href="/contact" className="text-foreground hover:text-auto-green transition-colors">
-              Contact
+              {t('header.contact')}
             </a>
             <Button 
               className="bg-gradient-primary hover:bg-auto-green-dark shadow-card"
               onClick={() => window.location.href = '/catalog'}
             >
-              Vezi Stocul
+              {t('header.viewStock')}
             </Button>
           </nav>
 
@@ -169,25 +171,25 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
           <nav className="md:hidden mt-4 py-4 border-t border-border">
             <div className="flex flex-col space-y-4">
               <a href="/" className="text-foreground hover:text-auto-green transition-colors py-2">
-                Acasă
+                {t('header.home')}
               </a>
               <a href="/catalog" className="text-foreground hover:text-auto-green transition-colors py-2">
-                Catalog Auto
+                {t('header.catalog')}
               </a>
               <a href="/finantare" className="text-foreground hover:text-auto-green transition-colors py-2">
-                Finanțare
+                {t('header.financing')}
               </a>
               <a href="/despre" className="text-foreground hover:text-auto-green transition-colors py-2">
-                Despre Noi
+                {t('header.about')}
               </a>
               <a href="/contact" className="text-foreground hover:text-auto-green transition-colors py-2">
-                Contact
+                {t('header.contact')}
               </a>
               <Button 
                 className="bg-gradient-primary hover:bg-auto-green-dark shadow-card mt-4"
                 onClick={() => window.location.href = '/catalog'}
               >
-                Vezi Stocul
+                {t('header.viewStock')}
               </Button>
             </div>
           </nav>

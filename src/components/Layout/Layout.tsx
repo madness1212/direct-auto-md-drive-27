@@ -1,17 +1,16 @@
-import { useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const [currentLang, setCurrentLang] = useState('ro');
+  const { currentLang, setCurrentLang } = useLanguage();
 
   const handleLanguageChange = (lang: string) => {
     setCurrentLang(lang);
-    // În implementarea reală ar schimba limba în întreaga aplicație
   };
 
   return (

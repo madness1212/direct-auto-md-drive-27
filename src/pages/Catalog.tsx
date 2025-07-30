@@ -42,8 +42,10 @@ import {
 } from "lucide-react";
 
 import Layout from "@/components/Layout/Layout";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Catalog = () => {
+  const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
@@ -59,12 +61,12 @@ const Catalog = () => {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   // Mock data pentru filtre
-  const brands = ["Toate", "Toyota", "BMW", "Mercedes-Benz", "Audi", "Ford", "Hyundai", "Kia", "Nissan", "Mazda", "Volkswagen", "Skoda"];
-  const models = ["Toate", "Camry", "Corolla", "X3", "X5", "A4", "A6", "E-Class", "C-Class", "Focus", "Tucson", "Sportage"];
-  const years = ["Toate", "2024", "2023", "2022", "2021", "2020", "2019", "2018", "2017", "2016"];
-  const fuelTypes = ["Toate", "Benzină", "Diesel", "Hibrid", "Electric", "GPL"];
-  const transmissions = ["Toate", "Manuală", "Automată", "CVT"];
-  const bodyTypes = ["Toate", "SUV", "Sedan", "Hatchback", "Combi", "Coupe", "Cabriolet"];
+  const brands = [t('common.all'), "Toyota", "BMW", "Mercedes-Benz", "Audi", "Ford", "Hyundai", "Kia", "Nissan", "Mazda", "Volkswagen", "Skoda"];
+  const models = [t('common.all'), "Camry", "Corolla", "X3", "X5", "A4", "A6", "E-Class", "C-Class", "Focus", "Tucson", "Sportage"];
+  const years = [t('common.all'), "2024", "2023", "2022", "2021", "2020", "2019", "2018", "2017", "2016"];
+  const fuelTypes = [t('common.all'), "Benzină", "Diesel", "Hibrid", "Electric", "GPL"];
+  const transmissions = [t('common.all'), "Manuală", "Automată", "CVT"];
+  const bodyTypes = [t('common.all'), "SUV", "Sedan", "Hatchback", "Combi", "Coupe", "Cabriolet"];
 
   // Funcție pentru încărcarea datelor din Supabase
   useEffect(() => {
@@ -111,12 +113,12 @@ const Catalog = () => {
   const filteredCars = cars.filter(car => {
     const matchesSearch = car.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          car.model.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesBrand = !selectedBrand || selectedBrand === "Toate" || car.brand === selectedBrand;
-    const matchesModel = !selectedModel || selectedModel === "Toate" || car.model === selectedModel;
-    const matchesYear = !selectedYear || selectedYear === "Toate" || car.year.toString() === selectedYear;
-    const matchesFuel = !selectedFuel || selectedFuel === "Toate" || car.fuel === selectedFuel;
-    const matchesTransmission = !selectedTransmission || selectedTransmission === "Toate" || car.transmission === selectedTransmission;
-    const matchesBodyType = !selectedBodyType || selectedBodyType === "Toate" || car.bodyType === selectedBodyType;
+    const matchesBrand = !selectedBrand || selectedBrand === t('common.all') || car.brand === selectedBrand;
+    const matchesModel = !selectedModel || selectedModel === t('common.all') || car.model === selectedModel;
+    const matchesYear = !selectedYear || selectedYear === t('common.all') || car.year.toString() === selectedYear;
+    const matchesFuel = !selectedFuel || selectedFuel === t('common.all') || car.fuel === selectedFuel;
+    const matchesTransmission = !selectedTransmission || selectedTransmission === t('common.all') || car.transmission === selectedTransmission;
+    const matchesBodyType = !selectedBodyType || selectedBodyType === t('common.all') || car.bodyType === selectedBodyType;
     const matchesPrice = car.price >= priceRange[0] && car.price <= priceRange[1];
     const matchesMileage = car.mileage >= mileageRange[0] && car.mileage <= mileageRange[1];
     
@@ -161,11 +163,10 @@ const Catalog = () => {
           {/* Header */}
           <div className="text-center space-y-4 mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-              Catalogul Nostru Auto
+              {t('catalog.title')}
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Descoperă gama noastră completă de automobile noi și rulate. 
-              Folosește filtrele pentru a găsi mașina perfectă pentru tine.
+              {t('catalog.subtitle')}
             </p>
           </div>
 
@@ -176,7 +177,7 @@ const Catalog = () => {
                 <DrawerTrigger asChild>
                   <Button className="w-full bg-auto-green hover:bg-auto-green-dark text-white flex items-center justify-center gap-2">
                     <Filter className="h-4 w-4" />
-                    Filtrează
+                    {t('catalog.filter')}
                   </Button>
                 </DrawerTrigger>
                 <DrawerContent className="h-[90vh]">
