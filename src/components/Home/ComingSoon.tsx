@@ -158,7 +158,7 @@ const ComingSoon = () => {
                           <img 
                             src={car.images && car.images.length > 0 ? car.images[0] : "/placeholder.svg"} 
                             alt={`${car.marca} ${car.model}`}
-                            className="w-full h-36 object-contain group-hover:scale-105 transition-transform duration-300"
+                            className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                           <Badge className="absolute top-4 left-4 bg-blue-600 hover:bg-blue-700">
                             {t('home.comingSoon.badge')}
