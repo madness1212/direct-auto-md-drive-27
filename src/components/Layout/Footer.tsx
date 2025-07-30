@@ -55,15 +55,15 @@ const Footer = () => {
             <div className="space-y-3 text-sm">
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4 text-auto-green" />
-                <span className="text-muted-foreground">+373 79 357 755</span>
+                <span className="text-muted-foreground">+373 696 88 999</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4 text-auto-green" />
-                <span className="text-muted-foreground">contact@directauto.md</span>
+                <span className="text-muted-foreground">directauto.direct@gmail.com</span>
               </div>
               <div className="flex items-center space-x-2">
                 <MapPin className="h-4 w-4 text-auto-green" />
-                <span className="text-muted-foreground">str. București 67/1, Chișinău</span>
+                <span className="text-muted-foreground">Chisinau, Grenbole175</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Clock className="h-4 w-4 text-auto-green" />

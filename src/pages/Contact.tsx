@@ -52,19 +52,19 @@ const Contact = () => {
     {
       icon: Phone,
       title: "Telefon",
-      details: ["+373 79 357 755", "+373 22 123 456"],
+      details: ["+373 696 88 999"],
       description: "Sună-ne pentru informații rapide"
     },
     {
       icon: Mail,
       title: "Email",
-      details: ["contact@directauto.md", "info@directauto.md"],
+      details: ["directauto.direct@gmail.com"],
       description: "Scrie-ne pentru întrebări detaliate"
     },
     {
       icon: MapPin,
       title: "Adresa",
-      details: ["str. București 67/1", "Chișinău, Moldova"],
+      details: ["Chisinau, Grenbole175"],
       description: "Vizitează showroom-ul nostru"
     },
     {
@@ -78,26 +78,26 @@ const Contact = () => {
   const departments = [
     {
       title: "Vânzări Auto",
-      phone: "+373 79 357 755",
-      email: "vanzari@directauto.md",
+      phone: "+373 696 88 999",
+      email: "directauto.direct@gmail.com",
       description: "Pentru informații despre automobile și prețuri"
     },
     {
       title: "Finanțare",
-      phone: "+373 79 357 756",
-      email: "finantare@directauto.md", 
+      phone: "+373 696 88 999",
+      email: "directauto.direct@gmail.com", 
       description: "Pentru credite auto și opțiuni de plată"
     },
     {
       title: "Service Auto",
-      phone: "+373 79 357 757",
-      email: "service@directauto.md",
+      phone: "+373 696 88 999",
+      email: "directauto.direct@gmail.com",
       description: "Pentru întreținere și reparații"
     },
     {
       title: "Asigurări",
-      phone: "+373 79 357 758",
-      email: "asigurari@directauto.md",
+      phone: "+373 696 88 999",
+      email: "directauto.direct@gmail.com",
       description: "Pentru asigurări auto și asistență rutieră"
     }
   ];
@@ -281,8 +281,12 @@ const Contact = () => {
                 <div className="text-center text-muted-foreground">
                   <MapPin className="h-12 w-12 mx-auto mb-2 text-auto-green" />
                   <p className="font-semibold">Hartă Google Maps</p>
-                  <p className="text-sm">str. București 67/1, Chișinău, Moldova</p>
-                  <Button size="sm" className="mt-2 bg-gradient-primary hover:bg-auto-green-dark">
+                  <p className="text-sm">Chisinau, Grenbole175</p>
+                  <Button 
+                    size="sm" 
+                    className="mt-2 bg-gradient-primary hover:bg-auto-green-dark"
+                    onClick={() => window.open('https://www.google.com/maps/place/Direct-AutoMD/@46.9814578,28.8379172,17z/data=!3m1!4b1!4m6!3m5!1s0x40c97fd8e912c99d:0xd30c3ad4e70b4542!8m2!3d46.9814578!4d28.8404921!16s%2Fg%2F11f7h618mk?entry=ttu&g_ep=EgoyMDI1MDcyOC4wIKXMDSoASAFQAw%3D%3D', '_blank')}
+                  >
                     Vezi pe Google Maps
                   </Button>
                 </div>

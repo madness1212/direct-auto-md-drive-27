@@ -392,9 +392,10 @@ const CarDetails = () => {
                     <Button 
                       className="w-full bg-auto-green hover:bg-auto-green-dark text-white" 
                       size="lg"
+                      onClick={() => window.open('tel:+373696888999', '_self')}
                     >
                       <Phone className="h-4 w-4 mr-2" />
-                      Solicită Ofertă
+                      Sună Acum
                     </Button>
                     
                     <Button 
@@ -410,7 +411,7 @@ const CarDetails = () => {
                   {/* Contact Info */}
                   <div className="text-center text-sm text-muted-foreground">
                     <p>Sau sună direct la:</p>
-                    <p className="font-semibold text-auto-green">+373 69 123 456</p>
+                    <p className="font-semibold text-auto-green">+373 696 88 999</p>
                   </div>
                 </CardContent>
               </Card>
