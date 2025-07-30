@@ -6,77 +6,107 @@ const Footer = () => {
   return (
     <footer className="bg-auto-dark text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Company Info */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2 md:space-x-3">
+        {/* Main Footer Content */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+          
+          {/* Company Info - Takes 2 columns on large screens */}
+          <div className="lg:col-span-2 space-y-4">
+            <div className="flex items-center space-x-3">
               <img 
                 src={logo} 
                 alt="Direct Auto" 
-                className="h-8 w-8 sm:h-10 sm:w-10 object-contain"
+                className="h-10 w-10 object-contain"
               />
               <div>
-                <h3 className="text-lg sm:text-xl font-bold">Direct Auto</h3>
-                <p className="text-xs sm:text-sm text-muted-foreground">Automobile pentru Moldova</p>
+                <h3 className="text-xl font-bold">Direct Auto</h3>
+                <p className="text-sm text-muted-foreground">Automobile pentru Moldova</p>
               </div>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Parc auto de încredere cu experiență de peste 15 ani în vânzarea si importarea  
+            <p className="text-sm text-muted-foreground max-w-md">
+              Parc auto de încredere cu experiență de peste 15 ani în vânzarea și importarea  
               automobilelor din Europa în Republica Moldova.
             </p>
-            <div className="flex space-x-4">
-              <Facebook 
-                className="h-5 w-5 text-muted-foreground hover:text-auto-green cursor-pointer transition-colors" 
-                onClick={() => window.open('https://www.facebook.com/directauto.md/', '_blank')}
-              />
-              <FaTelegram 
-                className="h-5 w-5 text-muted-foreground hover:text-auto-green cursor-pointer transition-colors" 
-                onClick={() => window.open('https://t.me/directautomd', '_blank')}
-              />
+            
+            {/* Social Media */}
+            <div className="space-y-2">
+              <h4 className="text-base font-semibold">Urmărește-ne</h4>
+              <div className="flex space-x-3">
+                <Facebook 
+                  className="h-5 w-5 text-muted-foreground hover:text-auto-green cursor-pointer transition-colors" 
+                  onClick={() => window.open('https://www.facebook.com/directauto.md/', '_blank')}
+                />
+                <FaTelegram 
+                  className="h-5 w-5 text-muted-foreground hover:text-auto-green cursor-pointer transition-colors" 
+                  onClick={() => window.open('https://t.me/directautomd', '_blank')}
+                />
+              </div>
             </div>
           </div>
 
           {/* Navigation */}
           <div className="space-y-4">
-            <h4 className="text-lg font-semibold">Navigare</h4>
+            <h4 className="text-base font-semibold">Navigare</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="/" className="text-muted-foreground hover:text-auto-green transition-colors">Acasă</a></li>
-              <li><a href="/catalog" className="text-muted-foreground hover:text-auto-green transition-colors">Catalog Auto</a></li>
-              
-              <li><a href="/despre" className="text-muted-foreground hover:text-auto-green transition-colors">Despre Noi</a></li>
-              <li><a href="/contact" className="text-muted-foreground hover:text-auto-green transition-colors">Contact</a></li>
+              <li>
+                <a href="/" className="text-muted-foreground hover:text-auto-green transition-colors">
+                  Acasă
+                </a>
+              </li>
+              <li>
+                <a href="/catalog" className="text-muted-foreground hover:text-auto-green transition-colors">
+                  Catalog Auto
+                </a>
+              </li>
+              <li>
+                <a href="/despre" className="text-muted-foreground hover:text-auto-green transition-colors">
+                  Despre Noi
+                </a>
+              </li>
+              <li>
+                <a href="/contact" className="text-muted-foreground hover:text-auto-green transition-colors">
+                  Contact
+                </a>
+              </li>
             </ul>
           </div>
 
-
           {/* Contact Info */}
           <div className="space-y-4">
-            <h4 className="text-lg font-semibold">Contact</h4>
+            <h4 className="text-base font-semibold">Contact</h4>
             <div className="space-y-3 text-sm">
-              <div className="flex items-center space-x-2">
-                <Phone className="h-4 w-4 text-auto-green" />
+              <div className="flex items-start space-x-2">
+                <Phone className="h-4 w-4 text-auto-green mt-0.5 flex-shrink-0" />
                 <span className="text-muted-foreground">+373 696 88 999</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Mail className="h-4 w-4 text-auto-green" />
-                <span className="text-muted-foreground">directauto.direct@gmail.com</span>
+              <div className="flex items-start space-x-2">
+                <Mail className="h-4 w-4 text-auto-green mt-0.5 flex-shrink-0" />
+                <span className="text-muted-foreground break-all">directauto.direct@gmail.com</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="h-4 w-4 text-auto-green" />
+              <div className="flex items-start space-x-2">
+                <MapPin className="h-4 w-4 text-auto-green mt-0.5 flex-shrink-0" />
                 <span className="text-muted-foreground">Chisinau, Grenoble175</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Clock className="h-4 w-4 text-auto-green" />
-                <span className="text-muted-foreground">Lun-Vin: 09:00-18:00</span>
+              <div className="flex items-start space-x-2">
+                <Clock className="h-4 w-4 text-auto-green mt-0.5 flex-shrink-0" />
+                <div className="text-muted-foreground">
+                  <div>Lun-Vin: 09:00-18:00</div>
+                  <div>Sâm-Dum: 09:00-15:00</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-auto-green-dark mt-8 pt-8 text-center">
-          <p className="text-sm text-muted-foreground">
-            © 2025 Direct Auto. Toate drepturile rezervate.         Made By Vlad Vicol vladvicol09@gmail.com
-          </p>
+        {/* Bottom Bar */}
+        <div className="border-t border-auto-green-dark pt-6">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
+            <p className="text-sm text-muted-foreground text-center md:text-left">
+              © 2025 Direct Auto. Toate drepturile rezervate.
+            </p>
+            <p className="text-xs text-muted-foreground text-center md:text-right">
+              Made by <span className="text-auto-green">Vlad Vicol</span> • vladvicol09@gmail.com
+            </p>
+          </div>
         </div>
       </div>
     </footer>
