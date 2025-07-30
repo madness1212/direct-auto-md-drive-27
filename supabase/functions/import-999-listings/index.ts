@@ -259,9 +259,12 @@ async function uploadImageFromUrl(imageUrl: string, fileName: string, supabase: 
 }
 
 function parseContentManually(content: string, htmlContent: string = ''): CarListing[] {
-  const listings: CarListing[] = [];
   console.log('Content length:', content.length);
   console.log('HTML content length:', htmlContent.length);
+  
+  // Check if this is a single listing page URL pattern
+  const url = content.match(/https?:\/\/[^\s]+/)?.[0] || '';
+  const isSingleListingUrl = url.includes('/ro/') && url.split('/').length > 5;
   
   // Extract image URLs from HTML content
   const imageUrls: string[] = [];
@@ -274,7 +277,10 @@ function parseContentManually(content: string, htmlContent: string = ''): CarLis
           const imageUrl = srcMatch[1];
           // Only include images that look like car photos (avoid tiny icons, logos etc)
           if (imageUrl.includes('999.md') || imageUrl.includes('cdn') || imageUrl.includes('img') || imageUrl.includes('photo')) {
-            imageUrls.push(imageUrl);
+            // Filter out small images (usually thumbnails or icons)
+            if (!imageUrl.includes('40x30') && !imageUrl.includes('60x45') && !imageUrl.includes('80x60')) {
+              imageUrls.push(imageUrl);
+            }
           }
         }
       });
@@ -286,6 +292,7 @@ function parseContentManually(content: string, htmlContent: string = ''): CarLis
   // Try to find car listings using various patterns
   const lines = content.split('\n');
   let currentListing: Partial<CarListing> = {};
+  const listings: CarListing[] = [];
   
   for (const line of lines) {
     const trimmedLine = line.trim().toLowerCase();
@@ -298,8 +305,13 @@ function parseContentManually(content: string, htmlContent: string = ''): CarLis
     if (priceMatch) {
       const price = parseInt(priceMatch[1].replace(/[^\d]/g, ''));
       if (price > 500 && price < 200000) { // Reasonable car price range
-        if (currentListing.pret) {
-          // Save previous listing and start new one
+        // If we're on a single listing page and already have a listing, don't create multiple
+        if (isSingleListingUrl && currentListing.pret) {
+          continue;
+        }
+        
+        if (currentListing.pret && !isSingleListingUrl) {
+          // Save previous listing and start new one (only for multi-listing pages)
           if (currentListing.marca && currentListing.model) {
             listings.push(currentListing as CarListing);
           }
@@ -368,30 +380,49 @@ function parseContentManually(content: string, htmlContent: string = ''): CarLis
     listings.push(currentListing as CarListing);
   }
   
-  // Distribute images among listings
-  const imagesPerListing = Math.floor(imageUrls.length / Math.max(listings.length, 1));
+  // For single listing pages, assign ALL images to the single listing
+  // For multi-listing pages, distribute images evenly
+  let completeListings: CarListing[];
   
-  // Fill in missing values with defaults and proper capitalization
-  const completeListings = listings.map((listing, index) => {
-    // Assign images to this listing
-    const startIndex = index * imagesPerListing;
-    const endIndex = startIndex + imagesPerListing;
-    const listingImages = imageUrls.slice(startIndex, endIndex);
+  if (isSingleListingUrl && listings.length === 1) {
+    // Single listing gets all images
+    completeListings = [{
+      marca: capitalizeText(listings[0].marca || 'Unknown'),
+      model: capitalizeText(listings[0].model || 'Unknown'),
+      an_fabricatie: listings[0].an_fabricatie || new Date().getFullYear(),
+      pret: listings[0].pret || 0,
+      kilometraj: listings[0].kilometraj || 0,
+      tip_motor: listings[0].tip_motor || 'benzina',
+      cutie_viteze: listings[0].cutie_viteze || 'manuala',
+      caroserie: capitalizeText(listings[0].caroserie || 'sedan'),
+      descriere: `${capitalizeText(listings[0].marca || 'Unknown')} ${capitalizeText(listings[0].model || 'Unknown')} - Importat de pe 999.md`,
+      images: imageUrls // All images go to this single listing
+    }];
+  } else {
+    // Multi-listing page: distribute images evenly
+    const imagesPerListing = Math.floor(imageUrls.length / Math.max(listings.length, 1));
     
-    return {
-      marca: capitalizeText(listing.marca || 'Unknown'),
-      model: capitalizeText(listing.model || 'Unknown'),
-      an_fabricatie: listing.an_fabricatie || new Date().getFullYear(),
-      pret: listing.pret || 0,
-      kilometraj: listing.kilometraj || 0,
-      tip_motor: listing.tip_motor || 'benzina',
-      cutie_viteze: listing.cutie_viteze || 'manuala',
-      caroserie: capitalizeText(listing.caroserie || 'sedan'),
-      descriere: `${capitalizeText(listing.marca || 'Unknown')} ${capitalizeText(listing.model || 'Unknown')} - Importat de pe 999.md`,
-      images: listingImages // Raw URLs, will be processed later
-    };
-  });
+    completeListings = listings.map((listing, index) => {
+      // Assign images to this listing
+      const startIndex = index * imagesPerListing;
+      const endIndex = startIndex + imagesPerListing;
+      const listingImages = imageUrls.slice(startIndex, endIndex);
+      
+      return {
+        marca: capitalizeText(listing.marca || 'Unknown'),
+        model: capitalizeText(listing.model || 'Unknown'),
+        an_fabricatie: listing.an_fabricatie || new Date().getFullYear(),
+        pret: listing.pret || 0,
+        kilometraj: listing.kilometraj || 0,
+        tip_motor: listing.tip_motor || 'benzina',
+        cutie_viteze: listing.cutie_viteze || 'manuala',
+        caroserie: capitalizeText(listing.caroserie || 'sedan'),
+        descriere: `${capitalizeText(listing.marca || 'Unknown')} ${capitalizeText(listing.model || 'Unknown')} - Importat de pe 999.md`,
+        images: listingImages
+      };
+    });
+  }
   
-  console.log(`Parsed ${completeListings.length} car listings from content`);
+  console.log(`Parsed ${completeListings.length} car listings from content (single listing mode: ${isSingleListingUrl})`);
   return completeListings;
 }
