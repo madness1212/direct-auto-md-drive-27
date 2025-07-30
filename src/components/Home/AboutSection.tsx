@@ -21,6 +21,11 @@ const AboutSection = () => {
       title: "2000+ Clienți Mulțumiți",
       description: "Peste 2000 de clienți au ales să-și cumpere automobil de la noi."
     },
+    {
+      icon: Clock,
+      title: "Service Rapid",
+      description: "Oferim servicii complete de întreținere și reparații auto."
+    }
   ];
 
   const benefits = [
