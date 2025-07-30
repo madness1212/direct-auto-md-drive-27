@@ -108,12 +108,14 @@ serve(async (req) => {
     
     // Create a client with the user's JWT to get user info
     const supabaseAnon = Deno.env.get('SUPABASE_ANON_KEY')!;
-    const userClient = createClient(supabaseUrl, supabaseAnon, {
-      global: { headers: { authorization: authHeader } }
-    });
+    const userClient = createClient(supabaseUrl, supabaseAnon);
     
-    const { data: { user }, error: userError } = await userClient.auth.getUser();
+    // Extract JWT token from authorization header
+    const jwt = authHeader.replace('Bearer ', '');
+    
+    const { data: { user }, error: userError } = await userClient.auth.getUser(jwt);
     if (userError || !user) {
+      console.error('User error:', userError);
       throw new Error('Failed to get user information');
     }
 
