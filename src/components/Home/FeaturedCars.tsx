@@ -15,6 +15,7 @@ import {
   Loader2,
   Car as CarIcon
 } from "lucide-react";
+import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 interface Car {
   id: string;
@@ -33,6 +34,7 @@ interface Car {
 const FeaturedCars = () => {
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
+  const { formatMDLPrice } = useExchangeRate();
 
   useEffect(() => {
     fetchTopOffers();
@@ -179,7 +181,7 @@ const FeaturedCars = () => {
                           €{car.pret.toLocaleString()}
                         </div>
                         <div className="text-sm text-muted-foreground">
-                          ≈ {(car.pret * 18).toLocaleString()} MDL
+                          {formatMDLPrice(car.pret)}
                         </div>
                       </div>
                     </div>

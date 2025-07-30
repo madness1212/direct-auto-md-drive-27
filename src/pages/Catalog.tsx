@@ -43,9 +43,11 @@ import {
 
 import Layout from "@/components/Layout/Layout";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 const Catalog = () => {
   const { t } = useLanguage();
+  const { formatMDLPrice } = useExchangeRate();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
@@ -625,7 +627,7 @@ const Catalog = () => {
                               €{car.price.toLocaleString()}
                             </div>
                             <div className="text-sm text-muted-foreground">
-                              ≈ {(car.price * 18).toLocaleString()} MDL
+                              {formatMDLPrice(car.price)}
                             </div>
                           </div>
                         </div>

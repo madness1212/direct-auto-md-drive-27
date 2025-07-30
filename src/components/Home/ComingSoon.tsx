@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Eye, Loader2, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 interface Car {
   id: string;
@@ -23,6 +24,7 @@ interface Car {
 const ComingSoon = () => {
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
+  const { formatMDLPrice } = useExchangeRate();
 
   useEffect(() => {
     fetchComingSoonCars();
@@ -153,7 +155,7 @@ const ComingSoon = () => {
                           €{car.pret.toLocaleString()}
                         </div>
                         <div className="text-sm text-muted-foreground">
-                          ≈ {(car.pret * 19.5).toLocaleString()} MDL
+                          {formatMDLPrice(car.pret)}
                         </div>
                       </div>
                     </div>
