@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Calendar, Car, Clock, Mail, Phone, User, CheckCircle, XCircle, AlertCircle } from "lucide-react";
+import { Calendar, Car, Clock, Mail, Phone, User, CheckCircle, XCircle, AlertCircle, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
@@ -34,6 +35,15 @@ export const TestDriveManager = () => {
   const [loading, setLoading] = useState(true);
   const [pendingCount, setPendingCount] = useState(0);
   const { toast } = useToast();
+  const navigate = useNavigate();
+
+  // Funcție pentru generarea slug-ului pentru mașină
+  const generateCarSlug = (carId: string, carData: CarDetails) => {
+    const marca = carData.marca.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    const model = carData.model.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    const an = carData.an_fabricatie;
+    return `${marca}-${model}-${an}-${carId}`;
+  };
 
   useEffect(() => {
     fetchTestDriveRequests();
@@ -236,11 +246,25 @@ export const TestDriveManager = () => {
                     </TableCell>
                     <TableCell>
                       {carDetails[request.car_id] ? (
-                        <div className="flex items-center space-x-2">
-                          <Car className="h-4 w-4 text-auto-green" />
-                          <span>
-                            {carDetails[request.car_id].marca} {carDetails[request.car_id].model} ({carDetails[request.car_id].an_fabricatie})
-                          </span>
+                        <div className="space-y-2">
+                          <div className="flex items-center space-x-2">
+                            <Car className="h-4 w-4 text-auto-green" />
+                            <span>
+                              {carDetails[request.car_id].marca} {carDetails[request.car_id].model} ({carDetails[request.car_id].an_fabricatie})
+                            </span>
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              const slug = generateCarSlug(request.car_id, carDetails[request.car_id]);
+                              navigate(`/car/${slug}`);
+                            }}
+                            className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
+                          >
+                            <ExternalLink className="h-3 w-3 mr-1" />
+                            Vezi detalii
+                          </Button>
                         </div>
                       ) : (
                         <span className="text-muted-foreground">Mașină necunoscută</span>

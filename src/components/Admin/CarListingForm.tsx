@@ -19,6 +19,7 @@ interface CarListingFormData {
   model: string;
   an_fabricatie: number;
   kilometraj?: number;
+  parcurs?: number;
   tip_motor: string;
   cutie_viteze: string;
   tractiune?: string;
@@ -133,6 +134,7 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
         an_fabricatie: Number(data.an_fabricatie),
         pret: Number(data.pret),
         kilometraj: data.kilometraj ? Number(data.kilometraj) : null,
+        parcurs: data.parcurs ? Number(data.parcurs) : null,
         is_top_offer: isTopOffer,
         is_coming_soon: isComingSoon,
       };
@@ -214,7 +216,7 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-4 gap-4">
                 <div>
                   <Label htmlFor="an_fabricatie">An fabricație *</Label>
                   <Input
@@ -239,6 +241,17 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                     type="number"
                     min="0"
                     {...register('kilometraj')}
+                    placeholder="km"
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="parcurs">Parcurs</Label>
+                  <Input
+                    id="parcurs"
+                    type="number"
+                    min="0"
+                    {...register('parcurs')}
                     placeholder="km"
                   />
                 </div>
