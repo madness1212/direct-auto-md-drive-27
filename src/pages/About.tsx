@@ -93,7 +93,7 @@ const About = () => {
             Despre Direct Auto
           </h1>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Cu peste 10 ani de experiență pe piața auto din Moldova, Direct Auto s-a impus 
+            Cu peste 15 ani de experiență pe piața auto din Moldova, Direct Auto s-a impus 
             ca unul dintre cei mai de încredere dealeri auto din țară. Misiunea noastră este 
             să oferim automobile de cea mai înaltă calitate la prețuri competitive, 
             alături de servicii complete și profesionale.
