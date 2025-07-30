@@ -174,9 +174,6 @@ const About = () => {
                     <span className="text-muted-foreground">Consultații si test-drive complet gratuit</span>
                   </div>
                 </div>
-                <Button size="lg" className="bg-gradient-primary hover:bg-auto-green-dark shadow-card">
-                  Programează o Vizită
-                </Button>
               </div>
               <div className="bg-auto-neutral rounded-lg p-8 text-center">
                 <div className="space-y-4">
@@ -188,11 +185,11 @@ const About = () => {
                     mașina perfectă pentru nevoile tale.
                   </p>
                   <div className="space-y-2">
-                    <Button variant="outline" className="w-full border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
-                      Sună Acum: +373 696 88 999
+                    <Button variant="outline" className="w-full border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground" asChild>
+                      <a href="tel:+373696888999">Sună Acum: +373 696 88 999</a>
                     </Button>
-                    <Button variant="outline" className="w-full border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
-                      Scrie-ne: directauto.direct@gmail.com
+                    <Button variant="outline" className="w-full border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground" asChild>
+                      <a href="mailto:directauto.direct@gmail.com">Scrie-ne: directauto.direct@gmail.com</a>
                     </Button>
                   </div>
                 </div>
