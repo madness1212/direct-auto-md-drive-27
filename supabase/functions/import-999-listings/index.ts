@@ -57,19 +57,30 @@ serve(async (req) => {
         },
         extractorOptions: {
           mode: 'llm-extraction',
-          extractionPrompt: `Extract car listings data from this page. For each car listing, extract:
-          - marca (brand/make)
-          - model
-          - an_fabricatie (year of manufacture)
-          - pret (price in euros, convert from any currency)
-          - kilometraj (mileage/kilometers)
-          - tip_motor (engine type: benzina, diesel, hibrid, electric, GPL)
-          - cutie_viteze (transmission: manuala, automata, CVT)
-          - caroserie (body type: SUV, sedan, hatchback, combi, coupe, cabriolet)
-          - descriere (description)
-          - images (array of image URLs)
-          
-          Return as JSON array of car objects. If any field is not available, use appropriate defaults or null.`
+          extractionSchema: {
+            type: "object",
+            properties: {
+              listings: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    marca: { type: "string", description: "Car brand/make" },
+                    model: { type: "string", description: "Car model" },
+                    an_fabricatie: { type: "number", description: "Year of manufacture" },
+                    pret: { type: "number", description: "Price in euros" },
+                    kilometraj: { type: "number", description: "Mileage in kilometers" },
+                    tip_motor: { type: "string", description: "Engine type: benzina, diesel, hibrid, electric, GPL" },
+                    cutie_viteze: { type: "string", description: "Transmission: manuala, automata, CVT" },
+                    caroserie: { type: "string", description: "Body type: SUV, sedan, hatchback, combi, coupe, cabriolet" },
+                    descriere: { type: "string", description: "Car description" },
+                    images: { type: "array", items: { type: "string" }, description: "Array of image URLs" }
+                  },
+                  required: ["marca", "model", "an_fabricatie", "pret", "tip_motor", "cutie_viteze"]
+                }
+              }
+            }
+          }
         }
       })
     });
@@ -92,9 +103,11 @@ serve(async (req) => {
     
     try {
       if (firecrawlData.llm_extraction) {
-        carListings = JSON.parse(firecrawlData.llm_extraction);
+        const extractedData = JSON.parse(firecrawlData.llm_extraction);
+        carListings = extractedData.listings || [];
       } else if (firecrawlData.data?.llm_extraction) {
-        carListings = JSON.parse(firecrawlData.data.llm_extraction);
+        const extractedData = JSON.parse(firecrawlData.data.llm_extraction);
+        carListings = extractedData.listings || [];
       } else {
         console.log('No LLM extraction found, trying to parse content manually...');
         // Fallback: try to extract basic info from content
