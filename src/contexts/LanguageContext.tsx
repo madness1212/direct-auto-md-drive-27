@@ -18,7 +18,6 @@ const translations = {
     // Header
     'header.home': 'Acasă',
     'header.catalog': 'Catalog Auto',
-    'header.financing': 'Finanțare',
     'header.about': 'Despre Noi',
     'header.contact': 'Contact',
     'header.viewStock': 'Vezi Stocul',
@@ -86,7 +85,6 @@ const translations = {
     // Header
     'header.home': 'Главная',
     'header.catalog': 'Каталог Авто',
-    'header.financing': 'Финансирование',
     'header.about': 'О Нас',
     'header.contact': 'Контакты',
     'header.viewStock': 'Посмотреть Склад',
@@ -154,7 +152,6 @@ const translations = {
     // Header
     'header.home': 'Home',
     'header.catalog': 'Car Catalog',
-    'header.financing': 'Financing',
     'header.about': 'About Us',
     'header.contact': 'Contact',
     'header.viewStock': 'View Stock',

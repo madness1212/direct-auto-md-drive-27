@@ -119,9 +119,6 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
             <a href="/catalog" className="text-foreground hover:text-auto-green transition-colors">
               {t('header.catalog')}
             </a>
-            <a href="/finantare" className="text-foreground hover:text-auto-green transition-colors">
-              {t('header.financing')}
-            </a>
             <a href="/despre" className="text-foreground hover:text-auto-green transition-colors">
               {t('header.about')}
             </a>
@@ -181,9 +178,6 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
               </a>
               <a href="/catalog" className="text-foreground hover:text-auto-green transition-colors py-2">
                 {t('header.catalog')}
-              </a>
-              <a href="/finantare" className="text-foreground hover:text-auto-green transition-colors py-2">
-                {t('header.financing')}
               </a>
               <a href="/despre" className="text-foreground hover:text-auto-green transition-colors py-2">
                 {t('header.about')}
