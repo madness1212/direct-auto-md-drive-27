@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Star, Car, Users, Award } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import heroBanner from "@/assets/hero-banner.jpg";
+const heroBanner = "/lovable-uploads/3e709a6f-213f-4bff-877e-c4510989fbec.png";
 
 const HeroSection = () => {
   const { t } = useLanguage();
