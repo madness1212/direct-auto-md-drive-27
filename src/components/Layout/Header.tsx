@@ -103,11 +103,15 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <a href="/" className="flex items-center space-x-3 cursor-pointer">
-            <img src={logo} alt="Direct Auto" className="h-12 w-12" />
+          <a href="/" className="flex items-center space-x-2 md:space-x-3 cursor-pointer">
+            <img 
+              src={logo} 
+              alt="Direct Auto" 
+              className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 object-contain"
+            />
             <div>
-              <h1 className="text-2xl font-bold text-auto-green">Direct Auto</h1>
-              <p className="text-sm text-muted-foreground hidden md:block">{t('header.companySlogan')}</p>
+              <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-auto-green">Direct Auto</h1>
+              <p className="text-xs sm:text-sm text-muted-foreground hidden md:block">{t('header.companySlogan')}</p>
             </div>
           </a>
 
