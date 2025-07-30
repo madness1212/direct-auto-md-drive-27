@@ -176,7 +176,7 @@ const FeaturedCars = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="text-2xl font-bold text-auto-green">
-                          ${car.pret.toLocaleString()}
+                          €{car.pret.toLocaleString()}
                         </div>
                         <div className="text-sm text-muted-foreground">
                           ≈ {(car.pret * 18).toLocaleString()} MDL

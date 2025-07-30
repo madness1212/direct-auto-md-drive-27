@@ -127,7 +127,7 @@ const CarDetails = () => {
   }
 
   const formatPrice = (price: number) => {
-    return `$${price.toLocaleString()}`;
+    return `€${price.toLocaleString()}`;
   };
 
   const formatMDLPrice = (price: number) => {
