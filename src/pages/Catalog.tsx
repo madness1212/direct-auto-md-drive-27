@@ -75,7 +75,8 @@ const Catalog = () => {
         const { data, error } = await supabase
           .from('car_listings')
           .select('*')
-          .eq('status', 'active');
+          .eq('status', 'active')
+          .eq('is_coming_soon', false);
         
         if (error) {
           console.error('Error fetching cars:', error);
