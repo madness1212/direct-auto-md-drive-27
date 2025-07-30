@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Clock, ChevronLeft, ChevronRight, Star, Calendar, Gauge, Fuel, Settings } from "lucide-react";
+import { Loader2, Clock, ChevronLeft, ChevronRight, Star, Calendar, Gauge, Fuel, Settings, Car } from "lucide-react";
 import { Link } from "react-router-dom";
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
@@ -19,6 +19,7 @@ interface Car {
   kilometraj: number | null;
   tip_motor: string;
   cutie_viteze: string;
+  caroserie?: string;
   capacitate_motor?: string;
   images: string[];
   is_coming_soon: boolean;
@@ -207,8 +208,14 @@ const ComingSoon = () => {
                               <Settings className="h-3 w-3 text-auto-green" />
                               <span className="text-muted-foreground">{car.cutie_viteze}</span>
                             </div>
+                            {car.caroserie && (
+                              <div className="flex items-center space-x-1">
+                                <Car className="h-3 w-3 text-auto-green" />
+                                <span className="text-muted-foreground">{car.caroserie}</span>
+                              </div>
+                            )}
                             {car.capacitate_motor && (
-                              <div className="flex items-center space-x-1 col-span-2">
+                              <div className="flex items-center space-x-1">
                                 <Fuel className="h-3 w-3 text-auto-green" />
                                 <span className="text-muted-foreground">{car.capacitate_motor}</span>
                               </div>

@@ -12,6 +12,7 @@ import {
   Star,
   Loader2,
   Car as CarIcon,
+  Car,
   ChevronLeft,
   ChevronRight
 } from "lucide-react";
@@ -29,6 +30,7 @@ interface Car {
   kilometraj: number;
   tip_motor: string;
   cutie_viteze: string;
+  caroserie?: string;
   capacitate_motor?: string;
   images: string[];
   is_top_offer: boolean;
@@ -219,8 +221,14 @@ const FeaturedCars = () => {
                               <Settings className="h-3 w-3 text-auto-green" />
                               <span className="text-muted-foreground">{car.cutie_viteze}</span>
                             </div>
+                            {car.caroserie && (
+                              <div className="flex items-center space-x-1">
+                                <Car className="h-3 w-3 text-auto-green" />
+                                <span className="text-muted-foreground">{car.caroserie}</span>
+                              </div>
+                            )}
                             {car.capacitate_motor && (
-                              <div className="flex items-center space-x-1 col-span-2">
+                              <div className="flex items-center space-x-1">
                                 <Fuel className="h-3 w-3 text-auto-green" />
                                 <span className="text-muted-foreground">{car.capacitate_motor}</span>
                               </div>
