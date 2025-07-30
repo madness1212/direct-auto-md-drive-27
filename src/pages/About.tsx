@@ -155,17 +155,15 @@ const About = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
               <div className="space-y-6">
                 <h2 className="text-3xl font-bold text-auto-dark">
-                  Vizitează-ne Showroom-ul
+                  Vizitează Parcul Auto
                 </h2>
                 <p className="text-muted-foreground">
-                  Te invităm să descoperi gama noastră completă de automobile într-un 
-                  showroom modern, dotat cu toate facilitățile necesare pentru o 
-                  experiență de cumpărare confortabilă și plăcută.
+                  Te invităm să descoperi gama noastră completă de automobile la parcul nostru auto
                 </p>
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3">
                     <MapPin className="h-5 w-5 text-auto-green" />
-                    <span className="text-muted-foreground">str. București 67/1, Chișinău, Moldova</span>
+                    <span className="text-muted-foreground">str. Grenoble175, Chișinău, Moldova</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <Clock className="h-5 w-5 text-auto-green" />
