@@ -14,14 +14,15 @@ import {
   Car,
   Phone,
   Mail,
-  Heart,
   Share2,
   ChevronLeft as ArrowLeft,
   ChevronRight as ArrowRight,
-  ZoomIn,
-  Play
+  Play,
+  X
 } from "lucide-react";
 import Layout from "@/components/Layout/Layout";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 
 interface CarListing {
   id: string;
@@ -48,6 +49,7 @@ interface CarListing {
 const CarDetails = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [car, setCar] = useState<CarListing | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -201,21 +203,13 @@ const CarDetails = () => {
                         variant="ghost"
                         size="sm"
                         className="bg-background/80 hover:bg-background"
-                        onClick={() => setShowImageModal(true)}
-                      >
-                        <ZoomIn className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="bg-background/80 hover:bg-background"
-                      >
-                        <Heart className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="bg-background/80 hover:bg-background"
+                        onClick={() => {
+                          navigator.clipboard.writeText(window.location.href);
+                          toast({
+                            title: "Link copiat!",
+                            description: "Link-ul a fost copiat în clipboard.",
+                          });
+                        }}
                       >
                         <Share2 className="h-4 w-4" />
                       </Button>
@@ -414,6 +408,60 @@ const CarDetails = () => {
           </div>
         </div>
       </div>
+
+      {/* Image Modal */}
+      <Dialog open={showImageModal} onOpenChange={setShowImageModal}>
+        <DialogContent className="max-w-4xl max-h-[90vh] p-0">
+          <div className="relative">
+            {car?.images && (
+              <img 
+                src={car.images[currentImageIndex]} 
+                alt={`${car.marca} ${car.model}`}
+                className="w-full h-auto max-h-[80vh] object-contain"
+              />
+            )}
+            
+            {/* Close Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="absolute top-4 right-4 bg-background/80 hover:bg-background"
+              onClick={() => setShowImageModal(false)}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+            
+            {/* Navigation Arrows for Modal */}
+            {car?.images && car.images.length > 1 && (
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-background/80 hover:bg-background"
+                  onClick={prevImage}
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-background/80 hover:bg-background"
+                  onClick={nextImage}
+                >
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </>
+            )}
+            
+            {/* Image Counter for Modal */}
+            {car?.images && car.images.length > 1 && (
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-background/80 rounded-md px-3 py-1 text-sm">
+                {currentImageIndex + 1} / {car.images.length}
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 };
