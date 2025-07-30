@@ -314,11 +314,30 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                 
                 <div>
                   <Label htmlFor="caroserie">Caroserie</Label>
-                  <Input
-                    id="caroserie"
-                    {...register('caroserie')}
-                    placeholder="ex: Sedan, SUV, Hatchback"
-                  />
+                  <Select 
+                    onValueChange={(value) => setValue('caroserie', value)}
+                    defaultValue={watch('caroserie')}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selectează tipul de caroserie" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border border-border shadow-lg z-50">
+                      <SelectItem value="sedan">Sedan</SelectItem>
+                      <SelectItem value="hatchback">Hatchback</SelectItem>
+                      <SelectItem value="suv">SUV</SelectItem>
+                      <SelectItem value="crossover">Crossover</SelectItem>
+                      <SelectItem value="combi">Combi/Station Wagon</SelectItem>
+                      <SelectItem value="coupe">Coupe</SelectItem>
+                      <SelectItem value="cabriolet">Cabriolet</SelectItem>
+                      <SelectItem value="pickup">Pickup</SelectItem>
+                      <SelectItem value="minivan">Minivan</SelectItem>
+                      <SelectItem value="monovolum">Monovolum</SelectItem>
+                      <SelectItem value="roadster">Roadster</SelectItem>
+                      <SelectItem value="limuzina">Limuzină</SelectItem>
+                      <SelectItem value="microbus">Microbus</SelectItem>
+                      <SelectItem value="furgoneta">Furgoneta</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 
