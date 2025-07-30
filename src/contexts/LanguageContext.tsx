@@ -28,7 +28,7 @@ const translations = {
     'home.hero.subtitle': 'Găsește mașina perfectă din gama noastră selectă de automobile. Calitate garantată și prețuri accesibile.',
     'home.hero.viewCars': 'Vezi Mașinile',
     'home.hero.contactUs': 'Contactează-ne',
-    'home.stats.carsInStock': 'Automobile în Stoc',
+    'home.stats.carsInStock': 'Automobile Vândute',
     'home.stats.happyClients': 'Clienți Mulțumiți',
     'home.stats.yearsExperience': 'Ani de Experiență',
     
@@ -95,7 +95,7 @@ const translations = {
     'home.hero.subtitle': 'Найдите идеальный автомобиль из нашего отборного ассортимента новых и подержанных автомобилей. Гарантированное качество и конкурентные цены.',
     'home.hero.viewCars': 'Посмотреть Автомобили',
     'home.hero.contactUs': 'Связаться с нами',
-    'home.stats.carsInStock': 'Автомобили в Наличии',
+    'home.stats.carsInStock': 'Автомобили Проданы',
     'home.stats.happyClients': 'Довольные Клиенты',
     'home.stats.yearsExperience': 'Лет Опыта',
     
@@ -162,7 +162,7 @@ const translations = {
     'home.hero.subtitle': 'Find the perfect car from our select range of new and used automobiles. Guaranteed quality and competitive prices.',
     'home.hero.viewCars': 'View Cars',
     'home.hero.contactUs': 'Contact Us',
-    'home.stats.carsInStock': 'Cars in Stock',
+    'home.stats.carsInStock': 'Cars Sold',
     'home.stats.happyClients': 'Happy Clients',
     'home.stats.yearsExperience': 'Years Experience',
     
