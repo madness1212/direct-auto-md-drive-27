@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Heart, Eye, Loader2 } from "lucide-react";
+import { Heart, Eye, Loader2, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface Car {
@@ -66,12 +66,15 @@ const ComingSoon = () => {
   };
 
   return (
-    <section className="py-16 bg-background">
+    <section className="py-8 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            În Curând
-          </h2>
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <Clock className="h-6 w-6 text-blue-600" />
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+              În Curând
+            </h2>
+          </div>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Descoperă mașinile care vor fi disponibile în curând în showroom-ul nostru
           </p>

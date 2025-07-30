@@ -74,9 +74,9 @@ const FeaturedCars = () => {
   };
 
   return (
-    <section className="py-16 bg-auto-gray">
+    <section className="py-8 bg-auto-gray">
       <div className="container mx-auto px-4">
-        <div className="text-center space-y-4 mb-12">
+        <div className="text-center space-y-4 mb-8">
           <div className="flex items-center justify-center space-x-2 mb-4">
             <Star className="h-6 w-6 text-auto-green" />
             <h2 className="text-3xl md:text-4xl font-bold text-auto-dark">
