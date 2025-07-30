@@ -11,9 +11,9 @@ import {
   Clock,
   MessageSquare,
   Send,
-  Facebook,
-  Instagram
+  Facebook
 } from "lucide-react";
+import { FaTiktok } from "react-icons/fa";
 
 import Layout from "@/components/Layout/Layout";
 
@@ -65,12 +65,12 @@ const Contact = () => {
       icon: MapPin,
       title: "Adresa",
       details: ["Chisinau, Grenbole175"],
-      description: "Vizitează showroom-ul nostru"
+      description: "Vizitează parcul auto"
     },
     {
       icon: Clock,
       title: "Program de Lucru",
-      details: ["Lun-Vin: 09:00-18:00", "Sâmbătă: 09:00-15:00", "Duminică: Închis"],
+      details: ["Lun-Vin: 09:00-18:00", "Sâmbătă: 09:00-15:00", "Duminică: 09:00-15:00"],
       description: "Când ne poți găsi disponibili"
     }
   ];
@@ -230,12 +230,22 @@ const Contact = () => {
             <Card className="border-0 shadow-card">
               <CardContent className="p-4">
                 <h4 className="font-semibold text-auto-dark mb-3">Urmărește-ne</h4>
-                <div className="flex space-x-3">
-                  <Button size="sm" variant="outline" className="border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
+                 <div className="flex space-x-3">
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground"
+                    onClick={() => window.open('https://www.facebook.com/directauto.md/', '_blank')}
+                  >
                     <Facebook className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" variant="outline" className="border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
-                    <Instagram className="h-4 w-4" />
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground"
+                    onClick={() => window.open('https://www.tiktok.com/@directauto?lang=ro-RO', '_blank')}
+                  >
+                    <FaTiktok className="h-4 w-4" />
                   </Button>
                 </div>
               </CardContent>
@@ -243,26 +253,6 @@ const Contact = () => {
           </div>
         </div>
 
-        {/* Departments */}
-        <Card className="border-0 shadow-card mb-8">
-          <CardHeader>
-            <CardTitle className="text-auto-dark">Departamente Specializate</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {departments.map((dept, index) => (
-                <div key={index} className="space-y-2">
-                  <h4 className="font-semibold text-auto-dark">{dept.title}</h4>
-                  <div className="text-sm text-muted-foreground space-y-1">
-                    <p>📞 {dept.phone}</p>
-                    <p>✉️ {dept.email}</p>
-                    <p className="text-xs">{dept.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
 
         {/* Map Placeholder */}
         <Card className="border-0 shadow-card">
@@ -292,11 +282,7 @@ const Contact = () => {
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                <div className="space-y-1">
-                  <h5 className="font-semibold text-auto-dark">Parcare Gratuită</h5>
-                  <p className="text-sm text-muted-foreground">50+ locuri de parcare</p>
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
                 <div className="space-y-1">
                   <h5 className="font-semibold text-auto-dark">Test Drive</h5>
                   <p className="text-sm text-muted-foreground">Programează un test drive</p>
