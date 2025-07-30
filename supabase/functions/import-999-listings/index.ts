@@ -51,33 +51,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         url: url,
-        formats: ['extract'],
-        extract: {
-          schema: {
-            type: "object",
-            properties: {
-              listings: {
-                type: "array",
-                items: {
-                  type: "object",
-                  properties: {
-                    marca: { type: "string", description: "Car brand/make" },
-                    model: { type: "string", description: "Car model" },
-                    an_fabricatie: { type: "number", description: "Year of manufacture" },
-                    pret: { type: "number", description: "Price in euros" },
-                    kilometraj: { type: "number", description: "Mileage in kilometers" },
-                    tip_motor: { type: "string", description: "Engine type: benzina, diesel, hibrid, electric, GPL" },
-                    cutie_viteze: { type: "string", description: "Transmission: manuala, automata, CVT" },
-                    caroserie: { type: "string", description: "Body type: SUV, sedan, hatchback, combi, coupe, cabriolet" },
-                    descriere: { type: "string", description: "Car description" },
-                    images: { type: "array", items: { type: "string" }, description: "Array of image URLs" }
-                  },
-                  required: ["marca", "model", "an_fabricatie", "pret", "tip_motor", "cutie_viteze"]
-                }
-              }
-            }
-          }
-        }
+        formats: ['markdown', 'html']
       })
     });
 
@@ -98,16 +72,10 @@ serve(async (req) => {
     let carListings: CarListing[] = [];
     
     try {
-      if (firecrawlData.extract) {
-        carListings = firecrawlData.extract.listings || [];
-      } else if (firecrawlData.data?.extract) {
-        carListings = firecrawlData.data.extract.listings || [];
-      } else {
-        console.log('No extraction found, trying to parse content manually...');
-        // Fallback: try to extract basic info from content
-        const content = firecrawlData.data?.content || firecrawlData.content || '';
-        carListings = parseContentManually(content);
-      }
+      console.log('Parsing content manually since we use simple scraping...');
+      // Get the content from Firecrawl response
+      const content = firecrawlData.data?.markdown || firecrawlData.data?.content || firecrawlData.markdown || firecrawlData.content || '';
+      carListings = parseContentManually(content);
     } catch (parseError) {
       console.error('Error parsing extracted data:', parseError);
       carListings = [];
@@ -203,33 +171,108 @@ serve(async (req) => {
 });
 
 function parseContentManually(content: string): CarListing[] {
-  // Basic fallback parser for when LLM extraction fails
   const listings: CarListing[] = [];
+  console.log('Content length:', content.length);
   
-  // This is a simple implementation - you might want to enhance this
-  // based on the actual structure of 999.md pages
-  const priceMatches = content.match(/(\d+)\s*(euro|eur|€)/gi);
-  const yearMatches = content.match(/20\d{2}/g);
+  // Try to find car listings using various patterns
+  const lines = content.split('\n');
+  let currentListing: Partial<CarListing> = {};
   
-  if (priceMatches && priceMatches.length > 0) {
-    priceMatches.forEach((priceMatch, index) => {
-      const price = parseInt(priceMatch.replace(/[^\d]/g, ''));
-      const year = yearMatches && yearMatches[index] ? parseInt(yearMatches[index]) : new Date().getFullYear();
-      
-      listings.push({
-        marca: 'Unknown',
-        model: 'Unknown',
-        an_fabricatie: year,
-        pret: price,
-        kilometraj: 0,
-        tip_motor: 'benzina',
-        cutie_viteze: 'manuala',
-        caroserie: 'sedan',
-        descriere: 'Imported from 999.md - manual parsing',
-        images: []
-      });
-    });
+  for (const line of lines) {
+    const trimmedLine = line.trim().toLowerCase();
+    
+    // Skip empty lines
+    if (!trimmedLine) continue;
+    
+    // Look for prices (in various formats)
+    const priceMatch = trimmedLine.match(/(\d+[\s,]*\d*)\s*(euro|eur|€|\$|lei)/i);
+    if (priceMatch) {
+      const price = parseInt(priceMatch[1].replace(/[^\d]/g, ''));
+      if (price > 500 && price < 200000) { // Reasonable car price range
+        if (currentListing.pret) {
+          // Save previous listing and start new one
+          if (currentListing.marca && currentListing.model) {
+            listings.push(currentListing as CarListing);
+          }
+          currentListing = {};
+        }
+        currentListing.pret = price;
+      }
+    }
+    
+    // Look for years
+    const yearMatch = trimmedLine.match(/\b(20[0-2][0-9]|19[8-9][0-9])\b/);
+    if (yearMatch && currentListing.pret) {
+      currentListing.an_fabricatie = parseInt(yearMatch[1]);
+    }
+    
+    // Look for common car brands
+    const brands = ['mercedes', 'bmw', 'audi', 'volkswagen', 'toyota', 'honda', 'ford', 'opel', 'skoda', 'nissan', 'hyundai', 'kia', 'mazda', 'renault', 'peugeot', 'citroen', 'fiat', 'alfa', 'volvo', 'lexus', 'infiniti', 'acura', 'cadillac', 'chevrolet', 'dodge', 'jeep', 'land', 'rover', 'jaguar', 'porsche', 'mini', 'smart', 'seat', 'dacia'];
+    
+    for (const brand of brands) {
+      if (trimmedLine.includes(brand) && currentListing.pret && !currentListing.marca) {
+        currentListing.marca = brand.charAt(0).toUpperCase() + brand.slice(1);
+        
+        // Try to extract model from the same line
+        const brandIndex = trimmedLine.indexOf(brand);
+        const afterBrand = trimmedLine.substring(brandIndex + brand.length).trim();
+        const modelMatch = afterBrand.match(/^([a-z0-9\-\s]+)/i);
+        if (modelMatch) {
+          currentListing.model = modelMatch[1].trim().split(' ')[0];
+        }
+        break;
+      }
+    }
+    
+    // Look for mileage
+    const mileageMatch = trimmedLine.match(/(\d+[\s,]*\d*)\s*(km|mil)/i);
+    if (mileageMatch && currentListing.pret) {
+      const mileage = parseInt(mileageMatch[1].replace(/[^\d]/g, ''));
+      if (mileage < 1000000) { // Reasonable mileage range
+        currentListing.kilometraj = mileage;
+      }
+    }
+    
+    // Look for engine types
+    if (trimmedLine.includes('diesel') && currentListing.pret) {
+      currentListing.tip_motor = 'diesel';
+    } else if (trimmedLine.includes('benzin') && currentListing.pret) {
+      currentListing.tip_motor = 'benzina';
+    } else if (trimmedLine.includes('hibrid') && currentListing.pret) {
+      currentListing.tip_motor = 'hibrid';
+    } else if (trimmedLine.includes('electric') && currentListing.pret) {
+      currentListing.tip_motor = 'electric';
+    } else if (trimmedLine.includes('gpl') && currentListing.pret) {
+      currentListing.tip_motor = 'GPL';
+    }
+    
+    // Look for transmission
+    if (trimmedLine.includes('automat') && currentListing.pret) {
+      currentListing.cutie_viteze = 'automata';
+    } else if (trimmedLine.includes('manual') && currentListing.pret) {
+      currentListing.cutie_viteze = 'manuala';
+    }
   }
   
-  return listings;
+  // Add the last listing if it's complete
+  if (currentListing.pret && currentListing.marca && currentListing.model) {
+    listings.push(currentListing as CarListing);
+  }
+  
+  // Fill in missing values with defaults
+  const completeListings = listings.map(listing => ({
+    marca: listing.marca || 'Unknown',
+    model: listing.model || 'Unknown',
+    an_fabricatie: listing.an_fabricatie || new Date().getFullYear(),
+    pret: listing.pret || 0,
+    kilometraj: listing.kilometraj || 0,
+    tip_motor: listing.tip_motor || 'benzina',
+    cutie_viteze: listing.cutie_viteze || 'manuala',
+    caroserie: listing.caroserie || 'sedan',
+    descriere: `${listing.marca} ${listing.model} - Importat de pe 999.md`,
+    images: listing.images || []
+  }));
+  
+  console.log(`Parsed ${completeListings.length} car listings from content`);
+  return completeListings;
 }
