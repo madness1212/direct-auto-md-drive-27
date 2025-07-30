@@ -43,11 +43,11 @@ import {
 
 import Layout from "@/components/Layout/Layout";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useExchangeRate } from "@/hooks/useExchangeRate";
+
 
 const Catalog = () => {
   const { t } = useLanguage();
-  const { formatMDLPrice } = useExchangeRate();
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
@@ -623,11 +623,8 @@ const Catalog = () => {
                         {/* Price */}
                         <div className="flex items-center justify-between">
                           <div>
-                            <div className="text-2xl font-bold text-auto-green">
+                            <div className="text-3xl font-bold text-auto-green">
                               €{car.price.toLocaleString()}
-                            </div>
-                            <div className="text-sm text-muted-foreground">
-                              {formatMDLPrice(car.price)}
                             </div>
                           </div>
                         </div>

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Eye, Loader2, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useExchangeRate } from "@/hooks/useExchangeRate";
+
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Car {
@@ -25,7 +25,7 @@ interface Car {
 const ComingSoon = () => {
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
-  const { formatMDLPrice } = useExchangeRate();
+  
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -154,11 +154,8 @@ const ComingSoon = () => {
                     
                     <div className="flex justify-between items-center mb-4">
                       <div>
-                        <div className="text-2xl font-bold text-primary">
+                        <div className="text-3xl font-bold text-primary">
                           €{car.pret.toLocaleString()}
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          {formatMDLPrice(car.pret)}
                         </div>
                       </div>
                     </div>

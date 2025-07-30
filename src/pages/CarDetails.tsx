@@ -130,9 +130,6 @@ const CarDetails = () => {
     return `€${price.toLocaleString()}`;
   };
 
-  const formatMDLPrice = (price: number) => {
-    return `≈ ${(price * 18).toLocaleString()} MDL`;
-  };
 
   return (
     <Layout>
@@ -317,11 +314,8 @@ const CarDetails = () => {
                 <CardContent className="space-y-6">
                   {/* Price */}
                   <div className="text-center p-4 bg-auto-green/5 rounded-lg border border-auto-green/20">
-                    <div className="text-3xl font-bold text-auto-green">
+                    <div className="text-4xl font-bold text-auto-green">
                       {formatPrice(car.pret)}
-                    </div>
-                    <div className="text-lg text-muted-foreground">
-                      {formatMDLPrice(car.pret)}
                     </div>
                   </div>
 

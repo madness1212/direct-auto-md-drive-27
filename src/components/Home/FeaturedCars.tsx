@@ -15,7 +15,7 @@ import {
   Loader2,
   Car as CarIcon
 } from "lucide-react";
-import { useExchangeRate } from "@/hooks/useExchangeRate";
+
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Car {
@@ -35,7 +35,7 @@ interface Car {
 const FeaturedCars = () => {
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
-  const { formatMDLPrice } = useExchangeRate();
+  
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -178,11 +178,8 @@ const FeaturedCars = () => {
                     {/* Price */}
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-2xl font-bold text-auto-green">
+                        <div className="text-3xl font-bold text-auto-green">
                           €{car.pret.toLocaleString()}
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          {formatMDLPrice(car.pret)}
                         </div>
                       </div>
                     </div>
