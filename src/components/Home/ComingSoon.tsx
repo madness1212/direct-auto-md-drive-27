@@ -97,7 +97,7 @@ const ComingSoon = () => {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 mb-8">
               {cars.map((car) => (
                 <Card key={car.id} className="group hover:shadow-lg transition-all duration-300 overflow-hidden">
                   <div className="relative">
@@ -111,19 +111,11 @@ const ComingSoon = () => {
                     <Badge className="absolute top-2 left-2 bg-blue-600 hover:bg-blue-700">
                       {t('home.comingSoon.badge')}
                     </Badge>
-                    <div className="absolute top-2 right-2 flex gap-2">
-                      <Button size="sm" variant="ghost" className="h-8 w-8 p-0 bg-white/80 hover:bg-white">
-                        <Heart className="h-4 w-4" />
-                      </Button>
-                      <Button size="sm" variant="ghost" className="h-8 w-8 p-0 bg-white/80 hover:bg-white">
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                    </div>
                   </div>
                   
-                  <CardContent className="p-4">
+                  <CardContent className="p-3">
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-semibold text-lg text-foreground">
+                      <h3 className="font-semibold text-sm text-foreground truncate">
                         {car.marca} {car.model}
                       </h3>
                       <div className="flex">
@@ -154,7 +146,7 @@ const ComingSoon = () => {
                     
                     <div className="flex justify-between items-center mb-4">
                       <div>
-                        <div className="text-3xl font-bold text-primary">
+                        <div className="text-xl font-bold text-primary">
                           €{car.pret.toLocaleString()}
                         </div>
                       </div>

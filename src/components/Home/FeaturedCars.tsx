@@ -106,7 +106,7 @@ const FeaturedCars = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 mb-8">
             {cars.map((car) => (
               <Card key={car.id} className="group hover:shadow-hero transition-all duration-300 bg-background border-0">
                 <CardContent className="p-0">
@@ -115,27 +115,19 @@ const FeaturedCars = () => {
                     <img 
                       src={car.images && car.images.length > 0 ? car.images[0] : "/placeholder.svg"} 
                       alt={`${car.marca} ${car.model}`}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     {car.is_top_offer && (
                       <Badge className="absolute top-4 left-4 bg-auto-green hover:bg-auto-green-dark">
                         {t('car.topOffer')}
                       </Badge>
                     )}
-                    <div className="absolute top-4 right-4 flex space-x-2">
-                      <Button size="sm" variant="ghost" className="h-8 w-8 p-0 bg-background/80 hover:bg-background">
-                        <Heart className="h-4 w-4" />
-                      </Button>
-                      <Button size="sm" variant="ghost" className="h-8 w-8 p-0 bg-background/80 hover:bg-background">
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                    </div>
                 </div>
 
-                  {/* Content */}
-                  <div className="p-4 space-y-4">
+                   {/* Content */}
+                   <div className="p-3 space-y-3">
                     <div>
-                      <h3 className="text-lg font-semibold text-auto-dark">
+                      <h3 className="text-sm font-semibold text-auto-dark truncate">
                         {car.marca} {car.model}
                       </h3>
                       <div className="flex items-center space-x-2 mt-1">
@@ -178,7 +170,7 @@ const FeaturedCars = () => {
                     {/* Price */}
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-3xl font-bold text-auto-green">
+                        <div className="text-xl font-bold text-auto-green">
                           €{car.pret.toLocaleString()}
                         </div>
                       </div>

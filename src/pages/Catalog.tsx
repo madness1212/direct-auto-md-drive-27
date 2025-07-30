@@ -547,7 +547,7 @@ const Catalog = () => {
                   <p className="text-muted-foreground">Încercați să modificați filtrele pentru a găsi mai multe rezultate.</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                   {filteredCars.map((car) => (
                   <Card key={car.id} className="group hover:shadow-xl transition-all duration-300 bg-background border-0 shadow-md">
                     <CardContent className="p-0">
@@ -556,27 +556,19 @@ const Catalog = () => {
                         <img 
                           src={car.image} 
                           alt={`${car.brand} ${car.model}`}
-                          className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                         {car.isTopOffer && (
                           <Badge className="absolute top-4 left-4 bg-auto-green hover:bg-auto-green text-white">
                             TOP OFERTĂ
                           </Badge>
                         )}
-                        <div className="absolute top-4 right-4 flex space-x-2">
-                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 bg-background/80 hover:bg-background">
-                            <Heart className="h-4 w-4" />
-                          </Button>
-                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0 bg-background/80 hover:bg-background">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </div>
                       </div>
 
                       {/* Content */}
-                      <div className="p-6 space-y-4">
+                      <div className="p-4 space-y-3">
                         <div>
-                          <h3 className="text-xl font-semibold text-foreground">
+                          <h3 className="text-sm font-semibold text-foreground truncate">
                             {car.brand} {car.model}
                           </h3>
                           <div className="flex items-center space-x-2 mt-1">
@@ -623,7 +615,7 @@ const Catalog = () => {
                         {/* Price */}
                         <div className="flex items-center justify-between">
                           <div>
-                            <div className="text-3xl font-bold text-auto-green">
+                            <div className="text-xl font-bold text-auto-green">
                               €{car.price.toLocaleString()}
                             </div>
                           </div>
