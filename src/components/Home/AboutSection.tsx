@@ -12,11 +12,6 @@ import {
 const AboutSection = () => {
   const features = [
     {
-      icon: Shield,
-      title: "Garanție de Calitate",
-      description: "Toate automobilele sunt verificate tehnic."
-    },
-    {
       icon: Award,
       title: "Experiență de 15+ Ani",
       description: "Parc auto de încredere cu experiență de peste 15 ani în vânzarea și importarea automobilelor din Europa în Republica Moldova."
