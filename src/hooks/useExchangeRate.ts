@@ -52,15 +52,10 @@ export const useExchangeRate = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const formatMDLPrice = (eurPrice: number) => {
-    const mdlPrice = eurPrice * exchangeRate;
-    return `≈ ${mdlPrice.toLocaleString()} MDL`;
-  };
 
   return {
     exchangeRate,
     loading,
-    error,
-    formatMDLPrice
+    error
   };
 };
