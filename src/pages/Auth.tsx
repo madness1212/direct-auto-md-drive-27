@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
@@ -29,6 +30,7 @@ export default function Auth() {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     const adminCode = formData.get('adminCode') as string;
+    const rememberMe = formData.get('rememberMe') === 'on';
 
     // Verifică codul de administrator
     if (adminCode !== 'NicolaeVicol1983/Direct') {
@@ -39,6 +41,13 @@ export default function Auth() {
       });
       setIsLoading(false);
       return;
+    }
+
+    // Store remember preference
+    if (rememberMe) {
+      localStorage.setItem('rememberMe', 'true');
+    } else {
+      localStorage.removeItem('rememberMe');
     }
 
     const { error } = await signIn(email, password);
@@ -145,6 +154,12 @@ export default function Auth() {
                     placeholder="Introdu codul de administrator"
                     required
                   />
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="remember-me" name="rememberMe" />
+                  <Label htmlFor="remember-me" className="text-sm font-normal">
+                    Ține-mă minte
+                  </Label>
                 </div>
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
