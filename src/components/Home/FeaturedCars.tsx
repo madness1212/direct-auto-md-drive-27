@@ -221,16 +221,16 @@ const FeaturedCars = () => {
                               <Settings className="h-3 w-3 text-auto-green" />
                               <span className="text-muted-foreground">{car.cutie_viteze}</span>
                             </div>
-                            {car.caroserie && (
-                              <div className="flex items-center space-x-1">
-                                <Car className="h-3 w-3 text-auto-green" />
-                                <span className="text-muted-foreground">{car.caroserie}</span>
-                              </div>
-                            )}
                             {car.capacitate_motor && (
                               <div className="flex items-center space-x-1">
                                 <Fuel className="h-3 w-3 text-auto-green" />
                                 <span className="text-muted-foreground">{car.capacitate_motor}</span>
+                              </div>
+                            )}
+                            {car.caroserie && (
+                              <div className="flex items-center space-x-1">
+                                <Car className="h-3 w-3 text-auto-green" />
+                                <span className="text-muted-foreground">{car.caroserie}</span>
                               </div>
                             )}
                           </div>
