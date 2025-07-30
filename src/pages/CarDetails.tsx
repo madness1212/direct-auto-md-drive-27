@@ -402,6 +402,7 @@ const CarDetails = () => {
                       variant="outline" 
                       className="w-full border-auto-green text-auto-green hover:bg-auto-green hover:text-white" 
                       size="lg"
+                      onClick={() => navigate('/contact')}
                     >
                       <Mail className="h-4 w-4 mr-2" />
                       Contactează-ne
