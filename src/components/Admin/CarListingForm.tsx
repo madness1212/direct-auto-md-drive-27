@@ -268,6 +268,7 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                       <SelectItem value="benzina">Benzină</SelectItem>
                       <SelectItem value="diesel">Diesel</SelectItem>
                       <SelectItem value="hibrid">Hibrid</SelectItem>
+                      <SelectItem value="diesel_hibrid">Diesel hibrid</SelectItem>
                       <SelectItem value="electric">Electric</SelectItem>
                     </SelectContent>
                   </Select>
