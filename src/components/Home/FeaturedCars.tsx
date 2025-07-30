@@ -160,7 +160,7 @@ const FeaturedCars = () => {
             <div className="overflow-hidden" ref={emblaRef}>
               <div className="flex">
                 {cars.map((car) => (
-                  <div key={car.id} className="flex-[0_0_100%] min-w-0 md:flex-[0_0_50%] lg:flex-[0_0_33.333%] xl:flex-[0_0_25%] pl-4">
+                  <div key={car.id} className="flex-[0_0_90%] min-w-0 md:flex-[0_0_45%] lg:flex-[0_0_30%] xl:flex-[0_0_22%] pl-4">
                     <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 mr-4">
                       <CardContent className="p-0">
                         {/* Image Container */}
@@ -168,7 +168,7 @@ const FeaturedCars = () => {
                           <img 
                             src={car.images && car.images.length > 0 ? car.images[0] : "/placeholder.svg"} 
                             alt={`${car.marca} ${car.model}`}
-                            className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300"
+                            className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                           {car.is_top_offer && (
                             <Badge className="absolute top-4 left-4 bg-auto-green hover:bg-auto-green-dark">
