@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, Eye, Loader2, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useExchangeRate } from "@/hooks/useExchangeRate";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Car {
   id: string;
@@ -25,6 +26,7 @@ const ComingSoon = () => {
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
   const { formatMDLPrice } = useExchangeRate();
+  const { t } = useLanguage();
 
   useEffect(() => {
     fetchComingSoonCars();
@@ -74,22 +76,23 @@ const ComingSoon = () => {
           <div className="flex items-center justify-center space-x-2 mb-4">
             <Clock className="h-6 w-6 text-auto-green" />
             <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-              În Curând
+              {t('home.comingSoon.title')}
             </h2>
           </div>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Descoperă mașinile care vor fi disponibile în curând în showroom-ul nostru
+            {t('home.comingSoon.subtitle')}
           </p>
         </div>
 
         {loading ? (
           <div className="flex justify-center items-center py-12">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <span className="ml-2 text-muted-foreground">{t('common.loading')}</span>
           </div>
         ) : cars.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground text-lg">
-              Nu sunt mașini programate să sosească în curând.
+              {t('home.comingSoon.noResults')}
             </p>
           </div>
         ) : (
@@ -106,7 +109,7 @@ const ComingSoon = () => {
                       />
                     </div>
                     <Badge className="absolute top-2 left-2 bg-blue-600 hover:bg-blue-700">
-                      ÎN CURÂND
+                      {t('home.comingSoon.badge')}
                     </Badge>
                     <div className="absolute top-2 right-2 flex gap-2">
                       <Button size="sm" variant="ghost" className="h-8 w-8 p-0 bg-white/80 hover:bg-white">
@@ -163,11 +166,11 @@ const ComingSoon = () => {
                     <div className="flex gap-2">
                       <Button asChild className="flex-1">
                         <Link to={`/catalog/${generateSlug(car)}`}>
-                          Detalii
+                          {t('car.details')}
                         </Link>
                       </Button>
                       <Button asChild variant="outline" className="flex-1">
-                        <Link to="/contact">Contactează</Link>
+                        <Link to="/contact">{t('car.contact')}</Link>
                       </Button>
                     </div>
                   </CardContent>
@@ -178,7 +181,7 @@ const ComingSoon = () => {
             <div className="text-center">
               <Button asChild variant="outline" size="lg">
                 <Link to="/catalog">
-                  Vezi Toate Mașinile
+                  {t('home.comingSoon.viewAll')}
                 </Link>
               </Button>
             </div>

@@ -16,6 +16,7 @@ import {
   Car as CarIcon
 } from "lucide-react";
 import { useExchangeRate } from "@/hooks/useExchangeRate";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Car {
   id: string;
@@ -35,6 +36,7 @@ const FeaturedCars = () => {
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
   const { formatMDLPrice } = useExchangeRate();
+  const { t } = useLanguage();
 
   useEffect(() => {
     fetchTopOffers();
@@ -82,26 +84,25 @@ const FeaturedCars = () => {
           <div className="flex items-center justify-center space-x-2 mb-4">
             <Star className="h-6 w-6 text-auto-green" />
             <h2 className="text-3xl md:text-4xl font-bold text-auto-dark">
-              Oferte Speciale
+              {t('home.featuredCars.title')}
             </h2>
           </div>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Descoperă cele mai bune oferte din catalogul nostru - 
-            automobile verificate și garantate cu prețuri competitive.
+            {t('home.featuredCars.subtitle')}
           </p>
         </div>
 
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="h-8 w-8 animate-spin text-auto-green" />
-            <span className="ml-2 text-muted-foreground">Se încarcă ofertele...</span>
+            <span className="ml-2 text-muted-foreground">{t('common.loading')}</span>
           </div>
         ) : cars.length === 0 ? (
           <div className="text-center py-12">
             <CarIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-foreground mb-2">Nu există top oferte</h3>
+            <h3 className="text-xl font-semibold text-foreground mb-2">{t('catalog.noResults')}</h3>
             <p className="text-muted-foreground">
-              Top ofertele vor fi afișate aici când vor fi configurate în panoul de administrare.
+              {t('catalog.noResultsText')}
             </p>
           </div>
         ) : (
@@ -118,7 +119,7 @@ const FeaturedCars = () => {
                     />
                     {car.is_top_offer && (
                       <Badge className="absolute top-4 left-4 bg-auto-green hover:bg-auto-green-dark">
-                        TOP OFERTĂ
+                        {t('car.topOffer')}
                       </Badge>
                     )}
                     <div className="absolute top-4 right-4 flex space-x-2">
@@ -193,11 +194,11 @@ const FeaturedCars = () => {
                         className="flex-1"
                       >
                         <Button className="w-full bg-gradient-primary hover:bg-auto-green-dark text-sm">
-                          Detalii
+                          {t('car.details')}
                         </Button>
                       </Link>
                       <Button asChild variant="outline" className="flex-1 text-sm border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
-                        <Link to="/contact">Contactează</Link>
+                        <Link to="/contact">{t('car.contact')}</Link>
                       </Button>
                     </div>
                   </div>
@@ -210,7 +211,7 @@ const FeaturedCars = () => {
         <div className="text-center">
           <Link to="/catalog">
             <Button size="lg" variant="outline" className="border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
-              Vezi Toate Ofertele
+              {t('home.featuredCars.viewAll')}
             </Button>
           </Link>
         </div>
