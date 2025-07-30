@@ -32,7 +32,7 @@ const translations = {
     'home.featuredCars.subtitle': 'Descoperă cele mai bune oferte din catalogul nostru',
     'home.featuredCars.viewAll': 'Vezi Toate Ofertele',
     'home.comingSoon.title': 'În Curând',
-    'home.comingSoon.subtitle': 'Descoperă mașinile care vor fi disponibile în curând în showroom-ul nostru',
+    'home.comingSoon.subtitle': 'Descoperă mașinile care vor fi disponibile în curând în Parcul nostru',
     'home.comingSoon.viewAll': 'Vezi Toate Mașinile',
     'home.comingSoon.badge': 'ÎN CURÂND',
     'home.comingSoon.noResults': 'Nu sunt mașini programate să sosească în curând.',
