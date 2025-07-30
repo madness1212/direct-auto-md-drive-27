@@ -194,14 +194,30 @@ const translations = {
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
   const [currentLang, setCurrentLang] = useState('ro');
+  
+  console.log('LanguageProvider rendering with currentLang:', currentLang);
 
   const t = (key: string): string => {
+    console.log('Translation request - key:', key, 'currentLang:', currentLang);
     const langTranslations = translations[currentLang as keyof typeof translations] || translations.ro;
-    return langTranslations[key as keyof typeof langTranslations] || key;
+    const result = langTranslations[key as keyof typeof langTranslations] || key;
+    console.log('Translation result:', result);
+    return result;
+  };
+
+  const handleSetCurrentLang = (lang: string) => {
+    console.log('Context setCurrentLang called with:', lang);
+    setCurrentLang(lang);
+  };
+
+  const contextValue = { 
+    currentLang, 
+    setCurrentLang: handleSetCurrentLang, 
+    t 
   };
 
   return (
-    <LanguageContext.Provider value={{ currentLang, setCurrentLang, t }}>
+    <LanguageContext.Provider value={contextValue}>
       {children}
     </LanguageContext.Provider>
   );

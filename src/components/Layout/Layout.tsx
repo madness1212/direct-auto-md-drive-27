@@ -10,6 +10,7 @@ const Layout = ({ children }: LayoutProps) => {
   const { currentLang, setCurrentLang } = useLanguage();
 
   const handleLanguageChange = (lang: string) => {
+    console.log('Layout handleLanguageChange called with:', lang);
     setCurrentLang(lang);
   };
 

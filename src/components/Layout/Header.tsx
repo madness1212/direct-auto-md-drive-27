@@ -83,7 +83,10 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
                   {languages.map((lang) => (
                     <DropdownMenuItem 
                       key={lang.code}
-                      onClick={() => onLanguageChange(lang.code)}
+                      onClick={() => {
+                        console.log('Language change clicked:', lang.code);
+                        onLanguageChange(lang.code);
+                      }}
                       className="hover:bg-auto-neutral cursor-pointer"
                     >
                       {lang.flag} {lang.name}
@@ -146,7 +149,10 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
                 {languages.map((lang) => (
                   <DropdownMenuItem 
                     key={lang.code}
-                    onClick={() => onLanguageChange(lang.code)}
+                    onClick={() => {
+                      console.log('Mobile language change clicked:', lang.code);
+                      onLanguageChange(lang.code);
+                    }}
                     className="hover:bg-auto-neutral cursor-pointer"
                   >
                     {lang.flag} {lang.name}
