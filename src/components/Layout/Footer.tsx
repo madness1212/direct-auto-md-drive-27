@@ -1,11 +1,12 @@
-import { Phone, Mail, MapPin, Clock, Facebook, Instagram } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Facebook } from "lucide-react";
+import { FaTelegram } from "react-icons/fa";
 import logo from "/lovable-uploads/4baf3b13-6bff-467c-92f9-2bdd6b9cb9a4.png";
 
 const Footer = () => {
   return (
     <footer className="bg-auto-dark text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2 md:space-x-3">
@@ -24,8 +25,14 @@ const Footer = () => {
               automobilelor din Europa în Republica Moldova.
             </p>
             <div className="flex space-x-4">
-              <Facebook className="h-5 w-5 text-muted-foreground hover:text-auto-green cursor-pointer transition-colors" />
-              <Instagram className="h-5 w-5 text-muted-foreground hover:text-auto-green cursor-pointer transition-colors" />
+              <Facebook 
+                className="h-5 w-5 text-muted-foreground hover:text-auto-green cursor-pointer transition-colors" 
+                onClick={() => window.open('https://www.facebook.com/directauto.md/', '_blank')}
+              />
+              <FaTelegram 
+                className="h-5 w-5 text-muted-foreground hover:text-auto-green cursor-pointer transition-colors" 
+                onClick={() => window.open('https://t.me/directautomd', '_blank')}
+              />
             </div>
           </div>
 
@@ -35,22 +42,12 @@ const Footer = () => {
             <ul className="space-y-2 text-sm">
               <li><a href="/" className="text-muted-foreground hover:text-auto-green transition-colors">Acasă</a></li>
               <li><a href="/catalog" className="text-muted-foreground hover:text-auto-green transition-colors">Catalog Auto</a></li>
-              <li><a href="/finantare" className="text-muted-foreground hover:text-auto-green transition-colors">Finanțare</a></li>
+              
               <li><a href="/despre" className="text-muted-foreground hover:text-auto-green transition-colors">Despre Noi</a></li>
               <li><a href="/contact" className="text-muted-foreground hover:text-auto-green transition-colors">Contact</a></li>
             </ul>
           </div>
 
-          {/* Services */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold">Servicii</h4>
-            <ul className="space-y-2 text-sm">
-              <li><span className="text-muted-foreground">Vânzare automobile rulate</span></li>
-              <li><span className="text-muted-foreground">Finanțare auto</span></li>
-              <li><span className="text-muted-foreground">Asigurare auto</span></li>
-              <li><span className="text-muted-foreground">Service auto</span></li>
-            </ul>
-          </div>
 
           {/* Contact Info */}
           <div className="space-y-4">

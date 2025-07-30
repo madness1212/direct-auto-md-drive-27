@@ -8,6 +8,7 @@ import {
   Facebook
 } from "lucide-react";
 import { FaTiktok } from "react-icons/fa";
+import { FaTelegram } from "react-icons/fa";
 
 import Layout from "@/components/Layout/Layout";
 
@@ -98,6 +99,14 @@ const Contact = () => {
                     onClick={() => window.open('https://www.tiktok.com/@directauto?lang=ro-RO', '_blank')}
                   >
                     <FaTiktok className="h-4 w-4" />
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground"
+                    onClick={() => window.open('https://t.me/directautomd', '_blank')}
+                  >
+                    <FaTelegram className="h-4 w-4" />
                   </Button>
                 </div>
               </CardContent>
