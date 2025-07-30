@@ -38,48 +38,53 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
   return (
     <header className="bg-background shadow-sm">
       {/* Top Bar */}
-      <div className="bg-auto-green text-primary-foreground py-2">
+      <div className="bg-gradient-to-r from-auto-green to-auto-green-dark text-white py-3 shadow-lg">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center text-sm">
-            {/* Desktop Contact Info */}
-            <div className="hidden md:flex items-center space-x-6">
-              <div className="flex items-center space-x-2">
+          <div className="flex justify-between items-center">
+            {/* Left Side - Tagline */}
+            <div className="hidden md:block">
+              <p className="text-sm font-medium opacity-90">Direct Auto - Mașini importate din Europa</p>
+            </div>
+
+            {/* Center - Desktop Contact Info */}
+            <div className="hidden md:flex items-center space-x-8">
+              <div className="flex items-center space-x-2 bg-white/10 px-3 py-2 rounded-lg backdrop-blur-sm">
                 <Phone className="h-4 w-4" />
-                <span>+373 696 88 999</span>
+                <span className="font-semibold">+373 696 88 999</span>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 bg-white/10 px-3 py-2 rounded-lg backdrop-blur-sm">
                 <Mail className="h-4 w-4" />
                 <span>directauto.direct@gmail.com</span>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 bg-white/10 px-3 py-2 rounded-lg backdrop-blur-sm">
                 <MapPin className="h-4 w-4" />
-                <span>Chisinau, Grenoble175</span>
+                <span>Chișinău, Grenoble175</span>
               </div>
             </div>
 
             {/* Mobile Contact Info */}
-            <div className="md:hidden flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <Phone className="h-4 w-4" />
-                <span>+373 696 88 999</span>
+            <div className="md:hidden flex items-center space-x-3 text-sm">
+              <div className="flex items-center space-x-1 bg-white/10 px-2 py-1 rounded">
+                <Phone className="h-3 w-3" />
+                <span className="font-semibold">+373 696 88 999</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="h-4 w-4" />
-                <span>Chisinau, Grenoble175</span>
+              <div className="flex items-center space-x-1 bg-white/10 px-2 py-1 rounded">
+                <MapPin className="h-3 w-3" />
+                <span>Chișinău</span>
               </div>
             </div>
             
-            {/* Language Selector - Desktop only */}
+            {/* Right Side - Language Selector */}
             <div className="hidden md:block">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-auto-green-light">
+                  <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 border border-white/30">
                     <Globe className="h-4 w-4 mr-2" />
                     {currentLanguage.flag} {currentLanguage.name}
                     <ChevronDown className="h-4 w-4 ml-1" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-background">
+                <DropdownMenuContent align="end" className="bg-background border shadow-lg z-50">
                   {languages.map((lang) => (
                     <DropdownMenuItem 
                       key={lang.code}
@@ -87,7 +92,7 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
                         console.log('Language change clicked:', lang.code);
                         onLanguageChange(lang.code);
                       }}
-                      className="hover:bg-auto-neutral cursor-pointer"
+                      className="hover:bg-auto-green hover:text-white cursor-pointer"
                     >
                       {lang.flag} {lang.name}
                     </DropdownMenuItem>
@@ -95,6 +100,11 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
+          </div>
+
+          {/* Mobile Tagline */}
+          <div className="md:hidden mt-2 text-center">
+            <p className="text-xs opacity-90">Mașini importate din Europa</p>
           </div>
         </div>
       </div>
