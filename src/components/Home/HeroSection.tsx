@@ -6,10 +6,10 @@ const heroBanner = "/lovable-uploads/23a86efd-805a-4ce9-a13d-0472dc2cbb45.png";
 const HeroSection = () => {
   const { t } = useLanguage();
   return (
-    <section className="relative min-h-[50vh] md:min-h-[60vh] flex items-center">
+    <section className="relative min-h-[100vh] flex items-center -mx-4 md:-mx-8 lg:-mx-16">
       {/* Background Image */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat md:bg-contain md:bg-center"
+        className="absolute inset-0 bg-cover bg-top bg-no-repeat"
         style={{
           backgroundImage: `url(${heroBanner})`,
         }}
