@@ -75,7 +75,8 @@ serve(async (req) => {
       console.log('Parsing content manually since we use simple scraping...');
       // Get the content from Firecrawl response
       const content = firecrawlData.data?.markdown || firecrawlData.data?.content || firecrawlData.markdown || firecrawlData.content || '';
-      carListings = parseContentManually(content);
+      const htmlContent = firecrawlData.data?.html || firecrawlData.html || '';
+      carListings = parseContentManually(content, htmlContent);
     } catch (parseError) {
       console.error('Error parsing extracted data:', parseError);
       carListings = [];
@@ -105,6 +106,26 @@ serve(async (req) => {
 
     for (const listing of carListings) {
       try {
+        console.log(`Processing listing ${listing.marca} ${listing.model}...`);
+        
+        // Upload images to Supabase Storage
+        const uploadedImageUrls: string[] = [];
+        for (let i = 0; i < listing.images.length; i++) {
+          const imageUrl = listing.images[i];
+          if (imageUrl.startsWith('http')) {
+            // Generate unique filename
+            const timestamp = Date.now();
+            const fileName = `999md-import/${listing.marca}-${listing.model}-${timestamp}-${i}.jpg`;
+            
+            const uploadedUrl = await uploadImageFromUrl(imageUrl, fileName, supabase);
+            if (uploadedUrl) {
+              uploadedImageUrls.push(uploadedUrl);
+            }
+          }
+        }
+        
+        console.log(`Uploaded ${uploadedImageUrls.length} images for ${listing.marca} ${listing.model}`);
+        
         // Validate and clean data with proper capitalization
         const cleanedListing = {
           marca: capitalizeText(listing.marca || 'Unknown'),
@@ -119,7 +140,7 @@ serve(async (req) => {
           descriere_ro: listing.descriere || 'Importat de pe 999.md',
           descriere_en: listing.descriere || 'Imported from 999.md',
           descriere_ru: listing.descriere || 'Импортировано с 999.md',
-          images: listing.images || [],
+          images: uploadedImageUrls, // Use uploaded Storage URLs
           status: 'active',
           tractiune: capitalizeText('fata'), // default value
           video_url: '',
@@ -177,9 +198,72 @@ function capitalizeText(text: string): string {
     .join(' ');
 }
 
-function parseContentManually(content: string): CarListing[] {
+// Helper function to download and upload images to Supabase Storage
+async function uploadImageFromUrl(imageUrl: string, fileName: string, supabase: any): Promise<string | null> {
+  try {
+    console.log('Downloading image:', imageUrl);
+    
+    // Download the image
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+      console.error('Failed to download image:', response.status);
+      return null;
+    }
+    
+    const imageBlob = await response.blob();
+    const arrayBuffer = await imageBlob.arrayBuffer();
+    const uint8Array = new Uint8Array(arrayBuffer);
+    
+    // Upload to Supabase Storage
+    const { data, error } = await supabase.storage
+      .from('car-images')
+      .upload(fileName, uint8Array, {
+        contentType: imageBlob.type || 'image/jpeg',
+        upsert: true
+      });
+    
+    if (error) {
+      console.error('Storage upload error:', error);
+      return null;
+    }
+    
+    // Return the public URL
+    const { data: publicUrlData } = supabase.storage
+      .from('car-images')
+      .getPublicUrl(fileName);
+    
+    console.log('Image uploaded successfully:', publicUrlData.publicUrl);
+    return publicUrlData.publicUrl;
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    return null;
+  }
+}
+
+function parseContentManually(content: string, htmlContent: string = ''): CarListing[] {
   const listings: CarListing[] = [];
   console.log('Content length:', content.length);
+  console.log('HTML content length:', htmlContent.length);
+  
+  // Extract image URLs from HTML content
+  const imageUrls: string[] = [];
+  if (htmlContent) {
+    const imgMatches = htmlContent.match(/<img[^>]+src="([^"]+)"/gi);
+    if (imgMatches) {
+      imgMatches.forEach(match => {
+        const srcMatch = match.match(/src="([^"]+)"/i);
+        if (srcMatch && srcMatch[1]) {
+          const imageUrl = srcMatch[1];
+          // Only include images that look like car photos (avoid tiny icons, logos etc)
+          if (imageUrl.includes('999.md') || imageUrl.includes('cdn') || imageUrl.includes('img') || imageUrl.includes('photo')) {
+            imageUrls.push(imageUrl);
+          }
+        }
+      });
+    }
+  }
+  
+  console.log(`Found ${imageUrls.length} potential car images`);
   
   // Try to find car listings using various patterns
   const lines = content.split('\n');
@@ -266,19 +350,29 @@ function parseContentManually(content: string): CarListing[] {
     listings.push(currentListing as CarListing);
   }
   
+  // Distribute images among listings
+  const imagesPerListing = Math.floor(imageUrls.length / Math.max(listings.length, 1));
+  
   // Fill in missing values with defaults and proper capitalization
-  const completeListings = listings.map(listing => ({
-    marca: capitalizeText(listing.marca || 'Unknown'),
-    model: capitalizeText(listing.model || 'Unknown'),
-    an_fabricatie: listing.an_fabricatie || new Date().getFullYear(),
-    pret: listing.pret || 0,
-    kilometraj: listing.kilometraj || 0,
-    tip_motor: listing.tip_motor || 'benzina',
-    cutie_viteze: listing.cutie_viteze || 'manuala',
-    caroserie: capitalizeText(listing.caroserie || 'sedan'),
-    descriere: `${capitalizeText(listing.marca || 'Unknown')} ${capitalizeText(listing.model || 'Unknown')} - Importat de pe 999.md`,
-    images: listing.images || []
-  }));
+  const completeListings = listings.map((listing, index) => {
+    // Assign images to this listing
+    const startIndex = index * imagesPerListing;
+    const endIndex = startIndex + imagesPerListing;
+    const listingImages = imageUrls.slice(startIndex, endIndex);
+    
+    return {
+      marca: capitalizeText(listing.marca || 'Unknown'),
+      model: capitalizeText(listing.model || 'Unknown'),
+      an_fabricatie: listing.an_fabricatie || new Date().getFullYear(),
+      pret: listing.pret || 0,
+      kilometraj: listing.kilometraj || 0,
+      tip_motor: listing.tip_motor || 'benzina',
+      cutie_viteze: listing.cutie_viteze || 'manuala',
+      caroserie: capitalizeText(listing.caroserie || 'sedan'),
+      descriere: `${capitalizeText(listing.marca || 'Unknown')} ${capitalizeText(listing.model || 'Unknown')} - Importat de pe 999.md`,
+      images: listingImages // Raw URLs, will be processed later
+    };
+  });
   
   console.log(`Parsed ${completeListings.length} car listings from content`);
   return completeListings;
