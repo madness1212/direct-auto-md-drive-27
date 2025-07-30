@@ -36,16 +36,16 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
   const currentLanguage = languages.find(lang => lang.code === currentLang) || languages[0];
 
   return (
-    <header className="bg-background shadow-lg border-b border-border/50">
-      {/* Top Bar with Contact Info */}
-      <div className="bg-gradient-primary text-primary-foreground py-3">
+    <header className="bg-background shadow-sm">
+      {/* Top Bar */}
+      <div className="bg-auto-green text-primary-foreground py-2">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center text-sm">
-            {/* Desktop Contact Info - Enhanced Layout */}
-            <div className="hidden lg:flex items-center space-x-8">
-              <div className="flex items-center space-x-2 bg-white/10 rounded-full px-3 py-1">
+            {/* Desktop Contact Info */}
+            <div className="hidden md:flex items-center space-x-6">
+              <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4" />
-                <span className="font-medium">+373 696 88 999</span>
+                <span>+373 696 88 999</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
@@ -57,38 +57,29 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
               </div>
             </div>
 
-            {/* Medium Screen Contact Info */}
-            <div className="hidden md:flex lg:hidden items-center space-x-6">
-              <div className="flex items-center space-x-2 bg-white/10 rounded-full px-3 py-1">
+            {/* Mobile Contact Info */}
+            <div className="md:hidden flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4" />
-                <span className="font-medium">+373 696 88 999</span>
+                <span>+373 696 88 999</span>
               </div>
               <div className="flex items-center space-x-2">
                 <MapPin className="h-4 w-4" />
-                <span>Chisinau</span>
-              </div>
-            </div>
-
-            {/* Mobile Contact Info */}
-            <div className="md:hidden flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-white/10 rounded-full px-2 py-1">
-                <Phone className="h-4 w-4" />
-                <span className="font-medium">+373 696 88 999</span>
+                <span>Chisinau, Grenoble175</span>
               </div>
             </div>
             
-            {/* Language Selector - Enhanced Design */}
+            {/* Language Selector - Desktop only */}
             <div className="hidden md:block">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-white/20 rounded-full px-4 py-2 transition-all duration-200">
+                  <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-auto-green-light">
                     <Globe className="h-4 w-4 mr-2" />
-                    <span className="hidden lg:inline">{currentLanguage.flag} {currentLanguage.name}</span>
-                    <span className="lg:hidden">{currentLanguage.flag}</span>
+                    {currentLanguage.flag} {currentLanguage.name}
                     <ChevronDown className="h-4 w-4 ml-1" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-background shadow-xl border border-border/50">
+                <DropdownMenuContent align="end" className="bg-background">
                   {languages.map((lang) => (
                     <DropdownMenuItem 
                       key={lang.code}
@@ -96,7 +87,7 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
                         console.log('Language change clicked:', lang.code);
                         onLanguageChange(lang.code);
                       }}
-                      className="hover:bg-auto-neutral cursor-pointer transition-colors"
+                      className="hover:bg-auto-neutral cursor-pointer"
                     >
                       {lang.flag} {lang.name}
                     </DropdownMenuItem>
@@ -108,78 +99,53 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
         </div>
       </div>
 
-      {/* Main Navigation - Enhanced */}
-      <div className="container mx-auto px-4 py-4 md:py-6">
+      {/* Main Navigation */}
+      <div className="container mx-auto px-4 py-2 md:py-4">
         <div className="flex justify-between items-center">
-          {/* Logo - Enhanced */}
-          <a href="/" className="flex items-center space-x-3 md:space-x-4 cursor-pointer group">
-            <div className="bg-gradient-primary p-2 rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300">
-              <img 
-                src={logo} 
-                alt="Direct Auto" 
-                className="h-10 w-10 md:h-16 md:w-16 object-contain filter brightness-0 invert"
-              />
-            </div>
+          {/* Logo - Mobile Optimized */}
+          <a href="/" className="flex items-center space-x-2 md:space-x-4 cursor-pointer">
+            <img 
+              src={logo} 
+              alt="Direct Auto" 
+              className="h-12 w-12 md:h-24 md:w-24 object-contain"
+            />
             <div>
-              <h1 className="text-xl md:text-3xl lg:text-4xl font-bold text-auto-green">Direct Auto</h1>
-              <p className="text-xs md:text-sm text-muted-foreground hidden md:block">Import masini din Europa</p>
+              <h1 className="text-xl md:text-4xl font-bold text-auto-green">Direct Auto</h1>
             </div>
           </a>
 
-          {/* Desktop Navigation - Enhanced */}
-          <nav className="hidden lg:flex items-center space-x-8">
-            <a href="/" className="text-foreground hover:text-auto-green transition-all duration-200 font-medium relative group">
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-8">
+            <a href="/" className="text-foreground hover:text-auto-green transition-colors">
               {t('header.home')}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-auto-green transition-all duration-200 group-hover:w-full"></span>
             </a>
-            <a href="/catalog" className="text-foreground hover:text-auto-green transition-all duration-200 font-medium relative group">
+            <a href="/catalog" className="text-foreground hover:text-auto-green transition-colors">
               {t('header.catalog')}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-auto-green transition-all duration-200 group-hover:w-full"></span>
             </a>
-            <a href="/despre" className="text-foreground hover:text-auto-green transition-all duration-200 font-medium relative group">
+            <a href="/despre" className="text-foreground hover:text-auto-green transition-colors">
               {t('header.about')}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-auto-green transition-all duration-200 group-hover:w-full"></span>
             </a>
-            <a href="/contact" className="text-foreground hover:text-auto-green transition-all duration-200 font-medium relative group">
+            <a href="/contact" className="text-foreground hover:text-auto-green transition-colors">
               {t('header.contact')}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-auto-green transition-all duration-200 group-hover:w-full"></span>
             </a>
-            
-            {/* Call to Action Button - Enhanced */}
-            <div className="flex items-center space-x-4">
-              <a href="tel:+373696888999" className="flex items-center space-x-2 text-auto-green hover:text-auto-green-dark transition-colors font-semibold">
-                <Phone className="h-5 w-5" />
-                <span>+373 696 88 999</span>
-              </a>
-              <Button 
-                className="bg-gradient-primary hover:shadow-hero shadow-card px-6 py-2 text-base font-semibold transition-all duration-300 hover:scale-105"
-                onClick={() => window.location.href = '/catalog'}
-              >
-                {t('header.viewStock')}
-              </Button>
-            </div>
-          </nav>
-
-          {/* Medium Screen Navigation */}
-          <div className="hidden md:flex lg:hidden items-center space-x-4">
             <Button 
-              className="bg-gradient-primary hover:shadow-hero shadow-card transition-all duration-300"
+              className="bg-gradient-primary hover:bg-auto-green-dark shadow-card"
               onClick={() => window.location.href = '/catalog'}
             >
               {t('header.viewStock')}
             </Button>
-          </div>
+          </nav>
 
-          {/* Mobile Controls */}
-          <div className="md:hidden flex items-center space-x-2">
+          {/* Mobile Language & Menu */}
+          <div className="md:hidden flex items-center space-x-1">
             {/* Language Selector Mobile */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-foreground hover:bg-auto-green-light p-2 rounded-full">
+                <Button variant="ghost" size="sm" className="text-foreground hover:bg-auto-green-light p-2">
                   <Globe className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-background shadow-xl">
+              <DropdownMenuContent align="end" className="bg-background">
                 {languages.map((lang) => (
                   <DropdownMenuItem 
                     key={lang.code}
@@ -200,7 +166,7 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
               variant="ghost"
               size="sm"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-full hover:bg-auto-green-light"
+              className="p-2"
             >
               {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
@@ -209,22 +175,22 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <nav className="md:hidden mt-6 py-4 border-t border-border/50">
+          <nav className="md:hidden mt-4 py-4 border-t border-border">
             <div className="flex flex-col space-y-4">
-              <a href="/" className="text-foreground hover:text-auto-green transition-colors py-3 px-4 rounded-lg hover:bg-auto-green-light/20">
+              <a href="/" className="text-foreground hover:text-auto-green transition-colors py-2">
                 {t('header.home')}
               </a>
-              <a href="/catalog" className="text-foreground hover:text-auto-green transition-colors py-3 px-4 rounded-lg hover:bg-auto-green-light/20">
+              <a href="/catalog" className="text-foreground hover:text-auto-green transition-colors py-2">
                 {t('header.catalog')}
               </a>
-              <a href="/despre" className="text-foreground hover:text-auto-green transition-colors py-3 px-4 rounded-lg hover:bg-auto-green-light/20">
+              <a href="/despre" className="text-foreground hover:text-auto-green transition-colors py-2">
                 {t('header.about')}
               </a>
-              <a href="/contact" className="text-foreground hover:text-auto-green transition-colors py-3 px-4 rounded-lg hover:bg-auto-green-light/20">
+              <a href="/contact" className="text-foreground hover:text-auto-green transition-colors py-2">
                 {t('header.contact')}
               </a>
               <Button 
-                className="bg-gradient-primary hover:shadow-hero shadow-card mt-4 w-full"
+                className="bg-gradient-primary hover:bg-auto-green-dark shadow-card mt-4"
                 onClick={() => window.location.href = '/catalog'}
               >
                 {t('header.viewStock')}
