@@ -9,7 +9,7 @@ const HeroSection = () => {
     <section className="relative min-h-[50vh] md:min-h-[60vh] flex items-center">
       {/* Background Image */}
       <div 
-        className="absolute inset-2 bg-cover bg-center bg-no-repeat md:bg-contain md:bg-center"
+        className="absolute inset-2 bg-contain bg-center bg-no-repeat md:bg-contain md:bg-center"
         style={{
           backgroundImage: `url(${heroBanner})`,
         }}
