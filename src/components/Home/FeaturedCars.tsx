@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -10,11 +10,13 @@ import {
   Fuel, 
   Settings, 
   Star,
-  Heart,
-  Eye,
   Loader2,
-  Car as CarIcon
+  Car as CarIcon,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
 
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -37,6 +39,53 @@ const FeaturedCars = () => {
   const [loading, setLoading] = useState(true);
   
   const { t } = useLanguage();
+
+  // Configurez carousel-ul cu autoplay
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { 
+      loop: true,
+      align: 'start',
+      slidesToScroll: 1,
+      breakpoints: {
+        '(min-width: 768px)': { slidesToScroll: 2 },
+        '(min-width: 1024px)': { slidesToScroll: 3 },
+        '(min-width: 1280px)': { slidesToScroll: 4 }
+      }
+    },
+    [Autoplay({ delay: 4000, stopOnInteraction: false })]
+  );
+
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  const scrollTo = useCallback((index: number) => {
+    if (emblaApi) emblaApi.scrollTo(index);
+  }, [emblaApi]);
+
+  const onInit = useCallback((emblaApi: any) => {
+    setScrollSnaps(emblaApi.scrollSnapList());
+  }, []);
+
+  const onSelect = useCallback((emblaApi: any) => {
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, []);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    onInit(emblaApi);
+    onSelect(emblaApi);
+    emblaApi.on('reInit', onInit);
+    emblaApi.on('select', onSelect);
+  }, [emblaApi, onInit, onSelect]);
 
   useEffect(() => {
     fetchTopOffers();
@@ -106,98 +155,140 @@ const FeaturedCars = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
-            {cars.map((car) => (
-              <Card key={car.id} className="group hover:shadow-hero transition-all duration-300 bg-background border-0">
-                <CardContent className="p-0">
-                  {/* Image Container */}
-                  <div className="relative overflow-hidden rounded-t-lg">
-                    <img 
-                      src={car.images && car.images.length > 0 ? car.images[0] : "/placeholder.svg"} 
-                      alt={`${car.marca} ${car.model}`}
-                      className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    {car.is_top_offer && (
-                      <Badge className="absolute top-4 left-4 bg-auto-green hover:bg-auto-green-dark">
-                        {t('car.topOffer')}
-                      </Badge>
-                    )}
-                </div>
-
-                   {/* Content */}
-                   <div className="p-3 space-y-3">
-                    <div>
-                      <h3 className="text-sm font-semibold text-auto-dark truncate">
-                        {car.marca} {car.model}
-                      </h3>
-                      <div className="flex items-center space-x-2 mt-1">
-                        <div className="flex items-center">
-                          {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className={`h-3 w-3 ${
-                                i < 4 // Placeholder rating de 4.5
-                                  ? 'text-auto-green fill-current' 
-                                  : 'text-muted-foreground'
-                              }`} 
-                            />
-                          ))}
+          <div className="relative">
+            {/* Carousel Container */}
+            <div className="overflow-hidden" ref={emblaRef}>
+              <div className="flex">
+                {cars.map((car) => (
+                  <div key={car.id} className="flex-[0_0_100%] min-w-0 md:flex-[0_0_50%] lg:flex-[0_0_33.333%] xl:flex-[0_0_25%] pl-4">
+                    <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 mr-4">
+                      <CardContent className="p-0">
+                        {/* Image Container */}
+                        <div className="relative overflow-hidden rounded-t-lg">
+                          <img 
+                            src={car.images && car.images.length > 0 ? car.images[0] : "/placeholder.svg"} 
+                            alt={`${car.marca} ${car.model}`}
+                            className="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                          {car.is_top_offer && (
+                            <Badge className="absolute top-4 left-4 bg-auto-green hover:bg-auto-green-dark">
+                              {t('car.topOffer')}
+                            </Badge>
+                          )}
                         </div>
-                        <span className="text-sm text-muted-foreground">(4.5)</span>
-                      </div>
-                    </div>
 
-                    {/* Specifications */}
-                    <div className="grid grid-cols-2 gap-2 text-sm">
-                      <div className="flex items-center space-x-1">
-                        <Calendar className="h-3 w-3 text-auto-green" />
-                        <span className="text-muted-foreground">{car.an_fabricatie}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <Gauge className="h-3 w-3 text-auto-green" />
-                        <span className="text-muted-foreground">{(car.kilometraj || 0).toLocaleString()} km</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <Fuel className="h-3 w-3 text-auto-green" />
-                        <span className="text-muted-foreground">{car.tip_motor}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <Settings className="h-3 w-3 text-auto-green" />
-                        <span className="text-muted-foreground">{car.cutie_viteze}</span>
-                      </div>
-                    </div>
+                        {/* Content */}
+                        <div className="p-3 space-y-3">
+                          <div>
+                            <h3 className="text-sm font-semibold text-auto-dark truncate">
+                              {car.marca} {car.model}
+                            </h3>
+                            <div className="flex items-center space-x-2 mt-1">
+                              <div className="flex items-center">
+                                {[...Array(5)].map((_, i) => (
+                                  <Star 
+                                    key={i} 
+                                    className={`h-3 w-3 ${
+                                      i < 4 // Placeholder rating de 4.5
+                                        ? 'text-auto-green fill-current' 
+                                        : 'text-muted-foreground'
+                                    }`} 
+                                  />
+                                ))}
+                              </div>
+                              <span className="text-sm text-muted-foreground">(4.5)</span>
+                            </div>
+                          </div>
 
-                    {/* Price */}
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-xl font-bold text-auto-green">
-                          €{car.pret.toLocaleString()}
+                          {/* Specifications */}
+                          <div className="grid grid-cols-2 gap-2 text-sm">
+                            <div className="flex items-center space-x-1">
+                              <Calendar className="h-3 w-3 text-auto-green" />
+                              <span className="text-muted-foreground">{car.an_fabricatie}</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <Gauge className="h-3 w-3 text-auto-green" />
+                              <span className="text-muted-foreground">{(car.kilometraj || 0).toLocaleString()} km</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <Fuel className="h-3 w-3 text-auto-green" />
+                              <span className="text-muted-foreground">{car.tip_motor}</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <Settings className="h-3 w-3 text-auto-green" />
+                              <span className="text-muted-foreground">{car.cutie_viteze}</span>
+                            </div>
+                          </div>
+
+                          {/* Price */}
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <div className="text-xl font-bold text-auto-green">
+                                €{car.pret.toLocaleString()}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Action Buttons */}
+                          <div className="flex space-x-2">
+                            <Link 
+                              to={`/catalog/${generateSlug(car.marca, car.model, car.an_fabricatie, car.id)}`}
+                              className="flex-1"
+                            >
+                              <Button className="w-full bg-gradient-primary hover:bg-auto-green-dark text-sm">
+                                {t('car.details')}
+                              </Button>
+                            </Link>
+                            <Button asChild variant="outline" className="flex-1 text-sm border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
+                              <Link to="/contact">{t('car.contact')}</Link>
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex space-x-2">
-                      <Link 
-                        to={`/catalog/${generateSlug(car.marca, car.model, car.an_fabricatie, car.id)}`}
-                        className="flex-1"
-                      >
-                        <Button className="w-full bg-gradient-primary hover:bg-auto-green-dark text-sm">
-                          {t('car.details')}
-                        </Button>
-                      </Link>
-                      <Button asChild variant="outline" className="flex-1 text-sm border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
-                        <Link to="/contact">{t('car.contact')}</Link>
-                      </Button>
-                    </div>
+                      </CardContent>
+                    </Card>
                   </div>
-                </CardContent>
-              </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Navigation Arrows - Hidden on Mobile */}
+            <Button
+              variant="outline"
+              size="icon"
+              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 bg-background/90 backdrop-blur-sm border-auto-green text-auto-green hover:bg-auto-green hover:text-white z-10"
+              onClick={scrollPrev}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 bg-background/90 backdrop-blur-sm border-auto-green text-auto-green hover:bg-auto-green hover:text-white z-10"
+              onClick={scrollNext}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
+
+        {/* Dots Indicators */}
+        {!loading && cars.length > 0 && (
+          <div className="flex justify-center mt-6 space-x-2">
+            {scrollSnaps.map((_, index) => (
+              <button
+                key={index}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  index === selectedIndex
+                    ? 'bg-auto-green scale-110'
+                    : 'bg-auto-green/30 hover:bg-auto-green/50'
+                }`}
+                onClick={() => scrollTo(index)}
+              />
             ))}
           </div>
         )}
 
-        <div className="text-center">
+        <div className="text-center mt-8">
           <Link to="/catalog">
             <Button size="lg" variant="outline" className="border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
               {t('home.featuredCars.viewAll')}
