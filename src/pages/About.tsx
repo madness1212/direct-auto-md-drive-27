@@ -171,7 +171,7 @@ const About = () => {
                   </div>
                   <div className="flex items-center space-x-3">
                     <Handshake className="h-5 w-5 text-auto-green" />
-                    <span className="text-muted-foreground">Consultații test-drive complet gratuit</span>
+                    <span className="text-muted-foreground">Consultații si test-drive complet gratuit</span>
                   </div>
                 </div>
                 <Button size="lg" className="bg-gradient-primary hover:bg-auto-green-dark shadow-card">
