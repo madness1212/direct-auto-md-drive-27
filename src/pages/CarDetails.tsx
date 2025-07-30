@@ -272,18 +272,6 @@ const CarDetails = () => {
                   </CardContent>
                 </Card>
               )}
-
-              {/* Description */}
-              <Card className="border-0 shadow-card">
-                <CardHeader>
-                  <CardTitle>Descriere</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {car.descriere_ro || car.descriere || "Descriere detaliată în curs de actualizare."}
-                  </p>
-                </CardContent>
-              </Card>
             </div>
 
             {/* Right Column - Details and Actions */}
@@ -371,6 +359,14 @@ const CarDetails = () => {
                         </div>
                       )}
                     </div>
+                  </div>
+
+                  {/* Description */}
+                  <div className="space-y-4">
+                    <h3 className="font-semibold text-foreground">Descriere</h3>
+                    <p className="text-muted-foreground leading-relaxed text-sm">
+                      {car.descriere_ro || car.descriere || "Descriere detaliată în curs de actualizare."}
+                    </p>
                   </div>
 
                   <Separator />
