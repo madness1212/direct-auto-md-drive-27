@@ -18,12 +18,6 @@ import Layout from "@/components/Layout/Layout";
 const About = () => {
   const stats = [
     {
-      icon: Car,
-      number: "500+",
-      label: "Automobile în Stoc",
-      description: "Gama largă de mașini noi și rulate"
-    },
-    {
       icon: Users,
       number: "2000+",
       label: "Clienți Mulțumiți",
@@ -31,15 +25,15 @@ const About = () => {
     },
     {
       icon: Award,
-      number: "10+",
+      number: "15+",
       label: "Ani de Experiență",
       description: "Peste un deceniu în domeniul auto"
     },
     {
       icon: Shield,
       number: "100%",
-      label: "Garanție de Calitate",
-      description: "Toate mașinile verificate și garantate"
+      label: "Garantam calitatea automobilelor",
+      description: "Toate mașinile verificate la service autorizat"
     }
   ];
 
