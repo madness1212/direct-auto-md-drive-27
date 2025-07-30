@@ -417,16 +417,6 @@ const CarDetails = () => {
               />
             )}
             
-            {/* Close Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="absolute top-4 right-4 bg-background/80 hover:bg-background"
-              onClick={() => setShowImageModal(false)}
-            >
-              <X className="h-4 w-4" />
-            </Button>
-            
             {/* Navigation Arrows for Modal */}
             {car?.images && car.images.length > 1 && (
               <>
