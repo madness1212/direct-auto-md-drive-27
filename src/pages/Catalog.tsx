@@ -199,12 +199,12 @@ const Catalog = () => {
                     <div className="space-y-6 pb-6">
                       {/* Search */}
                       <div className="space-y-2">
-                        <Label htmlFor="search-mobile">Caută mașina</Label>
+                        <Label htmlFor="search-mobile">{t('catalog.search')}</Label>
                         <div className="relative">
                           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                           <Input
                             id="search-mobile"
-                            placeholder="Marcă, model..."
+                            placeholder={t('catalog.search')}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="pl-10"
@@ -214,10 +214,10 @@ const Catalog = () => {
 
                       {/* Brand Filter */}
                       <div className="space-y-2">
-                        <Label>Marca</Label>
+                        <Label>{t('catalog.brand')}</Label>
                         <Select value={selectedBrand} onValueChange={setSelectedBrand}>
                           <SelectTrigger>
-                            <SelectValue placeholder="Selectează marca" />
+                            <SelectValue placeholder={`${t('catalog.selectBrand')}`} />
                           </SelectTrigger>
                           <SelectContent>
                             {brands.map((brand) => (
@@ -231,10 +231,10 @@ const Catalog = () => {
 
                       {/* Model Filter */}
                       <div className="space-y-2">
-                        <Label>Modelul</Label>
+                        <Label>{t('catalog.model')}</Label>
                         <Select value={selectedModel} onValueChange={setSelectedModel}>
                           <SelectTrigger>
-                            <SelectValue placeholder="Selectează modelul" />
+                            <SelectValue placeholder={`${t('catalog.selectModel')}`} />
                           </SelectTrigger>
                           <SelectContent>
                             {models.map((model) => (
@@ -248,10 +248,10 @@ const Catalog = () => {
 
                       {/* Year Filter */}
                       <div className="space-y-2">
-                        <Label>Anul</Label>
+                        <Label>{t('catalog.year')}</Label>
                         <Select value={selectedYear} onValueChange={setSelectedYear}>
                           <SelectTrigger>
-                            <SelectValue placeholder="Selectează anul" />
+                            <SelectValue placeholder={`${t('catalog.selectYear')}`} />
                           </SelectTrigger>
                           <SelectContent>
                             {years.map((year) => (
@@ -265,10 +265,10 @@ const Catalog = () => {
 
                       {/* Fuel Type Filter */}
                       <div className="space-y-2">
-                        <Label>Tip Motor</Label>
+                        <Label>{t('catalog.fuelType')}</Label>
                         <Select value={selectedFuel} onValueChange={setSelectedFuel}>
                           <SelectTrigger>
-                            <SelectValue placeholder="Selectează tipul motorului" />
+                            <SelectValue placeholder={`${t('catalog.selectFuel')}`} />
                           </SelectTrigger>
                           <SelectContent>
                             {fuelTypes.map((fuel) => (
@@ -282,10 +282,10 @@ const Catalog = () => {
 
                       {/* Transmission Filter */}
                       <div className="space-y-2">
-                        <Label>Cutie de Viteze</Label>
+                        <Label>{t('catalog.transmission')}</Label>
                         <Select value={selectedTransmission} onValueChange={setSelectedTransmission}>
                           <SelectTrigger>
-                            <SelectValue placeholder="Selectează cutia de viteze" />
+                            <SelectValue placeholder={`${t('catalog.selectTransmission')}`} />
                           </SelectTrigger>
                           <SelectContent>
                             {transmissions.map((transmission) => (
@@ -299,10 +299,10 @@ const Catalog = () => {
 
                       {/* Body Type Filter */}
                       <div className="space-y-2">
-                        <Label>Caroserie</Label>
+                        <Label>{t('catalog.bodyType')}</Label>
                         <Select value={selectedBodyType} onValueChange={setSelectedBodyType}>
                           <SelectTrigger>
-                            <SelectValue placeholder="Selectează caroseria" />
+                            <SelectValue placeholder={`${t('catalog.selectBodyType')}`} />
                           </SelectTrigger>
                           <SelectContent>
                             {bodyTypes.map((bodyType) => (
@@ -316,7 +316,7 @@ const Catalog = () => {
 
                       {/* Price Range */}
                       <div className="space-y-2">
-                        <Label>Preț (USD): ${priceRange[0].toLocaleString()} - ${priceRange[1].toLocaleString()}</Label>
+                        <Label>{t('catalog.price')}: ${priceRange[0].toLocaleString()} - ${priceRange[1].toLocaleString()}</Label>
                         <Slider
                           value={priceRange}
                           onValueChange={setPriceRange}
@@ -328,7 +328,7 @@ const Catalog = () => {
 
                       {/* Mileage Range */}
                       <div className="space-y-2">
-                        <Label>Kilometraj: {mileageRange[0].toLocaleString()} - {mileageRange[1].toLocaleString()} km</Label>
+                        <Label>{t('catalog.mileage')}: {mileageRange[0].toLocaleString()} - {mileageRange[1].toLocaleString()} {t('common.km')}</Label>
                         <Slider
                           value={mileageRange}
                           onValueChange={setMileageRange}
@@ -342,10 +342,10 @@ const Catalog = () => {
                   
                   <DrawerFooter className="flex flex-row gap-2">
                     <Button variant="outline" onClick={clearFilters} className="flex-1">
-                      Resetează
+                      {t('catalog.reset')}
                     </Button>
                     <Button onClick={handleFiltersApply} className="flex-1 bg-auto-green hover:bg-auto-green-dark text-white">
-                      Aplică Filtrele
+                      {t('catalog.apply')}
                     </Button>
                   </DrawerFooter>
                 </DrawerContent>

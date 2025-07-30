@@ -29,6 +29,9 @@ const translations = {
     'home.hero.subtitle': 'Găsește mașina perfectă din gama noastră selectă de automobile noi și rulate. Calitate garantată și prețuri competitive.',
     'home.hero.viewCars': 'Vezi Mașinile',
     'home.hero.contactUs': 'Contactează-ne',
+    'home.stats.carsInStock': 'Automobile în Stoc',
+    'home.stats.happyClients': 'Clienți Mulțumiți',
+    'home.stats.yearsExperience': 'Ani de Experiență',
     
     // Catalog
     'catalog.title': 'Catalogul Nostru Auto',
@@ -47,6 +50,12 @@ const translations = {
     'catalog.apply': 'Aplică Filtrele',
     'catalog.viewDetails': 'Vezi Detalii',
     'catalog.call': 'Sună',
+    'catalog.selectBrand': 'Selectează marca',
+    'catalog.selectModel': 'Selectează modelul',
+    'catalog.selectYear': 'Selectează anul',
+    'catalog.selectFuel': 'Selectează tipul motorului',
+    'catalog.selectTransmission': 'Selectează cutia de viteze',
+    'catalog.selectBodyType': 'Selectează caroseria',
     'catalog.noResults': 'Nu am găsit rezultate',
     'catalog.noResultsText': 'Încearcă să modifici filtrele pentru a găsi mai multe opțiuni.',
     
@@ -88,6 +97,9 @@ const translations = {
     'home.hero.subtitle': 'Найдите идеальный автомобиль из нашего отборного ассортимента новых и подержанных автомобилей. Гарантированное качество и конкурентные цены.',
     'home.hero.viewCars': 'Посмотреть Автомобили',
     'home.hero.contactUs': 'Связаться с нами',
+    'home.stats.carsInStock': 'Автомобили в Наличии',
+    'home.stats.happyClients': 'Довольные Клиенты',
+    'home.stats.yearsExperience': 'Лет Опыта',
     
     // Catalog
     'catalog.title': 'Наш Автомобильный Каталог',
@@ -106,6 +118,12 @@ const translations = {
     'catalog.apply': 'Применить Фильтры',
     'catalog.viewDetails': 'Подробнее',
     'catalog.call': 'Звонить',
+    'catalog.selectBrand': 'Выберите марку',
+    'catalog.selectModel': 'Выберите модель',
+    'catalog.selectYear': 'Выберите год',
+    'catalog.selectFuel': 'Выберите тип двигателя',
+    'catalog.selectTransmission': 'Выберите коробку передач',
+    'catalog.selectBodyType': 'Выберите кузов',
     'catalog.noResults': 'Результатов не найдено',
     'catalog.noResultsText': 'Попробуйте изменить фильтры для поиска дополнительных опций.',
     
@@ -147,6 +165,9 @@ const translations = {
     'home.hero.subtitle': 'Find the perfect car from our select range of new and used automobiles. Guaranteed quality and competitive prices.',
     'home.hero.viewCars': 'View Cars',
     'home.hero.contactUs': 'Contact Us',
+    'home.stats.carsInStock': 'Cars in Stock',
+    'home.stats.happyClients': 'Happy Clients',
+    'home.stats.yearsExperience': 'Years Experience',
     
     // Catalog
     'catalog.title': 'Our Car Catalog',
@@ -165,6 +186,12 @@ const translations = {
     'catalog.apply': 'Apply Filters',
     'catalog.viewDetails': 'View Details',
     'catalog.call': 'Call',
+    'catalog.selectBrand': 'Select brand',
+    'catalog.selectModel': 'Select model',
+    'catalog.selectYear': 'Select year',
+    'catalog.selectFuel': 'Select engine type',
+    'catalog.selectTransmission': 'Select transmission',
+    'catalog.selectBodyType': 'Select body type',
     'catalog.noResults': 'No results found',
     'catalog.noResultsText': 'Try modifying the filters to find more options.',
     
