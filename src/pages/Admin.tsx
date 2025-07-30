@@ -96,10 +96,15 @@ export default function Admin() {
 
       if (error) throw error;
 
+      // Update local state immediately
+      setCarListings(prev => prev.filter(car => car.id !== id));
+
       toast({
         title: 'Anunțul a fost șters',
         description: 'Anunțul a fost șters cu succes din baza de date.',
       });
+      
+      // Also refresh from server to ensure consistency
       fetchCarListings();
     } catch (error: any) {
       toast({
