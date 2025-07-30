@@ -100,17 +100,17 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
       </div>
 
       {/* Main Navigation */}
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-4 py-2 md:py-4">
         <div className="flex justify-between items-center">
-          {/* Logo - Centered and Larger */}
-          <a href="/" className="flex items-center justify-center space-x-3 md:space-x-4 cursor-pointer mx-auto md:mx-0">
+          {/* Logo - Mobile Optimized */}
+          <a href="/" className="flex items-center space-x-2 md:space-x-4 cursor-pointer">
             <img 
               src={logo} 
               alt="Direct Auto" 
-              className="h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 object-contain"
+              className="h-12 w-12 md:h-24 md:w-24 object-contain"
             />
             <div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-auto-green">Direct Auto</h1>
+              <h1 className="text-xl md:text-4xl font-bold text-auto-green">Direct Auto</h1>
             </div>
           </a>
 
@@ -137,12 +137,12 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
           </nav>
 
           {/* Mobile Language & Menu */}
-          <div className="md:hidden flex items-center space-x-2">
+          <div className="md:hidden flex items-center space-x-1">
             {/* Language Selector Mobile */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-foreground hover:bg-auto-green-light">
-                  <Globe className="h-4 w-4" />
+                <Button variant="ghost" size="sm" className="text-foreground hover:bg-auto-green-light p-2">
+                  <Globe className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-background">
@@ -166,8 +166,9 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
               variant="ghost"
               size="sm"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2"
             >
-              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
           </div>
         </div>
