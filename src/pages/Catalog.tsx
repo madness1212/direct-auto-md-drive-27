@@ -547,7 +547,7 @@ const Catalog = () => {
                   <p className="text-muted-foreground">Încercați să modificați filtrele pentru a găsi mai multe rezultate.</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {filteredCars.map((car) => (
                   <Card key={car.id} className="group hover:shadow-xl transition-all duration-300 bg-background border-0 shadow-md">
                     <CardContent className="p-0">
