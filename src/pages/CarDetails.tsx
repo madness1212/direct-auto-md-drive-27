@@ -407,7 +407,7 @@ const CarDetails = () => {
 
       {/* Image Modal */}
       <Dialog open={showImageModal} onOpenChange={setShowImageModal}>
-        <DialogContent className="max-w-4xl max-h-[90vh] p-0">
+        <DialogContent className="max-w-4xl max-h-[90vh] p-0 [&>button]:hidden">
           <div className="relative">
             {car?.images && (
               <img 
@@ -417,6 +417,15 @@ const CarDetails = () => {
               />
             )}
             
+            {/* Custom Close Button in Box */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="absolute top-4 right-4 bg-background border border-border shadow-lg hover:bg-accent rounded-md p-2"
+              onClick={() => setShowImageModal(false)}
+            >
+              <X className="h-4 w-4" />
+            </Button>
             {/* Navigation Arrows for Modal */}
             {car?.images && car.images.length > 1 && (
               <>
