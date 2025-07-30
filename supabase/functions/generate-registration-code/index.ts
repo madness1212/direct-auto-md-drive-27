@@ -11,7 +11,7 @@ const corsHeaders = {
 };
 
 interface GenerateCodeRequest {
-  email: string;
+  userEmail: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -21,11 +21,11 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { email }: GenerateCodeRequest = await req.json();
+    const { userEmail }: GenerateCodeRequest = await req.json();
 
-    if (!email) {
+    if (!userEmail) {
       return new Response(
-        JSON.stringify({ error: "Email-ul este obligatoriu" }),
+        JSON.stringify({ error: "Email-ul utilizatorului este obligatoriu" }),
         {
           status: 400,
           headers: { "Content-Type": "application/json", ...corsHeaders },
@@ -33,21 +33,8 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Lista email-urilor autorizate pentru înregistrare
-    const authorizedEmails = [
-      'vladvicol09@gmail.com',
-      'directauto.direct@gmail.com'
-    ];
-
-    if (!authorizedEmails.includes(email.toLowerCase())) {
-      return new Response(
-        JSON.stringify({ error: "Email-ul specificat nu este autorizat pentru înregistrare" }),
-        {
-          status: 403,
-          headers: { "Content-Type": "application/json", ...corsHeaders },
-        }
-      );
-    }
+    // Email-ul administratorului care va primi codul
+    const adminEmail = 'vladvicol09@gmail.com';
 
     // Creez clientul Supabase
     const supabase = createClient(
@@ -62,18 +49,18 @@ const handler = async (req: Request): Promise<Response> => {
     const expiresAt = new Date();
     expiresAt.setHours(expiresAt.getHours() + 1);
 
-    // Șterge codurile vechi pentru același email
+    // Șterge codurile vechi pentru același email utilizator
     await supabase
       .from('registration_codes')
       .delete()
-      .eq('email', email);
+      .eq('email', userEmail);
 
-    // Inserez codul nou în baza de date
+    // Inserez codul nou în baza de date (asociat cu email-ul utilizatorului)
     const { error: insertError } = await supabase
       .from('registration_codes')
       .insert([{
         code,
-        email,
+        email: userEmail,
         expires_at: expiresAt.toISOString(),
         used: false
       }]);
@@ -89,29 +76,40 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Trimit email-ul cu codul
+    // Trimit email-ul cu codul la administrator
     const emailResponse = await resend.emails.send({
       from: "Direct Auto MD <directauto.direct@gmail.com>",
-      to: [email],
-      subject: "Cod de înregistrare - Direct Auto MD",
+      to: [adminEmail],
+      subject: "Solicitare cod de înregistrare - Direct Auto MD",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h1 style="color: #2563eb; text-align: center;">Direct Auto MD</h1>
-          <h2 style="color: #333;">Cod de înregistrare</h2>
+          <h1 style="color: #2563eb; text-align: center;">Direct Auto MD - Administrare</h1>
+          <h2 style="color: #333;">Solicitare cod de înregistrare</h2>
           <p>Bună ziua,</p>
-          <p>Ați solicitat un cod de înregistrare pentru platforma Direct Auto MD.</p>
-          <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0;">
-            <h3 style="color: #1f2937; margin: 0;">Codul dumneavoastră de înregistrare este:</h3>
-            <div style="font-size: 24px; font-weight: bold; color: #2563eb; letter-spacing: 2px; margin: 10px 0;">
+          <p>Un utilizator cu email-ul <strong>${userEmail}</strong> a solicitat un cod de înregistrare pentru platforma Direct Auto MD.</p>
+          
+          <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="color: #1f2937; margin: 0; margin-bottom: 10px;">Detalii solicitare:</h3>
+            <p style="margin: 5px 0;"><strong>Email utilizator:</strong> ${userEmail}</p>
+            <p style="margin: 5px 0;"><strong>Data solicitării:</strong> ${new Date().toLocaleString('ro-RO')}</p>
+          </div>
+          
+          <div style="background-color: #dbeafe; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0; border-left: 4px solid #2563eb;">
+            <h3 style="color: #1e40af; margin: 0;">Codul de înregistrare este:</h3>
+            <div style="font-size: 28px; font-weight: bold; color: #1e40af; letter-spacing: 3px; margin: 15px 0; font-family: monospace;">
               ${code}
             </div>
+            <p style="color: #1e40af; margin: 0; font-size: 14px;">Transmiteți acest cod utilizatorului pentru înregistrare</p>
           </div>
-          <p><strong>Important:</strong> Acest cod este valabil doar pentru <strong>1 oră</strong> de la momentul generării.</p>
-          <p>Dacă nu ați solicitat acest cod, vă rugăm să ignorați acest email.</p>
+          
+          <div style="background-color: #fef3c7; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b;">
+            <p style="margin: 0; color: #92400e;"><strong>⚠️ Important:</strong> Acest cod este valabil doar pentru <strong>1 oră</strong> de la momentul generării și poate fi folosit o singură dată.</p>
+          </div>
+          
           <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
           <p style="color: #6b7280; font-size: 14px; text-align: center;">
-            Direct Auto MD - Soluții auto de încredere<br>
-            Chișinău, Moldova
+            Sistem de administrare Direct Auto MD<br>
+            Email generat automat - nu răspundeți la acest email
           </p>
         </div>
       `,
@@ -121,7 +119,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     return new Response(JSON.stringify({ 
       success: true, 
-      message: "Codul de înregistrare a fost trimis pe email" 
+      message: "Codul de înregistrare a fost trimis administratorului" 
     }), {
       status: 200,
       headers: {

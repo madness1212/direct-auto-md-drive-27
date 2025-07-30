@@ -66,11 +66,11 @@ export default function Auth() {
     setIsGeneratingCode(true);
 
     const formData = new FormData(event.currentTarget);
-    const email = formData.get('email') as string;
+    const userEmail = formData.get('email') as string;
 
     try {
       const response = await supabase.functions.invoke('generate-registration-code', {
-        body: { email }
+        body: { userEmail }
       });
 
       if (response.error) {
@@ -78,10 +78,10 @@ export default function Auth() {
       }
 
       setCodeRequested(true);
-      setRequestEmail(email);
+      setRequestEmail(userEmail);
       toast({
-        title: 'Cod generat cu succes',
-        description: 'Verifică-ți emailul pentru codul de înregistrare.',
+        title: 'Cod solicitat cu succes',
+        description: 'Codul a fost trimis administratorului. Veți primi codul de la administrator.',
       });
     } catch (error: any) {
       toast({
@@ -216,9 +216,9 @@ export default function Auth() {
                 <div className="space-y-4">
                   <div className="text-center p-4 bg-muted rounded-lg">
                     <Mail className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
-                    <h3 className="font-semibold mb-1">Solicitare cod de înregistrare</h3>
+                    <h3 className="font-semibold mb-1">Solicitare cod administrator</h3>
                     <p className="text-sm text-muted-foreground">
-                      Pentru a vă înregistra, aveți nevoie de un cod unic care va fi trimis pe email.
+                      Pentru înregistrare, apăsați butonul pentru a solicita un cod de la administrator.
                     </p>
                   </div>
                   
@@ -235,7 +235,7 @@ export default function Auth() {
                     </div>
                     <Button type="submit" className="w-full" disabled={isGeneratingCode}>
                       {isGeneratingCode && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                      Generează cod de înregistrare
+                      Cere Cod Administrator
                     </Button>
                   </form>
                 </div>
@@ -243,10 +243,10 @@ export default function Auth() {
                 <div className="space-y-4">
                   <div className="text-center p-4 bg-green-50 border border-green-200 rounded-lg">
                     <Clock className="mx-auto h-8 w-8 text-green-600 mb-2" />
-                    <h3 className="font-semibold text-green-800 mb-1">Cod trimis pe email</h3>
+                    <h3 className="font-semibold text-green-800 mb-1">Cod solicitat cu succes</h3>
                     <p className="text-sm text-green-700">
-                      Un cod de înregistrare a fost trimis la <strong>{requestEmail}</strong>.
-                      Codul este valabil pentru 1 oră.
+                      Codul de înregistrare a fost trimis administratorului pentru email-ul <strong>{requestEmail}</strong>.
+                      Veți primi codul de la administrator. Codul este valabil pentru 1 oră.
                     </p>
                   </div>
                   
@@ -257,7 +257,7 @@ export default function Auth() {
                         id="signup-code"
                         name="registrationCode"
                         type="text"
-                        placeholder="Introdu codul primit pe email"
+                        placeholder="Introdu codul primit de la administrator"
                         className="text-center font-mono text-lg tracking-widest"
                         required
                       />
