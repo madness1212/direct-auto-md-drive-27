@@ -130,7 +130,7 @@ const TestimonialsSection = () => {
               <Star key={i} className="h-6 w-6 text-auto-green fill-current" />
             ))}
             <span className="text-auto-green font-semibold ml-2">4.9/5</span>
-            <span className="text-muted-foreground">din 2000+ recenzii</span>
+            <span className="text-muted-foreground">din 200+ recenzii</span>
           </div>
         </div>
       </div>
