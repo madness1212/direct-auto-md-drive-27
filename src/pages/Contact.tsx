@@ -114,8 +114,8 @@ const Contact = () => {
           <CardContent>
             <div className="space-y-4">
               <p className="text-muted-foreground">
-                Vizitează showroom-ul nostru modern pentru a vedea întreaga gamă de automobile 
-                și pentru a beneficia de consultanță personalizată de la specialiștii noștri.
+                Vizitează parcul auto pentru a vedea întreaga gamă de automobile 
+                și pentru a beneficia de consultaţie de la specialiștii noștri.
               </p>
               
               {/* Placeholder pentru hartă Google Maps */}
