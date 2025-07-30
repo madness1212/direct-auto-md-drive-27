@@ -226,7 +226,7 @@ const TestimonialsSection = () => {
 
           {/* Navigation Arrows */}
           <button
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-auto-dark hover:bg-background transition-colors"
+            className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-auto-dark hover:bg-background transition-colors"
             onClick={scrollPrev}
             aria-label="Previous testimonial"
           >
@@ -234,7 +234,7 @@ const TestimonialsSection = () => {
           </button>
           
           <button
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-auto-dark hover:bg-background transition-colors"
+            className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-auto-dark hover:bg-background transition-colors"
             onClick={scrollNext}
             aria-label="Next testimonial"
           >
