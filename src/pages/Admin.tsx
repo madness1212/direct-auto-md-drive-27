@@ -207,16 +207,6 @@ export default function Admin() {
   return (
     <AdminLayout>
       <div className="space-y-6">
-        {/* Large "În curând" text */}
-        <div className="text-center py-16">
-          <h1 className="text-8xl font-bold text-muted-foreground/30 mb-4">
-            În curând
-          </h1>
-          <p className="text-lg text-muted-foreground">
-            Funcționalitățile administrative vor fi disponibile în scurt timp
-          </p>
-        </div>
-
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
