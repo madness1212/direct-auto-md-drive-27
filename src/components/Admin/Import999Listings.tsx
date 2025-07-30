@@ -78,6 +78,15 @@ export const Import999Listings = () => {
 
   return (
     <div className="space-y-6">
+      {/* Large "În curând" text */}
+      <div className="text-center py-16">
+        <h1 className="text-8xl font-bold text-muted-foreground/30 mb-4">
+          În curând
+        </h1>
+        <p className="text-lg text-muted-foreground">
+          Funcționalitatea de import va fi disponibilă în scurt timp
+        </p>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
