@@ -6,7 +6,7 @@ import heroBanner from "@/assets/hero-banner.jpg";
 const HeroSection = () => {
   const { t } = useLanguage();
   return (
-    <section className="relative min-h-[80vh] flex items-center">
+    <section className="relative min-h-[60vh] flex items-center">
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -39,24 +39,6 @@ const HeroSection = () => {
             </Button>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 pt-8 border-t border-primary-foreground/20">
-            <div className="flex flex-col items-center space-y-2">
-              <Car className="h-8 w-8 text-auto-green-light" />
-              <div className="text-3xl font-bold">2000+</div>
-              <div className="text-sm text-primary-foreground/80">{t('home.stats.carsInStock')}</div>
-            </div>
-            <div className="flex flex-col items-center space-y-2">
-              <Users className="h-8 w-8 text-auto-green-light" />
-              <div className="text-3xl font-bold">2000+</div>
-              <div className="text-sm text-primary-foreground/80">{t('home.stats.happyClients')}</div>
-            </div>
-            <div className="flex flex-col items-center space-y-2">
-              <Award className="h-8 w-8 text-auto-green-light" />
-              <div className="text-3xl font-bold">10+</div>
-              <div className="text-sm text-primary-foreground/80">{t('home.stats.yearsExperience')}</div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
