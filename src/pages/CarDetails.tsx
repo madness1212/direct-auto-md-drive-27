@@ -23,6 +23,7 @@ import {
 import Layout from "@/components/Layout/Layout";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { TestDriveForm } from "@/components/TestDriveForm";
 
 interface CarListing {
   id: string;
@@ -384,6 +385,12 @@ const CarDetails = () => {
 
                   {/* Action Buttons */}
                   <div className="space-y-3">
+                    {/* Test Drive Button */}
+                    <TestDriveForm 
+                      carId={car.id} 
+                      carTitle={`${car.marca} ${car.model} ${car.an_fabricatie}`}
+                    />
+                    
                     <Button 
                       className="w-full bg-auto-green hover:bg-auto-green-dark text-white" 
                       size="lg"

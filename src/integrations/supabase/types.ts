@@ -161,6 +161,45 @@ export type Database = {
         }
         Relationships: []
       }
+      test_drive_requests: {
+        Row: {
+          car_id: string
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          message: string | null
+          phone: string
+          preferred_date: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          car_id: string
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          message?: string | null
+          phone: string
+          preferred_date: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          car_id?: string
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          message?: string | null
+          phone?: string
+          preferred_date?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

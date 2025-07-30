@@ -3,6 +3,7 @@ import { AdminLayout } from '@/components/Admin/AdminLayout';
 import { CarListingForm } from '@/components/Admin/CarListingForm';
 import { Import999Listings } from '@/components/Admin/Import999Listings';
 import { TopOffersManager } from '@/components/Admin/TopOffersManager';
+import { TestDriveManager } from '@/components/Admin/TestDriveManager';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -223,10 +224,11 @@ export default function Admin() {
 
         {/* Tabs pentru diferite secțiuni */}
         <Tabs defaultValue="listings" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="listings">Anunțuri</TabsTrigger>
             <TabsTrigger value="import">Import 999.md</TabsTrigger>
             <TabsTrigger value="offers">Oferte Speciale</TabsTrigger>
+            <TabsTrigger value="testdrive">Test Drive</TabsTrigger>
             <TabsTrigger value="stats">Statistici</TabsTrigger>
           </TabsList>
 
@@ -403,6 +405,10 @@ export default function Admin() {
 
           <TabsContent value="offers">
             <TopOffersManager />
+          </TabsContent>
+
+          <TabsContent value="testdrive">
+            <TestDriveManager />
           </TabsContent>
 
           <TabsContent value="stats" className="space-y-6">

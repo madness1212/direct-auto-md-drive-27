@@ -1,1 +1,4 @@
 project_id = "dlavhiebuhsqzhosivzn"
+
+[functions.submit-test-drive-request]
+verify_jwt = false
