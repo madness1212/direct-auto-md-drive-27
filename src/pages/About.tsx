@@ -169,11 +169,11 @@ const About = () => {
                   </div>
                   <div className="flex items-center space-x-3">
                     <Clock className="h-5 w-5 text-auto-green" />
-                    <span className="text-muted-foreground">Lun-Vin: 09:00-18:00, Sâm: 09:00-15:00</span>
+                    <span className="text-muted-foreground">Lun-Vin: 09:00-18:00, Sâm: 09:00-15:00, dum: 09:00-18:00</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <Handshake className="h-5 w-5 text-auto-green" />
-                    <span className="text-muted-foreground">Consultații gratuite și test-drive disponibile</span>
+                    <span className="text-muted-foreground">Consultații test-drive complet gratuit</span>
                   </div>
                 </div>
                 <Button size="lg" className="bg-gradient-primary hover:bg-auto-green-dark shadow-card">
@@ -191,10 +191,10 @@ const About = () => {
                   </p>
                   <div className="space-y-2">
                     <Button variant="outline" className="w-full border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
-                      Sună Acum: +373 79 357 755
+                      Sună Acum: +373 696 88 999
                     </Button>
                     <Button variant="outline" className="w-full border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
-                      Scrie-ne: contact@directauto.md
+                      Scrie-ne: directauto.direct@gmail.com
                     </Button>
                   </div>
                 </div>
