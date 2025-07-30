@@ -6,7 +6,7 @@ const heroBanner = "/lovable-uploads/23a86efd-805a-4ce9-a13d-0472dc2cbb45.png";
 const HeroSection = () => {
   const { t } = useLanguage();
   return (
-    <section className="relative min-h-[70vh] flex items-center -mx-4 md:-mx-8 lg:-mx-16">
+    <section className="relative min-h-[50vh] md:min-h-[70vh] flex items-center -mx-4 md:-mx-8 lg:-mx-16">
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-right md:bg-top bg-no-repeat"
