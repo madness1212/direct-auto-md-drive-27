@@ -33,6 +33,22 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
+    // Lista email-urilor autorizate pentru înregistrare
+    const authorizedEmails = [
+      'vladvicol09@gmail.com',
+      'directauto.direct@gmail.com'
+    ];
+
+    if (!authorizedEmails.includes(email.toLowerCase())) {
+      return new Response(
+        JSON.stringify({ error: "Email-ul specificat nu este autorizat pentru înregistrare" }),
+        {
+          status: 403,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
     // Creez clientul Supabase
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
