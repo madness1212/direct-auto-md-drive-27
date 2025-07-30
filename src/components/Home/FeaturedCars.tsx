@@ -194,8 +194,8 @@ const FeaturedCars = () => {
                           Detalii
                         </Button>
                       </Link>
-                      <Button variant="outline" className="flex-1 text-sm border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
-                        Contactează
+                      <Button asChild variant="outline" className="flex-1 text-sm border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
+                        <Link to="/contact">Contactează</Link>
                       </Button>
                     </div>
                   </div>

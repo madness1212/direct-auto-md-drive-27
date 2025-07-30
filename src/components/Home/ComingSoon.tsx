@@ -161,8 +161,8 @@ const ComingSoon = () => {
                           Detalii
                         </Link>
                       </Button>
-                      <Button variant="outline" className="flex-1">
-                        Contactează
+                      <Button asChild variant="outline" className="flex-1">
+                        <Link to="/contact">Contactează</Link>
                       </Button>
                     </div>
                   </CardContent>
