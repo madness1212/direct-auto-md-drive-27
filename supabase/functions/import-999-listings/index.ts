@@ -105,23 +105,23 @@ serve(async (req) => {
 
     for (const listing of carListings) {
       try {
-        // Validate and clean data
+        // Validate and clean data with proper capitalization
         const cleanedListing = {
-          marca: listing.marca || 'Unknown',
-          model: listing.model || 'Unknown',
+          marca: capitalizeText(listing.marca || 'Unknown'),
+          model: capitalizeText(listing.model || 'Unknown'),
           an_fabricatie: listing.an_fabricatie || new Date().getFullYear(),
           pret: listing.pret || 0,
           kilometraj: listing.kilometraj || 0,
           tip_motor: listing.tip_motor || 'benzina',
           cutie_viteze: listing.cutie_viteze || 'manuala',
-          caroserie: listing.caroserie || 'sedan',
-          descriere: listing.descriere || 'Imported from 999.md',
+          caroserie: capitalizeText(listing.caroserie || 'sedan'),
+          descriere: listing.descriere || 'Importat de pe 999.md',
           descriere_ro: listing.descriere || 'Importat de pe 999.md',
           descriere_en: listing.descriere || 'Imported from 999.md',
           descriere_ru: listing.descriere || 'Импортировано с 999.md',
           images: listing.images || [],
           status: 'active',
-          tractiune: 'fata', // default value
+          tractiune: capitalizeText('fata'), // default value
           video_url: '',
           is_top_offer: false,
           is_coming_soon: false
@@ -170,6 +170,13 @@ serve(async (req) => {
   }
 });
 
+// Helper function to capitalize text properly
+function capitalizeText(text: string): string {
+  return text.split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+}
+
 function parseContentManually(content: string): CarListing[] {
   const listings: CarListing[] = [];
   console.log('Content length:', content.length);
@@ -211,14 +218,14 @@ function parseContentManually(content: string): CarListing[] {
     
     for (const brand of brands) {
       if (trimmedLine.includes(brand) && currentListing.pret && !currentListing.marca) {
-        currentListing.marca = brand.charAt(0).toUpperCase() + brand.slice(1);
+        currentListing.marca = capitalizeText(brand);
         
         // Try to extract model from the same line
         const brandIndex = trimmedLine.indexOf(brand);
         const afterBrand = trimmedLine.substring(brandIndex + brand.length).trim();
         const modelMatch = afterBrand.match(/^([a-z0-9\-\s]+)/i);
         if (modelMatch) {
-          currentListing.model = modelMatch[1].trim().split(' ')[0];
+          currentListing.model = capitalizeText(modelMatch[1].trim().split(' ')[0]);
         }
         break;
       }
@@ -259,17 +266,17 @@ function parseContentManually(content: string): CarListing[] {
     listings.push(currentListing as CarListing);
   }
   
-  // Fill in missing values with defaults
+  // Fill in missing values with defaults and proper capitalization
   const completeListings = listings.map(listing => ({
-    marca: listing.marca || 'Unknown',
-    model: listing.model || 'Unknown',
+    marca: capitalizeText(listing.marca || 'Unknown'),
+    model: capitalizeText(listing.model || 'Unknown'),
     an_fabricatie: listing.an_fabricatie || new Date().getFullYear(),
     pret: listing.pret || 0,
     kilometraj: listing.kilometraj || 0,
     tip_motor: listing.tip_motor || 'benzina',
     cutie_viteze: listing.cutie_viteze || 'manuala',
-    caroserie: listing.caroserie || 'sedan',
-    descriere: `${listing.marca} ${listing.model} - Importat de pe 999.md`,
+    caroserie: capitalizeText(listing.caroserie || 'sedan'),
+    descriere: `${capitalizeText(listing.marca || 'Unknown')} ${capitalizeText(listing.model || 'Unknown')} - Importat de pe 999.md`,
     images: listing.images || []
   }));
   
