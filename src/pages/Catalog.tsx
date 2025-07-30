@@ -317,7 +317,7 @@ const Catalog = () => {
 
                       {/* Price Range */}
                       <div className="space-y-2">
-                        <Label>{t('catalog.price')}: ${priceRange[0].toLocaleString()} - ${priceRange[1].toLocaleString()}</Label>
+                        <Label>{t('catalog.price')}: €{priceRange[0].toLocaleString()} - €{priceRange[1].toLocaleString()}</Label>
                         <Slider
                           value={priceRange}
                           onValueChange={setPriceRange}
@@ -487,7 +487,7 @@ const Catalog = () => {
 
                   {/* Price Range */}
                   <div className="space-y-2">
-                    <Label>Preț (USD): ${priceRange[0].toLocaleString()} - ${priceRange[1].toLocaleString()}</Label>
+                    <Label>Preț (EUR): €{priceRange[0].toLocaleString()} - €{priceRange[1].toLocaleString()}</Label>
                     <Slider
                       value={priceRange}
                       onValueChange={setPriceRange}
@@ -622,7 +622,7 @@ const Catalog = () => {
                         <div className="flex items-center justify-between">
                           <div>
                             <div className="text-2xl font-bold text-auto-green">
-                              ${car.price.toLocaleString()}
+                              €{car.price.toLocaleString()}
                             </div>
                             <div className="text-sm text-muted-foreground">
                               ≈ {(car.price * 18).toLocaleString()} MDL
