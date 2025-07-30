@@ -20,8 +20,8 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
-              Dealership auto de încredere cu experiență de peste 10 ani în vânzarea 
-              de automobile noi și rulate în Moldova.
+              Parc auto de încredere cu experiență de peste 15 ani în vânzarea si importarea  
+              automobilelor din Europa în Republica Moldova.
             </p>
             <div className="flex space-x-4">
               <Facebook className="h-5 w-5 text-muted-foreground hover:text-auto-green cursor-pointer transition-colors" />
@@ -45,7 +45,6 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="text-lg font-semibold">Servicii</h4>
             <ul className="space-y-2 text-sm">
-              <li><span className="text-muted-foreground">Vânzare automobile noi</span></li>
               <li><span className="text-muted-foreground">Vânzare automobile rulate</span></li>
               <li><span className="text-muted-foreground">Finanțare auto</span></li>
               <li><span className="text-muted-foreground">Asigurare auto</span></li>
@@ -67,7 +66,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-2">
                 <MapPin className="h-4 w-4 text-auto-green" />
-                <span className="text-muted-foreground">Chisinau, Grenbole175</span>
+                <span className="text-muted-foreground">Chisinau, Grenoble175</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Clock className="h-4 w-4 text-auto-green" />
@@ -79,7 +78,7 @@ const Footer = () => {
 
         <div className="border-t border-auto-green-dark mt-8 pt-8 text-center">
           <p className="text-sm text-muted-foreground">
-            © 2024 Direct Auto. Toate drepturile rezervate.
+            © 2025 Direct Auto. Toate drepturile rezervate.         Made By Vlad Vicol vladvicol09@gmail.com
           </p>
         </div>
       </div>

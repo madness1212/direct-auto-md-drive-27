@@ -14,32 +14,26 @@ const AboutSection = () => {
     {
       icon: Shield,
       title: "Garanție de Calitate",
-      description: "Toate automobilele sunt verificate tehnic și au garanție extinsă."
+      description: "Toate automobilele sunt verificate tehnic."
     },
     {
       icon: Award,
-      title: "Experiență de 10+ Ani",
-      description: "Suntem lideri pe piața auto din Moldova cu peste 10 ani de experiență."
+      title: "Experiență de 15+ Ani",
+      description: "  Parc auto de încredere cu experiență de peste 15 ani în vânzarea si importarea  
+              automobilelor din Europa în Republica Moldova."
     },
     {
       icon: Users,
       title: "2000+ Clienți Mulțumiți",
       description: "Peste 2000 de clienți au ales să-și cumpere automobil de la noi."
     },
-    {
-      icon: Clock,
-      title: "Service Rapid",
-      description: "Oferim servicii complete de întreținere și reparații auto."
-    }
   ];
 
   const benefits = [
     "Verificare tehnică completă pentru fiecare automobil",
-    "Garanție extinsă și service post-vânzare",
-    "Prețuri competitive și transparente",
+    "Prețuri accesibile și transparente",
     "Opțiuni de finanțare flexibile",
-    "Echipă de profesioniști cu experiență",
-    "Showroom modern cu peste 500 de automobile"
+    "Echipă de profesioniști cu experiență in domeniu de peste 15 ani",
   ];
 
   return (
@@ -54,9 +48,8 @@ const AboutSection = () => {
                 <span className="text-auto-green"> Direct Auto?</span>
               </h2>
               <p className="text-lg text-muted-foreground">
-                Cu peste 10 ani de experiență pe piața auto din Moldova, 
-                Direct Auto s-a impus ca unul dintre cei mai de încredere 
-                dealeri auto din țară.
+                Cu peste 15 ani de experiență pe piața auto din Republica Moldova, 
+                Direct Auto se poziţionează pe lista de top a importatorilor de automobile cu rulaj din Europa
               </p>
             </div>
 

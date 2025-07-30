@@ -15,7 +15,7 @@ const TestimonialsSection = () => {
   const testimonials: Testimonial[] = [
     {
       id: 1,
-      name: "Ion Popescu",
+      name: "Ion Popov",
       location: "Chișinău",
       rating: 5,
       comment: "Experiență excelentă! Am găsit exact mașina pe care o căutam. Personalul foarte profesionist și prețurile corecte. Recomand cu încredere!",
@@ -24,7 +24,7 @@ const TestimonialsSection = () => {
     },
     {
       id: 2,
-      name: "Maria Ionescu",
+      name: "Maria Andronache",
       location: "Bălți",
       rating: 5,
       comment: "Am cumpărat un BMW X3 și sunt foarte mulțumită. Mașina în stare perfectă, documentele în regulă. Mulțumesc echipei Direct Auto!",
