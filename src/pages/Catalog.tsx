@@ -171,7 +171,7 @@ const Catalog = () => {
 
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Mobile Filter Button - Only visible on mobile */}
-            <div className="lg:hidden sticky top-20 z-40 bg-background pb-4">
+            <div className="lg:hidden mb-4">
               <Drawer open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
                 <DrawerTrigger asChild>
                   <Button className="w-full bg-auto-green hover:bg-auto-green-dark text-white flex items-center justify-center gap-2">
