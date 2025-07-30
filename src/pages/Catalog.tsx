@@ -547,7 +547,7 @@ const Catalog = () => {
                   <p className="text-muted-foreground">Încercați să modificați filtrele pentru a găsi mai multe rezultate.</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                   {filteredCars.map((car) => (
                   <Card key={car.id} className="group hover:shadow-xl transition-all duration-300 bg-background border-0 shadow-md">
                     <CardContent className="p-0">
@@ -556,7 +556,7 @@ const Catalog = () => {
                         <img 
                           src={car.image} 
                           alt={`${car.brand} ${car.model}`}
-                          className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                         {car.isTopOffer && (
                           <Badge className="absolute top-4 left-4 bg-auto-green hover:bg-auto-green text-white">
@@ -566,7 +566,7 @@ const Catalog = () => {
                       </div>
 
                       {/* Content */}
-                      <div className="p-4 space-y-3">
+                      <div className="p-5 space-y-4">
                         <div>
                           <h3 className="text-sm font-semibold text-foreground truncate">
                             {car.brand} {car.model}
@@ -589,28 +589,28 @@ const Catalog = () => {
                         </div>
 
                         {/* Specifications */}
-                        <div className="grid grid-cols-2 gap-3 text-sm">
-                          <div className="flex items-center space-x-2">
-                            <Calendar className="h-4 w-4 text-auto-green" />
-                            <span className="text-muted-foreground">{car.year}</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Gauge className="h-4 w-4 text-auto-green" />
-                            <span className="text-muted-foreground">{car.mileage.toLocaleString()} km</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Fuel className="h-4 w-4 text-auto-green" />
-                            <span className="text-muted-foreground">{car.fuel}</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Settings className="h-4 w-4 text-auto-green" />
-                            <span className="text-muted-foreground">{car.transmission}</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Car className="h-4 w-4 text-auto-green" />
-                            <span className="text-muted-foreground">{car.bodyType}</span>
-                          </div>
-                        </div>
+                         <div className="grid grid-cols-2 gap-2 text-sm">
+                           <div className="flex items-center space-x-1">
+                             <Calendar className="h-3 w-3 text-auto-green" />
+                             <span className="text-muted-foreground">{car.year}</span>
+                           </div>
+                           <div className="flex items-center space-x-1">
+                             <Gauge className="h-3 w-3 text-auto-green" />
+                             <span className="text-muted-foreground">{car.mileage.toLocaleString()} km</span>
+                           </div>
+                           <div className="flex items-center space-x-1">
+                             <Fuel className="h-3 w-3 text-auto-green" />
+                             <span className="text-muted-foreground">{car.fuel}</span>
+                           </div>
+                           <div className="flex items-center space-x-1">
+                             <Settings className="h-3 w-3 text-auto-green" />
+                             <span className="text-muted-foreground">{car.transmission}</span>
+                           </div>
+                           <div className="flex items-center space-x-1">
+                             <Car className="h-3 w-3 text-auto-green" />
+                             <span className="text-muted-foreground">{car.bodyType}</span>
+                           </div>
+                         </div>
 
                         {/* Price */}
                         <div className="flex items-center justify-between">
