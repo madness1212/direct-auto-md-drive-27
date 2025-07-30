@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           an_fabricatie: number
           caroserie: string | null
+          coming_soon_position: number | null
           created_at: string
           created_by: string | null
           cutie_viteze: string
@@ -28,6 +29,7 @@ export type Database = {
           id: string
           images: string[] | null
           images_order: Json | null
+          is_coming_soon: boolean | null
           is_top_offer: boolean | null
           kilometraj: number | null
           marca: string
@@ -43,6 +45,7 @@ export type Database = {
         Insert: {
           an_fabricatie: number
           caroserie?: string | null
+          coming_soon_position?: number | null
           created_at?: string
           created_by?: string | null
           cutie_viteze: string
@@ -53,6 +56,7 @@ export type Database = {
           id?: string
           images?: string[] | null
           images_order?: Json | null
+          is_coming_soon?: boolean | null
           is_top_offer?: boolean | null
           kilometraj?: number | null
           marca: string
@@ -68,6 +72,7 @@ export type Database = {
         Update: {
           an_fabricatie?: number
           caroserie?: string | null
+          coming_soon_position?: number | null
           created_at?: string
           created_by?: string | null
           cutie_viteze?: string
@@ -78,6 +83,7 @@ export type Database = {
           id?: string
           images?: string[] | null
           images_order?: Json | null
+          is_coming_soon?: boolean | null
           is_top_offer?: boolean | null
           kilometraj?: number | null
           marca?: string

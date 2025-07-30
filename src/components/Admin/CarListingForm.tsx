@@ -31,6 +31,7 @@ interface CarListingFormData {
   video_url?: string;
   status: string;
   is_top_offer: boolean;
+  is_coming_soon: boolean;
 }
 
 interface CarListingFormProps {
@@ -45,6 +46,7 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
   const [uploadedImages, setUploadedImages] = useState<string[]>(initialData?.images || []);
   const [isUploadingImages, setIsUploadingImages] = useState(false);
   const [isTopOffer, setIsTopOffer] = useState(initialData?.is_top_offer || false);
+  const [isComingSoon, setIsComingSoon] = useState(initialData?.is_coming_soon || false);
   const { toast } = useToast();
   const { user } = useAuth();
 
@@ -55,6 +57,7 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
       tip_motor: initialData?.tip_motor || 'benzina',
       cutie_viteze: initialData?.cutie_viteze || 'manuala',
       is_top_offer: initialData?.is_top_offer || false,
+      is_coming_soon: initialData?.is_coming_soon || false,
     },
   });
 
@@ -130,6 +133,7 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
         pret: Number(data.pret),
         kilometraj: data.kilometraj ? Number(data.kilometraj) : null,
         is_top_offer: isTopOffer,
+        is_coming_soon: isComingSoon,
       };
 
       let result;
@@ -495,6 +499,32 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                       id="top-offer"
                       checked={isTopOffer}
                       onCheckedChange={setIsTopOffer}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-blue-500/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-blue-600">
+                    <Star className="h-5 w-5" />
+                    În Curând
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-1">
+                      <Label htmlFor="coming-soon" className="text-base font-medium">
+                        Afișează în secțiunea "În Curând"
+                      </Label>
+                      <p className="text-sm text-muted-foreground">
+                        Când este activat, această mașină va apărea în secțiunea "În Curând" de pe homepage pentru mașinile care urmează să fie importate.
+                      </p>
+                    </div>
+                    <Switch
+                      id="coming-soon"
+                      checked={isComingSoon}
+                      onCheckedChange={setIsComingSoon}
                     />
                   </div>
                 </CardContent>
