@@ -75,32 +75,6 @@ const Contact = () => {
     }
   ];
 
-  const departments = [
-    {
-      title: "Vânzări Auto",
-      phone: "+373 696 88 999",
-      email: "directauto.direct@gmail.com",
-      description: "Pentru informații despre automobile și prețuri"
-    },
-    {
-      title: "Finanțare",
-      phone: "+373 696 88 999",
-      email: "directauto.direct@gmail.com", 
-      description: "Pentru credite auto și opțiuni de plată"
-    },
-    {
-      title: "Service Auto",
-      phone: "+373 696 88 999",
-      email: "directauto.direct@gmail.com",
-      description: "Pentru întreținere și reparații"
-    },
-    {
-      title: "Asigurări",
-      phone: "+373 696 88 999",
-      email: "directauto.direct@gmail.com",
-      description: "Pentru asigurări auto și asistență rutieră"
-    }
-  ];
 
   return (
     <Layout>
