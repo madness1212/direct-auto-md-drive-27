@@ -107,7 +107,7 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
             <img 
               src={logo} 
               alt="Direct Auto" 
-              className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 object-contain"
+              className="h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 object-contain"
             />
             <div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-auto-green">Direct Auto</h1>
