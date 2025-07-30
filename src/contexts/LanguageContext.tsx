@@ -24,8 +24,8 @@ const translations = {
     'header.companySlogan': 'Automobile pentru Moldova',
     
     // Home page
-    'home.hero.title': 'Mașini de Calitate pentru Moldova',
-    'home.hero.subtitle': 'Găsește mașina perfectă din gama noastră selectă de automobile noi și rulate. Calitate garantată și prețuri competitive.',
+    'home.hero.title': 'Automobile cu parcurs importate din Europa',
+    'home.hero.subtitle': 'Găsește mașina perfectă din gama noastră selectă de automobile. Calitate garantată și prețuri accesibile.',
     'home.hero.viewCars': 'Vezi Mașinile',
     'home.hero.contactUs': 'Contactează-ne',
     'home.stats.carsInStock': 'Automobile în Stoc',
@@ -34,7 +34,7 @@ const translations = {
     
     // Catalog
     'catalog.title': 'Catalogul Nostru Auto',
-    'catalog.subtitle': 'Descoperă gama noastră completă de automobile noi și rulate. Folosește filtrele pentru a găsi mașina perfectă pentru tine.',
+    'catalog.subtitle': 'Descoperă gama noastră completă de automobile. Folosește filtrele pentru a găsi mașina perfectă pentru tine.',
     'catalog.filter': 'Filtrează',
     'catalog.search': 'Caută mașina',
     'catalog.brand': 'Marca',
@@ -43,7 +43,7 @@ const translations = {
     'catalog.fuelType': 'Tip Motor',
     'catalog.transmission': 'Cutie de Viteze',
     'catalog.bodyType': 'Caroserie',
-    'catalog.price': 'Preț (USD)',
+    'catalog.price': 'Preț (EUR)',
     'catalog.mileage': 'Kilometraj',
     'catalog.reset': 'Resetează',
     'catalog.apply': 'Aplică Filtrele',
