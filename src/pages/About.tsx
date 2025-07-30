@@ -118,51 +118,6 @@ const About = () => {
           ))}
         </div>
 
-        {/* Povestea noastră */}
-        <Card className="border-0 shadow-card mb-16">
-          <CardContent className="p-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-              <div className="space-y-6">
-                <h2 className="text-3xl font-bold text-auto-dark">
-                  Povestea Noastră
-                </h2>
-                <div className="space-y-4 text-muted-foreground">
-                  <p>
-                    Direct Auto a început ca un vis ambițios în 2014 - să creăm cel mai 
-                    de încredere dealership auto din Moldova. Fondatorii noștri au văzut 
-                    o oportunitate de a aduce pe piața locală automobile de calitate și 
-                    servicii care să depășească așteptările clienților.
-                  </p>
-                  <p>
-                    Prin anii, am crescut organic, construind încrederea clienților prin 
-                    transparență, calitate și servicii excepționale. Fiecare automobil din 
-                    catalogul nostru trece printr-un proces riguros de verificare, iar echipa 
-                    noastră de specialiști se asigură că fiecare client primește exact 
-                    mașina de care are nevoie.
-                  </p>
-                  <p>
-                    Astăzi, Direct Auto nu este doar un dealer auto - suntem un partener 
-                    de încredere care oferă soluții complete: de la selecția automobilului 
-                    ideal, până la finanțare, asigurări și service post-vânzare.
-                  </p>
-                </div>
-              </div>
-              <div className="space-y-4">
-                {milestones.map((milestone, index) => (
-                  <div key={index} className="flex items-start space-x-4">
-                    <div className="w-16 h-16 bg-auto-green text-primary-foreground rounded-full flex items-center justify-center font-bold flex-shrink-0">
-                      {milestone.year}
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-auto-dark">{milestone.title}</h4>
-                      <p className="text-sm text-muted-foreground">{milestone.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
 
         {/* Valorile noastre */}
         <div className="mb-16">
