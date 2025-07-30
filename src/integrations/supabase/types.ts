@@ -17,6 +17,7 @@ export type Database = {
       car_listings: {
         Row: {
           an_fabricatie: number
+          capacitate_motor: string | null
           caroserie: string | null
           coming_soon_position: number | null
           created_at: string
@@ -44,6 +45,7 @@ export type Database = {
         }
         Insert: {
           an_fabricatie: number
+          capacitate_motor?: string | null
           caroserie?: string | null
           coming_soon_position?: number | null
           created_at?: string
@@ -71,6 +73,7 @@ export type Database = {
         }
         Update: {
           an_fabricatie?: number
+          capacitate_motor?: string | null
           caroserie?: string | null
           coming_soon_position?: number | null
           created_at?: string

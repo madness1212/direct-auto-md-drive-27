@@ -19,6 +19,7 @@ interface Car {
   kilometraj: number | null;
   tip_motor: string;
   cutie_viteze: string;
+  capacitate_motor?: string;
   images: string[];
   is_coming_soon: boolean;
   coming_soon_position: number | null;
@@ -206,6 +207,12 @@ const ComingSoon = () => {
                               <Settings className="h-3 w-3 text-auto-green" />
                               <span className="text-muted-foreground">{car.cutie_viteze}</span>
                             </div>
+                            {car.capacitate_motor && (
+                              <div className="flex items-center space-x-1 col-span-2">
+                                <Fuel className="h-3 w-3 text-auto-green" />
+                                <span className="text-muted-foreground">{car.capacitate_motor}</span>
+                              </div>
+                            )}
                           </div>
 
                           {/* Price */}

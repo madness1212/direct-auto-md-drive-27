@@ -24,6 +24,7 @@ interface CarListingFormData {
   tractiune?: string;
   pret: number;
   caroserie?: string;
+  capacitate_motor?: string;
   descriere?: string;
   descriere_ro?: string;
   descriere_ru?: string;
@@ -317,6 +318,17 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                     id="caroserie"
                     {...register('caroserie')}
                     placeholder="ex: Sedan, SUV, Hatchback"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="capacitate_motor">Capacitate motor</Label>
+                  <Input
+                    id="capacitate_motor"
+                    {...register('capacitate_motor')}
+                    placeholder="ex: 2.0L, 1.8L TSI, 3.0L V6"
                   />
                 </div>
               </div>

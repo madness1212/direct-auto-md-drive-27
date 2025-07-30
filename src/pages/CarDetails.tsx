@@ -35,6 +35,7 @@ interface CarListing {
   tractiune: string;
   pret: number;
   caroserie: string;
+  capacitate_motor: string;
   descriere: string;
   descriere_ro: string;
   descriere_ru: string;
@@ -330,6 +331,16 @@ const CarDetails = () => {
                         </div>
                         <span className="text-sm text-muted-foreground">{car.tip_motor}</span>
                       </div>
+                      
+                      {car.capacitate_motor && (
+                        <div className="flex items-center justify-between py-2 border-b border-border/50">
+                          <div className="flex items-center space-x-2">
+                            <Fuel className="h-4 w-4 text-auto-green" />
+                            <span className="text-sm font-medium">Capacitate motor</span>
+                          </div>
+                          <span className="text-sm text-muted-foreground">{car.capacitate_motor}</span>
+                        </div>
+                      )}
                       
                       <div className="flex items-center justify-between py-2 border-b border-border/50">
                         <div className="flex items-center space-x-2">

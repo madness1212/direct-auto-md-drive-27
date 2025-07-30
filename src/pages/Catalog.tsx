@@ -96,6 +96,7 @@ const Catalog = () => {
           fuel: car.tip_motor,
           transmission: car.cutie_viteze,
           bodyType: car.caroserie || 'N/A',
+          engineCapacity: car.capacitate_motor,
           image: car.images && car.images.length > 0 ? car.images[0] : "/placeholder.svg",
           isTopOffer: false, // Poți adăuga logică pentru acest câmp
           rating: 4.5, // Placeholder rating
@@ -610,6 +611,12 @@ const Catalog = () => {
                              <Car className="h-3 w-3 text-auto-green" />
                              <span className="text-muted-foreground">{car.bodyType}</span>
                            </div>
+                           {car.engineCapacity && (
+                             <div className="flex items-center space-x-1">
+                               <Fuel className="h-3 w-3 text-auto-green" />
+                               <span className="text-muted-foreground">{car.engineCapacity}</span>
+                             </div>
+                           )}
                          </div>
 
                         {/* Price */}
