@@ -29,7 +29,7 @@ const Contact = () => {
     {
       icon: MapPin,
       title: "Adresa",
-      details: ["Chisinau, Grenbole175"],
+      details: ["str. Grenoble175, Chișinău, Republica Moldova"],
       description: "Vizitează parcul auto"
     },
     {
