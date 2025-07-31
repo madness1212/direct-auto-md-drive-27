@@ -1,9 +1,12 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { useAutoTranslate } from '@/hooks/useAutoTranslate';
 
 interface LanguageContextType {
   currentLang: string;
   setCurrentLang: (lang: string) => void;
   t: (key: string) => string;
+  translateText: (text: string, targetLang: 'ru' | 'en') => Promise<string>;
+  isTranslating: boolean;
 }
 
 interface LanguageProviderProps {
@@ -440,30 +443,67 @@ const translations = {
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
   const [currentLang, setCurrentLang] = useState('ro');
-  
-  console.log('LanguageProvider rendering with currentLang:', currentLang);
+  const { translateText, isTranslating } = useAutoTranslate();
+  const [dynamicTranslations, setDynamicTranslations] = useState<any>({});
+
+  // Auto-translate when language changes to ru or en
+  useEffect(() => {
+    if (currentLang === 'ru' || currentLang === 'en') {
+      const translateContent = async () => {
+        const romanianTranslations = translations.ro;
+        const translatedContent: any = {};
+        
+        for (const [key, value] of Object.entries(romanianTranslations)) {
+          if (typeof value === 'string') {
+            translatedContent[key] = await translateText(value, currentLang as 'ru' | 'en');
+          }
+        }
+        
+        setDynamicTranslations(prev => ({
+          ...prev,
+          [currentLang]: translatedContent
+        }));
+      };
+      
+      // Only translate if we don't have cached translations for this language
+      if (!dynamicTranslations[currentLang]) {
+        translateContent();
+      }
+    }
+  }, [currentLang, translateText]);
 
   const t = (key: string): string => {
-    console.log('Translation request - key:', key, 'currentLang:', currentLang);
-    const langTranslations = translations[currentLang as keyof typeof translations] || translations.ro;
-    const result = langTranslations[key as keyof typeof langTranslations] || key;
-    console.log('Translation result:', result);
-    return result;
-  };
-
-  const handleSetCurrentLang = (lang: string) => {
-    console.log('Context setCurrentLang called with:', lang);
-    setCurrentLang(lang);
-  };
-
-  const contextValue = { 
-    currentLang, 
-    setCurrentLang: handleSetCurrentLang, 
-    t 
+    // For Romanian, use static translations
+    if (currentLang === 'ro') {
+      return translations.ro[key] || key;
+    }
+    
+    // For Russian and English, use dynamic translations if available, fallback to static
+    if (currentLang === 'ru' || currentLang === 'en') {
+      const dynamicTranslation = dynamicTranslations[currentLang]?.[key];
+      if (dynamicTranslation) {
+        return dynamicTranslation;
+      }
+      
+      // Fallback to static translations if available
+      const staticTranslation = translations[currentLang as keyof typeof translations]?.[key];
+      if (staticTranslation) {
+        return staticTranslation;
+      }
+    }
+    
+    // Final fallback to Romanian or the key itself
+    return translations.ro[key] || key;
   };
 
   return (
-    <LanguageContext.Provider value={contextValue}>
+    <LanguageContext.Provider value={{ 
+      currentLang, 
+      setCurrentLang, 
+      t, 
+      translateText,
+      isTranslating 
+    }}>
       {children}
     </LanguageContext.Provider>
   );
