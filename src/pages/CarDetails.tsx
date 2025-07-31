@@ -343,7 +343,7 @@ const CarDetails = () => {
                           <Fuel className="h-4 w-4 text-auto-green" />
                           <span className="text-sm font-medium">Tip motor</span>
                         </div>
-                        <span className="text-sm text-muted-foreground">{car.tip_motor}</span>
+                        <span className="text-sm text-muted-foreground">{car.tip_motor?.replace(/\b\w/g, l => l.toUpperCase())}</span>
                       </div>
                       
                       {car.capacitate_motor && (
@@ -361,7 +361,7 @@ const CarDetails = () => {
                           <Settings className="h-4 w-4 text-auto-green" />
                           <span className="text-sm font-medium">Cutie viteze</span>
                         </div>
-                        <span className="text-sm text-muted-foreground">{car.cutie_viteze}</span>
+                        <span className="text-sm text-muted-foreground">{car.cutie_viteze?.replace(/\b\w/g, l => l.toUpperCase())}</span>
                       </div>
                       
                       {car.tractiune && (
@@ -370,7 +370,7 @@ const CarDetails = () => {
                             <Car className="h-4 w-4 text-auto-green" />
                             <span className="text-sm font-medium">Tracțiune</span>
                           </div>
-                          <span className="text-sm text-muted-foreground">{car.tractiune}</span>
+                          <span className="text-sm text-muted-foreground">{car.tractiune?.replace(/\b\w/g, l => l.toUpperCase())}</span>
                         </div>
                       )}
                       
@@ -380,7 +380,7 @@ const CarDetails = () => {
                             <Car className="h-4 w-4 text-auto-green" />
                             <span className="text-sm font-medium">Caroserie</span>
                           </div>
-                          <span className="text-sm text-muted-foreground">{car.caroserie}</span>
+                          <span className="text-sm text-muted-foreground">{car.caroserie?.replace(/\b\w/g, l => l.toUpperCase())}</span>
                         </div>
                       )}
                     </div>

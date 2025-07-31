@@ -193,11 +193,45 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="marca">Marca *</Label>
-                  <Input
-                    id="marca"
-                    {...register('marca', { required: 'Marca este obligatorie' })}
-                    placeholder="ex: BMW, Mercedes, Audi"
-                  />
+                  <Select 
+                    onValueChange={(value) => setValue('marca', value)}
+                    defaultValue={watch('marca')}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selectează marca" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border border-border shadow-lg z-50 max-h-60 overflow-y-auto">
+                      <SelectItem value="Audi">Audi</SelectItem>
+                      <SelectItem value="BMW">BMW</SelectItem>
+                      <SelectItem value="Chevrolet">Chevrolet</SelectItem>
+                      <SelectItem value="Citroën">Citroën</SelectItem>
+                      <SelectItem value="Dacia">Dacia</SelectItem>
+                      <SelectItem value="DS Automobiles">DS Automobiles</SelectItem>
+                      <SelectItem value="Ford">Ford</SelectItem>
+                      <SelectItem value="Haval">Haval</SelectItem>
+                      <SelectItem value="Honda">Honda</SelectItem>
+                      <SelectItem value="Hyundai">Hyundai</SelectItem>
+                      <SelectItem value="Infiniti">Infiniti</SelectItem>
+                      <SelectItem value="Jaguar">Jaguar</SelectItem>
+                      <SelectItem value="Kia">Kia</SelectItem>
+                      <SelectItem value="Land Rover">Land Rover</SelectItem>
+                      <SelectItem value="Lexus">Lexus</SelectItem>
+                      <SelectItem value="Mazda">Mazda</SelectItem>
+                      <SelectItem value="Mercedes‑Benz">Mercedes‑Benz</SelectItem>
+                      <SelectItem value="Mitsubishi">Mitsubishi</SelectItem>
+                      <SelectItem value="Nissan">Nissan</SelectItem>
+                      <SelectItem value="Opel">Opel</SelectItem>
+                      <SelectItem value="Peugeot">Peugeot</SelectItem>
+                      <SelectItem value="Porsche">Porsche</SelectItem>
+                      <SelectItem value="Renault">Renault</SelectItem>
+                      <SelectItem value="Seat">Seat</SelectItem>
+                      <SelectItem value="Skoda">Skoda</SelectItem>
+                      <SelectItem value="Subaru">Subaru</SelectItem>
+                      <SelectItem value="Toyota">Toyota</SelectItem>
+                      <SelectItem value="Volkswagen">Volkswagen</SelectItem>
+                      <SelectItem value="Volvo">Volvo</SelectItem>
+                    </SelectContent>
+                  </Select>
                   {errors.marca && (
                     <span className="text-sm text-destructive">{errors.marca.message}</span>
                   )}
@@ -283,11 +317,13 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                       <SelectValue placeholder="Selectează tipul motorului" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="benzina">Benzină</SelectItem>
-                      <SelectItem value="diesel">Diesel</SelectItem>
-                      <SelectItem value="hibrid">Hibrid</SelectItem>
-                      <SelectItem value="diesel_hibrid">Diesel hibrid</SelectItem>
-                      <SelectItem value="electric">Electric</SelectItem>
+                      <SelectItem value="Benzină">Benzină</SelectItem>
+                      <SelectItem value="Diesel">Diesel</SelectItem>
+                      <SelectItem value="Gaz / Benzină (propan)">Gaz / Benzină (propan)</SelectItem>
+                      <SelectItem value="Gaz / Benzină (metan)">Gaz / Benzină (metan)</SelectItem>
+                      <SelectItem value="Hybrid">Hybrid</SelectItem>
+                      <SelectItem value="Plug-In Hybrid">Plug-In Hybrid</SelectItem>
+                      <SelectItem value="Diesel-Hybrid">Diesel-Hybrid</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

@@ -48,7 +48,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 const Catalog = () => {
   const { t } = useLanguage();
   
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
@@ -56,19 +55,22 @@ const Catalog = () => {
   const [selectedTransmission, setSelectedTransmission] = useState("");
   const [selectedBodyType, setSelectedBodyType] = useState("");
   const [priceRange, setPriceRange] = useState([0, 100000]);
-  const [mileageRange, setMileageRange] = useState([0, 200000]);
+  const [mileageRange, setMileageRange] = useState([0, 400000]);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [cars, setCars] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [availableBrands, setAvailableBrands] = useState<string[]>([]);
+  const [availableModels, setAvailableModels] = useState<string[]>([]);
 
-  // Mock data pentru filtre
-  const brands = [t('common.all'), "Toyota", "BMW", "Mercedes-Benz", "Audi", "Ford", "Hyundai", "Kia", "Nissan", "Mazda", "Volkswagen", "Skoda"];
-  const models = [t('common.all'), "Camry", "Corolla", "X3", "X5", "A4", "A6", "E-Class", "C-Class", "Focus", "Tucson", "Sportage"];
-  const years = [t('common.all'), "2024", "2023", "2022", "2021", "2020", "2019", "2018", "2017", "2016"];
-  const fuelTypes = [t('common.all'), "Benzină", "Diesel", "Hibrid", "Electric", "GPL"];
+  // Updated fuel types with requested options
+  const fuelTypes = [t('common.all'), "Benzină", "Diesel", "Gaz / Benzină (propan)", "Gaz / Benzină (metan)", "Hybrid", "Plug-In Hybrid", "Diesel-Hybrid"];
   const transmissions = [t('common.all'), "Manuală", "Automată", "CVT"];
   const bodyTypes = [t('common.all'), "SUV", "Sedan", "Hatchback", "Combi", "Coupe", "Cabriolet"];
+  
+  // Generate year options dynamically
+  const currentYear = new Date().getFullYear();
+  const years = [t('common.all'), ...Array.from({length: 30}, (_, i) => (currentYear - i).toString())];
 
   // Funcție pentru încărcarea datelor din Supabase
   useEffect(() => {
@@ -92,18 +94,31 @@ const Catalog = () => {
           model: car.model,
           year: car.an_fabricatie,
           price: car.pret,
-          mileage: car.kilometraj || 0,
+          mileage: car.kilometraj || car.parcurs || 0,
           fuel: car.tip_motor,
           transmission: car.cutie_viteze,
           bodyType: car.caroserie || 'N/A',
           engineCapacity: car.capacitate_motor,
           image: car.images && car.images.length > 0 ? car.images[0] : "/placeholder.svg",
-          isTopOffer: false, // Poți adăuga logică pentru acest câmp
+          isTopOffer: car.is_top_offer || false,
+          isComingSoon: car.is_coming_soon || false,
           rating: 4.5, // Placeholder rating
           phone: "+373 69 123 456" // Placeholder phone
         })) || [];
         
         setCars(transformedCars);
+        
+        // Extract unique brands and models from actual data
+        const uniqueBrands = [t('common.all'), ...new Set(transformedCars.map(car => car.brand))];
+        setAvailableBrands(uniqueBrands);
+        
+        // Models based on selected brand or all models if no brand selected
+        const filteredModels = selectedBrand && selectedBrand !== t('common.all') 
+          ? transformedCars.filter(car => car.brand === selectedBrand).map(car => car.model)
+          : transformedCars.map(car => car.model);
+        const uniqueModels = [t('common.all'), ...new Set(filteredModels)];
+        setAvailableModels(uniqueModels);
+        
       } catch (error) {
         console.error('Error:', error);
       } finally {
@@ -112,11 +127,25 @@ const Catalog = () => {
     };
 
     fetchCars();
-  }, []);
+  }, [selectedBrand, t]);
+  
+  // Update available models when brand changes
+  useEffect(() => {
+    if (cars.length > 0) {
+      const filteredModels = selectedBrand && selectedBrand !== t('common.all') 
+        ? cars.filter(car => car.brand === selectedBrand).map(car => car.model)
+        : cars.map(car => car.model);
+      const uniqueModels = [t('common.all'), ...new Set(filteredModels)];
+      setAvailableModels(uniqueModels);
+      
+      // Reset model selection if current model is not available for selected brand
+      if (selectedModel && selectedModel !== t('common.all') && !uniqueModels.includes(selectedModel)) {
+        setSelectedModel("");
+      }
+    }
+  }, [selectedBrand, cars, t, selectedModel]);
 
   const filteredCars = cars.filter(car => {
-    const matchesSearch = car.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         car.model.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesBrand = !selectedBrand || selectedBrand === t('common.all') || car.brand === selectedBrand;
     const matchesModel = !selectedModel || selectedModel === t('common.all') || car.model === selectedModel;
     const matchesYear = !selectedYear || selectedYear === t('common.all') || car.year.toString() === selectedYear;
@@ -126,13 +155,12 @@ const Catalog = () => {
     const matchesPrice = car.price >= priceRange[0] && car.price <= priceRange[1];
     const matchesMileage = car.mileage >= mileageRange[0] && car.mileage <= mileageRange[1];
     
-    return matchesSearch && matchesBrand && matchesModel && matchesYear && 
+    return matchesBrand && matchesModel && matchesYear && 
            matchesFuel && matchesTransmission && matchesBodyType && 
            matchesPrice && matchesMileage;
   });
 
   const clearFilters = () => {
-    setSearchTerm("");
     setSelectedBrand("");
     setSelectedModel("");
     setSelectedYear("");
@@ -140,7 +168,7 @@ const Catalog = () => {
     setSelectedTransmission("");
     setSelectedBodyType("");
     setPriceRange([0, 100000]);
-    setMileageRange([0, 200000]);
+    setMileageRange([0, 400000]);
   };
 
   const handleFiltersApply = () => {
@@ -201,21 +229,6 @@ const Catalog = () => {
                   
                   <div className="px-4 overflow-y-auto flex-1">
                     <div className="space-y-6 pb-6">
-                      {/* Search */}
-                      <div className="space-y-2">
-                        <Label htmlFor="search-mobile">{t('catalog.search')}</Label>
-                        <div className="relative">
-                          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            id="search-mobile"
-                            placeholder={t('catalog.search')}
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10"
-                          />
-                        </div>
-                      </div>
-
                       {/* Brand Filter */}
                       <div className="space-y-2">
                         <Label>{t('catalog.brand')}</Label>
@@ -224,7 +237,7 @@ const Catalog = () => {
                             <SelectValue placeholder={`${t('catalog.selectBrand')}`} />
                           </SelectTrigger>
                           <SelectContent>
-                            {brands.map((brand) => (
+                            {availableBrands.map((brand) => (
                               <SelectItem key={brand} value={brand}>
                                 {brand}
                               </SelectItem>
@@ -241,7 +254,7 @@ const Catalog = () => {
                             <SelectValue placeholder={`${t('catalog.selectModel')}`} />
                           </SelectTrigger>
                           <SelectContent>
-                            {models.map((model) => (
+                            {availableModels.map((model) => (
                               <SelectItem key={model} value={model}>
                                 {model}
                               </SelectItem>
@@ -336,7 +349,7 @@ const Catalog = () => {
                         <Slider
                           value={mileageRange}
                           onValueChange={setMileageRange}
-                          max={200000}
+                          max={400000}
                           step={5000}
                           className="w-full"
                         />
@@ -371,21 +384,6 @@ const Catalog = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  {/* Search */}
-                  <div className="space-y-2">
-                    <Label htmlFor="search">Caută mașina</Label>
-                    <div className="relative">
-                      <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        id="search"
-                        placeholder="Marcă, model..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-
                   {/* Brand Filter */}
                   <div className="space-y-2">
                     <Label>Marca</Label>
@@ -394,7 +392,7 @@ const Catalog = () => {
                         <SelectValue placeholder="Selectează marca" />
                       </SelectTrigger>
                       <SelectContent>
-                        {brands.map((brand) => (
+                        {availableBrands.map((brand) => (
                           <SelectItem key={brand} value={brand}>
                             {brand}
                           </SelectItem>
@@ -411,7 +409,7 @@ const Catalog = () => {
                         <SelectValue placeholder="Selectează modelul" />
                       </SelectTrigger>
                       <SelectContent>
-                        {models.map((model) => (
+                        {availableModels.map((model) => (
                           <SelectItem key={model} value={model}>
                             {model}
                           </SelectItem>
@@ -506,7 +504,7 @@ const Catalog = () => {
                     <Slider
                       value={mileageRange}
                       onValueChange={setMileageRange}
-                      max={200000}
+                      max={400000}
                       step={5000}
                       className="w-full"
                     />
@@ -550,7 +548,7 @@ const Catalog = () => {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                   {filteredCars.map((car) => (
-                  <Card key={car.id} className="group hover:shadow-xl transition-all duration-300 bg-background border-0 shadow-sm">
+                  <Card key={car.id} className="group hover:shadow-xl transition-all duration-300 bg-background border-0 shadow-lg">
                     <CardContent className="p-0">
                       {/* Image Container */}
                       <div className="relative overflow-hidden rounded-t-lg">
@@ -560,8 +558,13 @@ const Catalog = () => {
                           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                         {car.isTopOffer && (
-                          <Badge className="absolute top-4 left-4 bg-auto-green hover:bg-auto-green text-white">
+                          <Badge className="absolute top-4 left-4 bg-auto-green hover:bg-auto-green text-white shadow-md">
                             TOP OFERTĂ
+                          </Badge>
+                        )}
+                        {car.isComingSoon && (
+                          <Badge className="absolute top-4 left-4 bg-orange-500 hover:bg-orange-600 text-white shadow-md">
+                            ÎN CURÂND
                           </Badge>
                         )}
                       </div>
