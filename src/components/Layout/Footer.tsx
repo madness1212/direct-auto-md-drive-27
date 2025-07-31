@@ -39,10 +39,6 @@ const Footer = () => {
                   className="h-5 w-5 text-muted-foreground hover:text-auto-green cursor-pointer transition-colors" 
                   onClick={() => window.open('https://t.me/directautomd', '_blank')}
                 />
-                <FaTiktok 
-                  className="h-5 w-5 text-muted-foreground hover:text-auto-green cursor-pointer transition-colors" 
-                  onClick={() => window.open('https://www.tiktok.com/@directauto?lang=ro-RO', '_blank')}
-                />
               </div>
             </div>
           </div>
