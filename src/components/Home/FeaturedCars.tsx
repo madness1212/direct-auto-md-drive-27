@@ -237,10 +237,21 @@ const FeaturedCars = () => {
 
                           {/* Price */}
                           <div className="flex items-center justify-between">
-                            <div>
-                              <div className="text-xl font-bold text-auto-green">
-                                €{car.pret.toLocaleString()}
-                              </div>
+                            <div className="relative">
+                              {car.is_top_offer ? (
+                                <div className="bg-gradient-to-r from-auto-green to-auto-green-dark p-3 rounded-lg text-center transform -rotate-1 shadow-lg border-2 border-white">
+                                  <div className="text-2xl font-bold text-white">
+                                    €{car.pret.toLocaleString()}
+                                  </div>
+                                  <div className="text-xs text-white/90 font-medium mt-1">
+                                    ★ OFERTĂ SPECIALĂ ★
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="text-xl font-bold text-auto-green">
+                                  €{car.pret.toLocaleString()}
+                                </div>
+                              )}
                             </div>
                           </div>
 

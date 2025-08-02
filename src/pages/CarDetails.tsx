@@ -389,9 +389,9 @@ const CarDetails = () => {
                   {/* Description */}
                   <div className="space-y-4">
                     <h3 className="font-semibold text-foreground">Descriere</h3>
-                    <p className="text-muted-foreground leading-relaxed text-sm">
+                    <div className="text-muted-foreground leading-relaxed text-sm whitespace-pre-wrap">
                       {car.descriere_ro || car.descriere || "Descriere detaliată în curs de actualizare."}
-                    </p>
+                    </div>
                   </div>
 
                   <Separator />

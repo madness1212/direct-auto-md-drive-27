@@ -62,6 +62,7 @@ const Catalog = () => {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [availableBrands, setAvailableBrands] = useState<string[]>([]);
   const [availableModels, setAvailableModels] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState("price-asc");
 
   // Updated fuel types with requested options
   const fuelTypes = [t('common.all'), "Benzină", "Diesel", "Gaz / Benzină (propan)", "Gaz / Benzină (metan)", "Hybrid", "Plug-In Hybrid", "Diesel-Hybrid"];
@@ -158,6 +159,15 @@ const Catalog = () => {
     return matchesBrand && matchesModel && matchesYear && 
            matchesFuel && matchesTransmission && matchesBodyType && 
            matchesPrice && matchesMileage;
+  }).sort((a, b) => {
+    switch (sortBy) {
+      case "price-asc":
+        return a.price - b.price;
+      case "price-desc":
+        return b.price - a.price;
+      default:
+        return 0;
+    }
   });
 
   const clearFilters = () => {
@@ -520,15 +530,13 @@ const Catalog = () => {
                 <p className="text-muted-foreground">
                   Găsite {filteredCars.length} automobile
                 </p>
-                <Select defaultValue="price-asc">
+                <Select value={sortBy} onValueChange={setSortBy}>
                   <SelectTrigger className="w-48">
                     <SelectValue placeholder="Sortează după" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="price-asc">Preț crescător</SelectItem>
                     <SelectItem value="price-desc">Preț descrescător</SelectItem>
-                    <SelectItem value="year-desc">An nou</SelectItem>
-                    <SelectItem value="mileage-asc">Kilometraj mic</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -548,15 +556,17 @@ const Catalog = () => {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                   {filteredCars.map((car) => (
-                  <Card key={car.id} className="group hover:shadow-xl transition-all duration-300 bg-background border-0 shadow-lg">
-                    <CardContent className="p-0">
-                      {/* Image Container */}
-                      <div className="relative overflow-hidden rounded-t-lg">
-                        <img 
-                          src={car.image} 
-                          alt={`${car.brand} ${car.model}`}
-                          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
+                   <Card key={car.id} className="group hover:shadow-xl transition-all duration-300 bg-background border-0 shadow-lg">
+                     <CardContent className="p-0">
+                       {/* Image Container */}
+                       <div className="relative overflow-hidden rounded-t-lg">
+                         <Link to={`/catalog/${generateSlug(car.brand, car.model, car.year, car.id)}`}>
+                           <img 
+                             src={car.image} 
+                             alt={`${car.brand} ${car.model}`}
+                             className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                           />
+                         </Link>
                         {car.isTopOffer && (
                           <Badge className="absolute top-4 left-4 bg-auto-green hover:bg-auto-green text-white shadow-md">
                             TOP OFERTĂ

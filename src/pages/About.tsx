@@ -188,8 +188,11 @@ const About = () => {
                     <Button variant="outline" className="w-full border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground" asChild>
                       <a href="tel:+373696888999">Sună Acum: +373 696 88 999</a>
                     </Button>
-                    <Button variant="outline" className="w-full border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground" asChild>
-                      <a href="mailto:directauto.direct@gmail.com">Scrie-ne: directauto.direct@gmail.com</a>
+                    <Button variant="outline" className="w-full border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground text-xs sm:text-sm" asChild>
+                      <a href="mailto:directauto.direct@gmail.com" className="break-all">
+                        <span className="block">Scrie-ne:</span>
+                        <span className="block">directauto.direct@gmail.com</span>
+                      </a>
                     </Button>
                   </div>
                 </div>
