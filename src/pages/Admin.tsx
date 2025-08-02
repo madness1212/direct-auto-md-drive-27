@@ -4,6 +4,7 @@ import { CarListingForm } from '@/components/Admin/CarListingForm';
 import { Import999Listings } from '@/components/Admin/Import999Listings';
 import { TopOffersManager } from '@/components/Admin/TopOffersManager';
 import { TestDriveManager } from '@/components/Admin/TestDriveManager';
+import { NotificationBell } from '@/components/Admin/NotificationBell';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -216,10 +217,13 @@ export default function Admin() {
               Administrează catalogul de mașini și importă anunțuri noi
             </p>
           </div>
-          <Button onClick={() => setShowForm(true)} className="bg-primary hover:bg-primary/90">
-            <Plus className="h-4 w-4 mr-2" />
-            Adaugă anunț nou
-          </Button>
+          <div className="flex items-center gap-3">
+            <NotificationBell />
+            <Button onClick={() => setShowForm(true)} className="bg-primary hover:bg-primary/90">
+              <Plus className="h-4 w-4 mr-2" />
+              Adaugă anunț nou
+            </Button>
+          </div>
         </div>
 
         {/* Tabs pentru diferite secțiuni */}
