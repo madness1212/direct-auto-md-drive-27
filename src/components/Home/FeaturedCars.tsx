@@ -55,7 +55,7 @@ const FeaturedCars = () => {
         '(min-width: 1280px)': { slidesToScroll: 4 }
       }
     },
-    [Autoplay({ delay: 4000, stopOnInteraction: false })]
+    [Autoplay({ delay: 2300, stopOnInteraction: false })]
   );
 
   const [selectedIndex, setSelectedIndex] = useState(0);
