@@ -559,12 +559,51 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
               </div>
               
               <div>
-                <Label htmlFor="video_url">Link video (YouTube, Vimeo, TikTok)</Label>
-                <Input
-                  id="video_url"
-                  {...register('video_url')}
-                  placeholder="https://www.youtube.com/watch?v=..."
-                />
+                <Label htmlFor="video_url">Video prezentare</Label>
+                <div className="space-y-2">
+                  <Input
+                    id="video_url"
+                    {...register('video_url')}
+                    placeholder="Link video (YouTube, Vimeo, TikTok) sau încarcă fișier MP4"
+                  />
+                  <div className="text-xs text-muted-foreground">
+                    Poți adăuga un link către video de pe YouTube/Vimeo/TikTok sau încărca un fișier MP4 direct.
+                  </div>
+                  <Input
+                    type="file"
+                    accept="video/mp4"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        try {
+                          const fileExt = file.name.split('.').pop();
+                          const fileName = `video_${Math.random()}.${fileExt}`;
+                          const { data, error } = await supabase.storage
+                            .from('car-images')
+                            .upload(fileName, file);
+                          
+                          if (error) throw error;
+                          
+                          const { data: { publicUrl } } = supabase.storage
+                            .from('car-images')
+                            .getPublicUrl(fileName);
+                          
+                          setValue('video_url', publicUrl);
+                          toast({
+                            title: 'Succes',
+                            description: 'Video încărcat cu succes.',
+                          });
+                        } catch (error: any) {
+                          toast({
+                            title: 'Eroare',
+                            description: 'Eroare la încărcarea video-ului.',
+                            variant: 'destructive',
+                          });
+                        }
+                      }
+                    }}
+                  />
+                </div>
               </div>
             </TabsContent>
 

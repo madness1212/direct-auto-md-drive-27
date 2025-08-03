@@ -143,10 +143,10 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
           <div className="relative">
             {/* Carousel Container */}
             <div className="overflow-hidden" ref={emblaRef}>
-                <div className="flex">
+              <div className="flex gap-6">
                 {cars.map((car) => (
-                  <div key={car.id} className="flex-[0_0_90%] min-w-0 md:flex-[0_0_45%] lg:flex-[0_0_30%] xl:flex-[0_0_22%] pl-4">
-                    <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 mr-4 shadow-lg">
+                  <div key={car.id} className="flex-[0_0_300px] min-w-0">
+                    <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 shadow-lg h-full">
                       <CardContent className="p-0">
                         {/* Image Container */}
                         <div className="relative overflow-hidden rounded-t-lg">

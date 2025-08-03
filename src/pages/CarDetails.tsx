@@ -159,9 +159,9 @@ const CarDetails = () => {
           </div>
 
           {/* Main Content */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Left Column - Images and Gallery */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="space-y-6">
               {/* Main Image */}
               <Card className="border-0 shadow-card overflow-hidden">
                 <CardContent className="p-0">
@@ -262,7 +262,7 @@ const CarDetails = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="aspect-video bg-muted rounded-lg overflow-hidden">
+                    <div className="aspect-video bg-muted rounded-lg overflow-hidden max-w-lg">
                       {car.video_url.endsWith('.mp4') ? (
                         <video 
                           controls
@@ -446,8 +446,8 @@ const CarDetails = () => {
               </Card>
           </div>
           
-          {/* Recommended Cars Section */}
-          <RecommendedCars currentCarId={car.id} />
+        {/* Recommended Cars Section */}
+        <RecommendedCars currentCarId={car.id} />
         </div>
       </div>
       </div>
