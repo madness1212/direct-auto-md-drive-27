@@ -155,17 +155,19 @@ const ComingSoon = () => {
                   <div key={car.id} className="flex-[0_0_90%] min-w-0 md:flex-[0_0_45%] lg:flex-[0_0_30%] xl:flex-[0_0_22%] pl-4">
                     <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 mr-4 shadow-lg">
                       <CardContent className="p-0">
-                        {/* Image Container */}
-                        <div className="relative overflow-hidden rounded-t-lg">
-                          <img 
-                            src={car.images && car.images.length > 0 ? car.images[0] : "/placeholder.svg"} 
-                            alt={`${car.marca} ${car.model}`}
-                            className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                          <Badge className="absolute top-4 left-4 bg-blue-600 hover:bg-blue-700">
-                            {t('home.comingSoon.badge')}
-                          </Badge>
-                        </div>
+                         {/* Image Container */}
+                         <div className="relative overflow-hidden rounded-t-lg">
+                           <Link to={`/catalog/${generateSlug(car)}`}>
+                             <img 
+                               src={car.images && car.images.length > 0 ? car.images[0] : "/placeholder.svg"} 
+                               alt={`${car.marca} ${car.model}`}
+                               className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                             />
+                           </Link>
+                           <Badge className="absolute top-4 left-4 bg-blue-600 hover:bg-blue-700">
+                             {t('home.comingSoon.badge')}
+                           </Badge>
+                         </div>
 
                         {/* Content */}
                         <div className="p-4 space-y-3">
@@ -190,37 +192,37 @@ const ComingSoon = () => {
                             </div>
                           </div>
 
-                          {/* Specifications */}
-                          <div className="grid grid-cols-2 gap-2 text-sm">
-                            <div className="flex items-center space-x-1">
-                              <Calendar className="h-3 w-3 text-auto-green" />
-                              <span className="text-muted-foreground">{car.an_fabricatie}</span>
-                            </div>
-                            <div className="flex items-center space-x-1">
-                              <Gauge className="h-3 w-3 text-auto-green" />
-                              <span className="text-muted-foreground">{(car.kilometraj || 0).toLocaleString()} km</span>
-                            </div>
-                            <div className="flex items-center space-x-1">
-                              <Fuel className="h-3 w-3 text-auto-green" />
-                              <span className="text-muted-foreground">{car.tip_motor}</span>
-                            </div>
-                            <div className="flex items-center space-x-1">
-                              <Settings className="h-3 w-3 text-auto-green" />
-                              <span className="text-muted-foreground">{car.cutie_viteze}</span>
-                            </div>
-                            {car.capacitate_motor && (
-                              <div className="flex items-center space-x-1">
-                                <Fuel className="h-3 w-3 text-auto-green" />
-                                <span className="text-muted-foreground">{car.capacitate_motor}</span>
-                              </div>
-                            )}
-                            {car.caroserie && (
-                              <div className="flex items-center space-x-1">
-                                <Car className="h-3 w-3 text-auto-green" />
-                                <span className="text-muted-foreground">{car.caroserie}</span>
-                              </div>
-                            )}
-                          </div>
+                           {/* Specifications */}
+                           <div className="grid grid-cols-2 gap-2 text-base">
+                             <div className="flex items-center space-x-1">
+                               <Calendar className="h-4 w-4 text-auto-green" />
+                               <span className="text-muted-foreground">{car.an_fabricatie}</span>
+                             </div>
+                             <div className="flex items-center space-x-1">
+                               <Gauge className="h-4 w-4 text-auto-green" />
+                               <span className="text-muted-foreground">{(car.kilometraj || 0).toLocaleString()} km</span>
+                             </div>
+                             <div className="flex items-center space-x-1">
+                               <Fuel className="h-4 w-4 text-auto-green" />
+                               <span className="text-muted-foreground capitalize">{car.tip_motor}</span>
+                             </div>
+                             <div className="flex items-center space-x-1">
+                               <Settings className="h-4 w-4 text-auto-green" />
+                               <span className="text-muted-foreground capitalize">{car.cutie_viteze}</span>
+                             </div>
+                             {car.capacitate_motor && (
+                               <div className="flex items-center space-x-1">
+                                 <Fuel className="h-4 w-4 text-auto-green" />
+                                 <span className="text-muted-foreground capitalize">{car.capacitate_motor}</span>
+                               </div>
+                             )}
+                             {car.caroserie && (
+                               <div className="flex items-center space-x-1">
+                                 <Car className="h-4 w-4 text-auto-green" />
+                                 <span className="text-muted-foreground capitalize">{car.caroserie}</span>
+                               </div>
+                             )}
+                           </div>
 
                           {/* Price */}
                           <div className="flex items-center justify-between">

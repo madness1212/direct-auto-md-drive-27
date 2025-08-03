@@ -1,25 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Calendar, 
-  Gauge, 
-  Fuel, 
-  Settings, 
-  Star,
-  Loader2,
-  Car as CarIcon,
-  Car,
-  ChevronLeft,
-  ChevronRight
-} from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight, Star, Calendar, Gauge, Fuel, Settings, Car } from "lucide-react";
+import { Link } from "react-router-dom";
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
-
-import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Car {
   id: string;
@@ -27,23 +14,24 @@ interface Car {
   model: string;
   an_fabricatie: number;
   pret: number;
-  kilometraj: number;
+  kilometraj: number | null;
   tip_motor: string;
   cutie_viteze: string;
   caroserie?: string;
   capacitate_motor?: string;
   images: string[];
   is_top_offer: boolean;
-  top_offer_position: number;
 }
 
-const FeaturedCars = () => {
+interface RecommendedCarsProps {
+  currentCarId: string;
+}
+
+const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
-  
-  const { t } = useLanguage();
 
-  // Configurez carousel-ul cu autoplay
+  // Configure carousel with autoplay
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { 
       loop: true,
@@ -91,21 +79,21 @@ const FeaturedCars = () => {
   }, [emblaApi, onInit, onSelect]);
 
   useEffect(() => {
-    fetchTopOffers();
-  }, []);
+    fetchRecommendedCars();
+  }, [currentCarId]);
 
-  const fetchTopOffers = async () => {
+  const fetchRecommendedCars = async () => {
     try {
       const { data, error } = await supabase
         .from('car_listings')
         .select('*')
-        .eq('is_top_offer', true)
         .eq('status', 'active')
-        .order('top_offer_position', { ascending: true })
-        .limit(4); // Limitează la primele 4 top oferte
+        .eq('is_coming_soon', false)
+        .neq('id', currentCarId)
+        .limit(8);
 
       if (error) {
-        console.error('Error fetching top offers:', error);
+        console.error('Error fetching recommended cars:', error);
         return;
       }
 
@@ -117,44 +105,38 @@ const FeaturedCars = () => {
     }
   };
 
-  // Funcție pentru generarea slug-ului
-  const generateSlug = (brand: string, model: string, year: number, id: string) => {
+  const generateSlug = (car: Car) => {
     const cleanString = (str: string) => 
       str.toLowerCase()
-         .replace(/[^\w\s-]/g, '') // Elimină caractere speciale
-         .replace(/\s+/g, '-') // Înlocuiește spațiile cu liniuțe
-         .replace(/-+/g, '-') // Elimină liniuțele multiple
+         .replace(/[^\w\s-]/g, '')
+         .replace(/\s+/g, '-')
+         .replace(/-+/g, '-')
          .trim();
     
-    return `${cleanString(brand)}-${cleanString(model)}-${year}-${id}`;
+    return `${cleanString(car.marca)}-${cleanString(car.model)}-${car.an_fabricatie}-${car.id}`;
   };
 
   return (
-    <section className="py-8 bg-auto-gray">
+    <section className="py-8 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center space-y-4 mb-8">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <Star className="h-6 w-6 text-auto-green" />
-            <h2 className="text-3xl md:text-4xl font-bold text-auto-dark">
-              {t('home.featuredCars.title')}
-            </h2>
-          </div>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('home.featuredCars.subtitle')}
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            Mașini Recomandate
+          </h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Descoperă alte automobile care ar putea fi potrivite pentru tine
           </p>
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-auto-green" />
-            <span className="ml-2 text-muted-foreground">{t('common.loading')}</span>
+          <div className="flex justify-center items-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <span className="ml-2 text-muted-foreground">Se încarcă...</span>
           </div>
         ) : cars.length === 0 ? (
           <div className="text-center py-12">
-            <CarIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-foreground mb-2">{t('catalog.noResults')}</h3>
-            <p className="text-muted-foreground">
-              {t('catalog.noResultsText')}
+            <p className="text-muted-foreground text-lg">
+              Nu sunt disponibile alte mașini în acest moment.
             </p>
           </div>
         ) : (
@@ -166,21 +148,21 @@ const FeaturedCars = () => {
                   <div key={car.id} className="flex-[0_0_90%] min-w-0 md:flex-[0_0_45%] lg:flex-[0_0_30%] xl:flex-[0_0_22%] pl-4">
                     <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 mr-4 shadow-lg">
                       <CardContent className="p-0">
-                         {/* Image Container */}
-                         <div className="relative overflow-hidden rounded-t-lg">
-                           <Link to={`/catalog/${generateSlug(car.marca, car.model, car.an_fabricatie, car.id)}`}>
-                             <img 
-                               src={car.images && car.images.length > 0 ? car.images[0] : "/placeholder.svg"} 
-                               alt={`${car.marca} ${car.model}`}
-                               className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-                             />
-                           </Link>
-                           {car.is_top_offer && (
-                             <Badge className="absolute top-4 left-4 bg-auto-green hover:bg-auto-green-dark">
-                               {t('car.topOffer')}
-                             </Badge>
-                           )}
-                         </div>
+                        {/* Image Container */}
+                        <div className="relative overflow-hidden rounded-t-lg">
+                          <Link to={`/catalog/${generateSlug(car)}`}>
+                            <img 
+                              src={car.images && car.images.length > 0 ? car.images[0] : "/placeholder.svg"} 
+                              alt={`${car.marca} ${car.model}`}
+                              className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                            />
+                          </Link>
+                          {car.is_top_offer && (
+                            <Badge className="absolute top-4 left-4 bg-auto-green hover:bg-auto-green-dark">
+                              TOP OFERTĂ
+                            </Badge>
+                          )}
+                        </div>
 
                         {/* Content */}
                         <div className="p-3 space-y-3">
@@ -194,7 +176,7 @@ const FeaturedCars = () => {
                                   <Star 
                                     key={i} 
                                     className={`h-3 w-3 ${
-                                      i < 4 // Placeholder rating de 4.5
+                                      i < 4
                                         ? 'text-auto-green fill-current' 
                                         : 'text-muted-foreground'
                                     }`} 
@@ -205,70 +187,59 @@ const FeaturedCars = () => {
                             </div>
                           </div>
 
-                           {/* Specifications */}
-                           <div className="grid grid-cols-2 gap-2 text-base">
-                             <div className="flex items-center space-x-1">
-                               <Calendar className="h-4 w-4 text-auto-green" />
-                               <span className="text-muted-foreground">{car.an_fabricatie}</span>
-                             </div>
-                             <div className="flex items-center space-x-1">
-                               <Gauge className="h-4 w-4 text-auto-green" />
-                               <span className="text-muted-foreground">{(car.kilometraj || 0).toLocaleString()} km</span>
-                             </div>
-                             <div className="flex items-center space-x-1">
-                               <Fuel className="h-4 w-4 text-auto-green" />
-                               <span className="text-muted-foreground capitalize">{car.tip_motor}</span>
-                             </div>
-                             <div className="flex items-center space-x-1">
-                               <Settings className="h-4 w-4 text-auto-green" />
-                               <span className="text-muted-foreground capitalize">{car.cutie_viteze}</span>
-                             </div>
-                             {car.capacitate_motor && (
-                               <div className="flex items-center space-x-1">
-                                 <Fuel className="h-4 w-4 text-auto-green" />
-                                 <span className="text-muted-foreground capitalize">{car.capacitate_motor}</span>
-                               </div>
-                             )}
-                             {car.caroserie && (
-                               <div className="flex items-center space-x-1">
-                                 <Car className="h-4 w-4 text-auto-green" />
-                                 <span className="text-muted-foreground capitalize">{car.caroserie}</span>
-                               </div>
-                             )}
-                           </div>
+                          {/* Specifications */}
+                          <div className="grid grid-cols-2 gap-2 text-base">
+                            <div className="flex items-center space-x-1">
+                              <Calendar className="h-4 w-4 text-auto-green" />
+                              <span className="text-muted-foreground">{car.an_fabricatie}</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <Gauge className="h-4 w-4 text-auto-green" />
+                              <span className="text-muted-foreground">{(car.kilometraj || 0).toLocaleString()} km</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <Fuel className="h-4 w-4 text-auto-green" />
+                              <span className="text-muted-foreground capitalize">{car.tip_motor}</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <Settings className="h-4 w-4 text-auto-green" />
+                              <span className="text-muted-foreground capitalize">{car.cutie_viteze}</span>
+                            </div>
+                            {car.capacitate_motor && (
+                              <div className="flex items-center space-x-1">
+                                <Fuel className="h-4 w-4 text-auto-green" />
+                                <span className="text-muted-foreground capitalize">{car.capacitate_motor}</span>
+                              </div>
+                            )}
+                            {car.caroserie && (
+                              <div className="flex items-center space-x-1">
+                                <Car className="h-4 w-4 text-auto-green" />
+                                <span className="text-muted-foreground capitalize">{car.caroserie}</span>
+                              </div>
+                            )}
+                          </div>
 
                           {/* Price */}
                           <div className="flex items-center justify-between">
-                            <div className="relative">
-                              {car.is_top_offer ? (
-                                <div className="bg-gradient-to-r from-auto-green to-auto-green-dark p-3 rounded-lg text-center transform -rotate-1 shadow-lg border-2 border-white">
-                                  <div className="text-2xl font-bold text-white">
-                                    €{car.pret.toLocaleString()}
-                                  </div>
-                                  <div className="text-xs text-white/90 font-medium mt-1">
-                                    ★ OFERTĂ SPECIALĂ ★
-                                  </div>
-                                </div>
-                              ) : (
-                                <div className="text-xl font-bold text-auto-green">
-                                  €{car.pret.toLocaleString()}
-                                </div>
-                              )}
+                            <div>
+                              <div className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+                                €{car.pret.toLocaleString()}
+                              </div>
                             </div>
                           </div>
 
                           {/* Action Buttons */}
                           <div className="flex space-x-2">
                             <Link 
-                              to={`/catalog/${generateSlug(car.marca, car.model, car.an_fabricatie, car.id)}`}
+                              to={`/catalog/${generateSlug(car)}`}
                               className="flex-1"
                             >
                               <Button className="w-full bg-gradient-primary hover:bg-auto-green-dark text-sm">
-                                {t('car.details')}
+                                Vezi Detalii
                               </Button>
                             </Link>
                             <Button asChild variant="outline" className="flex-1 text-sm border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
-                              <Link to="/contact">{t('car.contact')}</Link>
+                              <Link to="/contact">Contact</Link>
                             </Button>
                           </div>
                         </div>
@@ -317,15 +288,15 @@ const FeaturedCars = () => {
         )}
 
         <div className="text-center mt-8">
-          <Link to="/catalog">
-            <Button size="lg" variant="outline" className="border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
-              {t('home.featuredCars.viewAll')}
-            </Button>
-          </Link>
+          <Button asChild variant="outline" size="lg" className="border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
+            <Link to="/catalog">
+              Vezi Toate Mașinile
+            </Link>
+          </Button>
         </div>
       </div>
     </section>
   );
 };
 
-export default FeaturedCars;
+export default RecommendedCars;

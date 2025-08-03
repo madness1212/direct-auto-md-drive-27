@@ -67,7 +67,7 @@ const Catalog = () => {
   // Updated fuel types with requested options
   const fuelTypes = [t('common.all'), "Benzină", "Diesel", "Gaz / Benzină (propan)", "Gaz / Benzină (metan)", "Hybrid", "Plug-In Hybrid", "Diesel-Hybrid"];
   const transmissions = [t('common.all'), "Manuală", "Automată", "CVT"];
-  const bodyTypes = [t('common.all'), "SUV", "Sedan", "Hatchback", "Combi", "Coupe", "Cabriolet"];
+  const bodyTypes = [t('common.all'), "SUV", "Sedan", "Hatchback", "Combi", "Coupe", "Cabriolet", "Crossover"];
   
   // Generate year options dynamically
   const currentYear = new Date().getFullYear();
@@ -150,9 +150,9 @@ const Catalog = () => {
     const matchesBrand = !selectedBrand || selectedBrand === t('common.all') || car.brand === selectedBrand;
     const matchesModel = !selectedModel || selectedModel === t('common.all') || car.model === selectedModel;
     const matchesYear = !selectedYear || selectedYear === t('common.all') || car.year.toString() === selectedYear;
-    const matchesFuel = !selectedFuel || selectedFuel === t('common.all') || car.fuel === selectedFuel;
-    const matchesTransmission = !selectedTransmission || selectedTransmission === t('common.all') || car.transmission === selectedTransmission;
-    const matchesBodyType = !selectedBodyType || selectedBodyType === t('common.all') || car.bodyType === selectedBodyType;
+    const matchesFuel = !selectedFuel || selectedFuel === t('common.all') || car.fuel.toLowerCase() === selectedFuel.toLowerCase();
+    const matchesTransmission = !selectedTransmission || selectedTransmission === t('common.all') || car.transmission.toLowerCase() === selectedTransmission.toLowerCase();
+    const matchesBodyType = !selectedBodyType || selectedBodyType === t('common.all') || car.bodyType.toLowerCase() === selectedBodyType.toLowerCase();
     const matchesPrice = car.price >= priceRange[0] && car.price <= priceRange[1];
     const matchesMileage = car.mileage >= mileageRange[0] && car.mileage <= mileageRange[1];
     
@@ -200,7 +200,7 @@ const Catalog = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-auto-gray">
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
           <div className="text-center space-y-4 mb-8">
@@ -603,43 +603,47 @@ const Catalog = () => {
                         </div>
 
                         {/* Specifications */}
-                         <div className="grid grid-cols-2 gap-2 text-sm">
+                         <div className="grid grid-cols-2 gap-2 text-base">
                            <div className="flex items-center space-x-1">
-                             <Calendar className="h-3 w-3 text-auto-green" />
+                             <Calendar className="h-4 w-4 text-auto-green" />
                              <span className="text-muted-foreground">{car.year}</span>
                            </div>
                            <div className="flex items-center space-x-1">
-                             <Gauge className="h-3 w-3 text-auto-green" />
+                             <Gauge className="h-4 w-4 text-auto-green" />
                              <span className="text-muted-foreground">{car.mileage.toLocaleString()} km</span>
                            </div>
                            <div className="flex items-center space-x-1">
-                             <Fuel className="h-3 w-3 text-auto-green" />
-                             <span className="text-muted-foreground">{car.fuel}</span>
+                             <Fuel className="h-4 w-4 text-auto-green" />
+                             <span className="text-muted-foreground capitalize">{car.fuel}</span>
                            </div>
                            <div className="flex items-center space-x-1">
-                             <Settings className="h-3 w-3 text-auto-green" />
-                             <span className="text-muted-foreground">{car.transmission}</span>
+                             <Settings className="h-4 w-4 text-auto-green" />
+                             <span className="text-muted-foreground capitalize">{car.transmission}</span>
                            </div>
                            <div className="flex items-center space-x-1">
-                             <Car className="h-3 w-3 text-auto-green" />
-                             <span className="text-muted-foreground">{car.bodyType}</span>
+                             <Car className="h-4 w-4 text-auto-green" />
+                             <span className="text-muted-foreground capitalize">{car.bodyType}</span>
                            </div>
                            {car.engineCapacity && (
                              <div className="flex items-center space-x-1">
-                               <Fuel className="h-3 w-3 text-auto-green" />
-                               <span className="text-muted-foreground">{car.engineCapacity}</span>
+                               <Fuel className="h-4 w-4 text-auto-green" />
+                               <span className="text-muted-foreground capitalize">{car.engineCapacity}</span>
                              </div>
                            )}
                          </div>
 
-                        {/* Price */}
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="text-xl font-bold text-auto-green">
-                              €{car.price.toLocaleString()}
-                            </div>
-                          </div>
-                        </div>
+                         {/* Price */}
+                         <div className="flex items-center justify-between">
+                           <div>
+                             <div className={`text-xl font-bold ${
+                               car.isTopOffer 
+                                 ? 'bg-gradient-primary bg-clip-text text-transparent' 
+                                 : 'text-auto-green'
+                             }`}>
+                               €{car.price.toLocaleString()}
+                             </div>
+                           </div>
+                         </div>
 
                         {/* Action Buttons */}
                         <div className="flex space-x-2">

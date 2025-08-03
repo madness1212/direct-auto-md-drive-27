@@ -24,6 +24,7 @@ import Layout from "@/components/Layout/Layout";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { TestDriveForm } from "@/components/TestDriveForm";
+import RecommendedCars from "@/components/CarDetails/RecommendedCars";
 
 interface CarListing {
   id: string;
@@ -261,16 +262,28 @@ const CarDetails = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
-                      <Button 
-                        variant="outline" 
-                        size="lg"
-                        onClick={() => window.open(car.video_url, '_blank')}
-                        className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
-                      >
-                        <Play className="h-5 w-5 mr-2" />
-                        Vezi Video
-                      </Button>
+                    <div className="aspect-video bg-muted rounded-lg overflow-hidden">
+                      {car.video_url.endsWith('.mp4') ? (
+                        <video 
+                          controls
+                          className="w-full h-full object-cover"
+                          src={car.video_url}
+                        >
+                          Browserul tău nu suportă video HTML5.
+                        </video>
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Button 
+                            variant="outline" 
+                            size="lg"
+                            onClick={() => window.open(car.video_url, '_blank')}
+                            className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
+                          >
+                            <Play className="h-5 w-5 mr-2" />
+                            Vezi Video
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -431,9 +444,12 @@ const CarDetails = () => {
                   </div>
                 </CardContent>
               </Card>
-            </div>
           </div>
+          
+          {/* Recommended Cars Section */}
+          <RecommendedCars currentCarId={car.id} />
         </div>
+      </div>
       </div>
 
       {/* Image Modal */}
