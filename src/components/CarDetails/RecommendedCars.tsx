@@ -118,7 +118,7 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
 
   return (
     <section className="py-8 bg-background">
-      <div className="container mx-auto px-4">
+      <div className="w-full px-4">
         <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             Mașini Recomandate
@@ -145,7 +145,10 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
             <div className="overflow-hidden" ref={emblaRef}>
               <div className="flex gap-4">
                 {cars.map((car) => (
-                  <div key={car.id} className="flex-[0_0_90%] min-w-0 sm:flex-[0_0_45%] lg:flex-[0_0_30%] xl:flex-[0_0_23%]">
+                  <div 
+                    key={car.id} 
+                    className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] xl:flex-[0_0_25%] min-w-0"
+                  >
                     <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 shadow-lg h-full">
                       <CardContent className="p-0">
                         {/* Image Container */}
