@@ -133,7 +133,6 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
         an_fabricatie: Number(data.an_fabricatie),
         pret: Number(data.pret),
         kilometraj: data.kilometraj ? Number(data.kilometraj) : null,
-        parcurs: data.parcurs ? Number(data.parcurs) : null,
         is_top_offer: isTopOffer,
         is_coming_soon: isComingSoon,
       };

@@ -32,7 +32,6 @@ interface CarListing {
   model: string;
   an_fabricatie: number;
   kilometraj: number;
-  parcurs?: number;
   tip_motor: string;
   cutie_viteze: string;
   tractiune: string;
@@ -366,18 +365,7 @@ const CarDetails = () => {
                           {car.kilometraj?.toLocaleString() || 0} km
                         </span>
                       </div>
-                      
-                      {car.parcurs && (
-                        <div className="flex items-center justify-between py-3 border-b border-border/50">
-                          <div className="flex items-center space-x-3">
-                            <Gauge className="h-5 w-5 text-auto-green" />
-                            <span className="font-medium">Parcurs</span>
-                          </div>
-                          <span className="text-muted-foreground">
-                            {car.parcurs?.toLocaleString()} km
-                          </span>
-                        </div>
-                      )}
+                  
                       
                       <div className="flex items-center justify-between py-3 border-b border-border/50">
                         <div className="flex items-center space-x-3">

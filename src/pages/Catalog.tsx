@@ -95,7 +95,7 @@ const Catalog = () => {
           model: car.model,
           year: car.an_fabricatie,
           price: car.pret,
-          mileage: car.kilometraj || car.parcurs || 0,
+          mileage: car.kilometraj || 0,
           fuel: car.tip_motor,
           transmission: car.cutie_viteze,
           bodyType: car.caroserie || 'N/A',

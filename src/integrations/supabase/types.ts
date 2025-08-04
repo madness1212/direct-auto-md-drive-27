@@ -68,7 +68,6 @@ export type Database = {
           kilometraj: number | null
           marca: string
           model: string
-          parcurs: number | null
           pret: number
           status: string | null
           tip_motor: string
