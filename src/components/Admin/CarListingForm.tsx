@@ -19,7 +19,6 @@ interface CarListingFormData {
   model: string;
   an_fabricatie: number;
   kilometraj?: number;
-  parcurs?: number;
   tip_motor: string;
   cutie_viteze: string;
   tractiune?: string;
@@ -279,16 +278,6 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                   />
                 </div>
                 
-                <div>
-                  <Label htmlFor="parcurs">Parcurs</Label>
-                  <Input
-                    id="parcurs"
-                    type="number"
-                    min="0"
-                    {...register('parcurs')}
-                    placeholder="km"
-                  />
-                </div>
                 
                 <div>
                   <Label htmlFor="pret">Preț (EUR) *</Label>
