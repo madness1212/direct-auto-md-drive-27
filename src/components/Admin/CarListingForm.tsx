@@ -662,11 +662,11 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
             </TabsContent>
           </Tabs>
 
-          <div className="flex justify-end space-x-4">
-            <Button type="button" variant="outline" onClick={onCancel}>
+          <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
+            <Button type="button" variant="outline" onClick={onCancel} className="w-full sm:w-auto">
               Anulează
             </Button>
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" disabled={isLoading} className="w-full sm:w-auto">
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {isEditing ? 'Actualizează' : 'Creează'} anunțul
             </Button>

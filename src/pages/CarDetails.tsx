@@ -58,6 +58,7 @@ const CarDetails = () => {
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showImageModal, setShowImageModal] = useState(false);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
     const fetchCarDetails = async () => {
@@ -262,7 +263,7 @@ const CarDetails = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="aspect-video bg-muted rounded-lg overflow-hidden max-w-lg">
+                    <div className="aspect-video bg-muted rounded-lg overflow-hidden max-w-md">
                       {car.video_url.endsWith('.mp4') ? (
                         <video 
                           controls
@@ -283,6 +284,33 @@ const CarDetails = () => {
                             Vezi Video
                           </Button>
                         </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Description Section with Expand/Collapse */}
+              {car.descriere && (
+                <Card className="border-0 shadow-card">
+                  <CardHeader>
+                    <CardTitle>Descriere</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className={`text-muted-foreground whitespace-pre-wrap ${
+                        showFullDescription ? '' : 'line-clamp-3'
+                      }`}>
+                        {car.descriere}
+                      </div>
+                      {car.descriere.length > 150 && (
+                        <Button
+                          variant="ghost"
+                          onClick={() => setShowFullDescription(!showFullDescription)}
+                          className="text-auto-green hover:text-auto-green-dark p-0 h-auto font-medium"
+                        >
+                          {showFullDescription ? 'Vezi mai puțin' : 'Vezi mai mult'}
+                        </Button>
                       )}
                     </div>
                   </CardContent>
@@ -319,95 +347,85 @@ const CarDetails = () => {
 
                   {/* Technical Specifications */}
                   <div className="space-y-4">
-                    <h3 className="font-semibold text-foreground">Specificații Tehnice</h3>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between py-2 border-b border-border/50">
-                        <div className="flex items-center space-x-2">
-                          <Calendar className="h-4 w-4 text-auto-green" />
-                          <span className="text-sm font-medium">An fabricație</span>
+                    <h3 className="text-lg font-semibold text-foreground">Specificații Tehnice</h3>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between py-3 border-b border-border/50">
+                        <div className="flex items-center space-x-3">
+                          <Calendar className="h-5 w-5 text-auto-green" />
+                          <span className="font-medium">An fabricație</span>
                         </div>
-                        <span className="text-sm text-muted-foreground">{car.an_fabricatie}</span>
+                        <span className="text-muted-foreground">{car.an_fabricatie}</span>
                       </div>
                       
-                      <div className="flex items-center justify-between py-2 border-b border-border/50">
-                        <div className="flex items-center space-x-2">
-                          <Gauge className="h-4 w-4 text-auto-green" />
-                          <span className="text-sm font-medium">Kilometraj</span>
+                      <div className="flex items-center justify-between py-3 border-b border-border/50">
+                        <div className="flex items-center space-x-3">
+                          <Gauge className="h-5 w-5 text-auto-green" />
+                          <span className="font-medium">Kilometraj</span>
                         </div>
-                        <span className="text-sm text-muted-foreground">
+                        <span className="text-muted-foreground">
                           {car.kilometraj?.toLocaleString() || 0} km
                         </span>
                       </div>
                       
                       {car.parcurs && (
-                        <div className="flex items-center justify-between py-2 border-b border-border/50">
-                          <div className="flex items-center space-x-2">
-                            <Gauge className="h-4 w-4 text-auto-green" />
-                            <span className="text-sm font-medium">Parcurs</span>
+                        <div className="flex items-center justify-between py-3 border-b border-border/50">
+                          <div className="flex items-center space-x-3">
+                            <Gauge className="h-5 w-5 text-auto-green" />
+                            <span className="font-medium">Parcurs</span>
                           </div>
-                          <span className="text-sm text-muted-foreground">
+                          <span className="text-muted-foreground">
                             {car.parcurs?.toLocaleString()} km
                           </span>
                         </div>
                       )}
                       
-                      <div className="flex items-center justify-between py-2 border-b border-border/50">
-                        <div className="flex items-center space-x-2">
-                          <Fuel className="h-4 w-4 text-auto-green" />
-                          <span className="text-sm font-medium">Tip motor</span>
+                      <div className="flex items-center justify-between py-3 border-b border-border/50">
+                        <div className="flex items-center space-x-3">
+                          <Fuel className="h-5 w-5 text-auto-green" />
+                          <span className="font-medium">Tip motor</span>
                         </div>
-                        <span className="text-sm text-muted-foreground">{car.tip_motor?.replace(/\b\w/g, l => l.toUpperCase())}</span>
+                        <span className="text-muted-foreground">{car.tip_motor?.replace(/\b\w/g, l => l.toUpperCase())}</span>
                       </div>
                       
                       {car.capacitate_motor && (
-                        <div className="flex items-center justify-between py-2 border-b border-border/50">
-                          <div className="flex items-center space-x-2">
-                            <Fuel className="h-4 w-4 text-auto-green" />
-                            <span className="text-sm font-medium">Capacitate motor</span>
+                        <div className="flex items-center justify-between py-3 border-b border-border/50">
+                          <div className="flex items-center space-x-3">
+                            <Fuel className="h-5 w-5 text-auto-green" />
+                            <span className="font-medium">Capacitate motor</span>
                           </div>
-                          <span className="text-sm text-muted-foreground">{car.capacitate_motor}</span>
+                          <span className="text-muted-foreground">{car.capacitate_motor}</span>
                         </div>
                       )}
                       
-                      <div className="flex items-center justify-between py-2 border-b border-border/50">
-                        <div className="flex items-center space-x-2">
-                          <Settings className="h-4 w-4 text-auto-green" />
-                          <span className="text-sm font-medium">Cutie viteze</span>
+                      <div className="flex items-center justify-between py-3 border-b border-border/50">
+                        <div className="flex items-center space-x-3">
+                          <Settings className="h-5 w-5 text-auto-green" />
+                          <span className="font-medium">Cutie viteze</span>
                         </div>
-                        <span className="text-sm text-muted-foreground">{car.cutie_viteze?.replace(/\b\w/g, l => l.toUpperCase())}</span>
+                        <span className="text-muted-foreground">{car.cutie_viteze?.replace(/\b\w/g, l => l.toUpperCase())}</span>
                       </div>
                       
                       {car.tractiune && (
-                        <div className="flex items-center justify-between py-2 border-b border-border/50">
-                          <div className="flex items-center space-x-2">
-                            <Car className="h-4 w-4 text-auto-green" />
-                            <span className="text-sm font-medium">Tracțiune</span>
+                        <div className="flex items-center justify-between py-3 border-b border-border/50">
+                          <div className="flex items-center space-x-3">
+                            <Car className="h-5 w-5 text-auto-green" />
+                            <span className="font-medium">Tracțiune</span>
                           </div>
-                          <span className="text-sm text-muted-foreground">{car.tractiune?.replace(/\b\w/g, l => l.toUpperCase())}</span>
+                          <span className="text-muted-foreground">{car.tractiune?.replace(/\b\w/g, l => l.toUpperCase())}</span>
                         </div>
                       )}
                       
                       {car.caroserie && (
-                        <div className="flex items-center justify-between py-2">
-                          <div className="flex items-center space-x-2">
-                            <Car className="h-4 w-4 text-auto-green" />
-                            <span className="text-sm font-medium">Caroserie</span>
+                        <div className="flex items-center justify-between py-3">
+                          <div className="flex items-center space-x-3">
+                            <Car className="h-5 w-5 text-auto-green" />
+                            <span className="font-medium">Caroserie</span>
                           </div>
-                          <span className="text-sm text-muted-foreground">{car.caroserie?.replace(/\b\w/g, l => l.toUpperCase())}</span>
+                          <span className="text-muted-foreground">{car.caroserie?.replace(/\b\w/g, l => l.toUpperCase())}</span>
                         </div>
                       )}
                     </div>
                   </div>
-
-                  {/* Description */}
-                  <div className="space-y-4">
-                    <h3 className="font-semibold text-foreground">Descriere</h3>
-                    <div className="text-muted-foreground leading-relaxed text-sm whitespace-pre-wrap">
-                      {car.descriere_ro || car.descriere || "Descriere detaliată în curs de actualizare."}
-                    </div>
-                  </div>
-
-                  <Separator />
 
                   {/* Action Buttons */}
                   <div className="space-y-3">

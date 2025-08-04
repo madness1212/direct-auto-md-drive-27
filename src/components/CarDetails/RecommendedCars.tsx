@@ -36,11 +36,11 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
     { 
       loop: true,
       align: 'start',
-      slidesToScroll: 1,
+      slidesToScroll: 4,
       breakpoints: {
-        '(min-width: 768px)': { slidesToScroll: 2 },
-        '(min-width: 1024px)': { slidesToScroll: 3 },
-        '(min-width: 1280px)': { slidesToScroll: 4 }
+        '(max-width: 768px)': { slidesToScroll: 1 },
+        '(max-width: 1024px)': { slidesToScroll: 2 },
+        '(max-width: 1280px)': { slidesToScroll: 3 }
       }
     },
     [Autoplay({ delay: 4000, stopOnInteraction: false })]
@@ -145,7 +145,7 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
             <div className="overflow-hidden" ref={emblaRef}>
               <div className="flex gap-6">
                 {cars.map((car) => (
-                  <div key={car.id} className="flex-[0_0_300px] min-w-0">
+                  <div key={car.id} className="flex-[0_0_100%] min-w-0 md:flex-[0_0_50%] lg:flex-[0_0_33.333%] xl:flex-[0_0_25%]">
                     <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 shadow-lg h-full">
                       <CardContent className="p-0">
                         {/* Image Container */}
@@ -170,21 +170,6 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
                             <h3 className="text-sm font-semibold text-auto-dark truncate">
                               {car.marca} {car.model}
                             </h3>
-                            <div className="flex items-center space-x-2 mt-1">
-                              <div className="flex items-center">
-                                {[...Array(5)].map((_, i) => (
-                                  <Star 
-                                    key={i} 
-                                    className={`h-3 w-3 ${
-                                      i < 4
-                                        ? 'text-auto-green fill-current' 
-                                        : 'text-muted-foreground'
-                                    }`} 
-                                  />
-                                ))}
-                              </div>
-                              <span className="text-sm text-muted-foreground">(4.5)</span>
-                            </div>
                           </div>
 
                           {/* Specifications */}

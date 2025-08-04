@@ -120,6 +120,11 @@ const ComingSoon = () => {
     return `${brandSlug}-${modelSlug}-${car.an_fabricatie}-${car.id}`;
   };
 
+  // Don't render anything if there are no cars
+  if (!loading && cars.length === 0) {
+    return null;
+  }
+
   return (
     <section className="py-8 bg-background">
       <div className="container mx-auto px-4">
@@ -175,21 +180,6 @@ const ComingSoon = () => {
                             <h3 className="text-sm font-semibold text-auto-dark truncate">
                               {car.marca} {car.model}
                             </h3>
-                            <div className="flex items-center space-x-2 mt-1">
-                              <div className="flex items-center">
-                                {[...Array(5)].map((_, i) => (
-                                  <Star 
-                                    key={i} 
-                                    className={`h-3 w-3 ${
-                                      i < 4 // Placeholder rating de 4.5
-                                        ? 'text-auto-green fill-current' 
-                                        : 'text-muted-foreground'
-                                    }`} 
-                                  />
-                                ))}
-                              </div>
-                              <span className="text-sm text-muted-foreground">(4.5)</span>
-                            </div>
                           </div>
 
                            {/* Specifications */}

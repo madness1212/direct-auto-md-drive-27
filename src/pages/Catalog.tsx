@@ -151,8 +151,10 @@ const Catalog = () => {
     const matchesModel = !selectedModel || selectedModel === t('common.all') || car.model === selectedModel;
     const matchesYear = !selectedYear || selectedYear === t('common.all') || car.year.toString() === selectedYear;
     const matchesFuel = !selectedFuel || selectedFuel === t('common.all') || car.fuel.toLowerCase() === selectedFuel.toLowerCase();
-    const matchesTransmission = !selectedTransmission || selectedTransmission === t('common.all') || car.transmission.toLowerCase() === selectedTransmission.toLowerCase();
-    const matchesBodyType = !selectedBodyType || selectedBodyType === t('common.all') || car.bodyType.toLowerCase() === selectedBodyType.toLowerCase();
+    const matchesTransmission = !selectedTransmission || selectedTransmission === t('common.all') || 
+      (car.transmission && car.transmission.toLowerCase().includes(selectedTransmission.toLowerCase()));
+    const matchesBodyType = !selectedBodyType || selectedBodyType === t('common.all') || 
+      (car.bodyType && car.bodyType.toLowerCase().includes(selectedBodyType.toLowerCase()));
     const matchesPrice = car.price >= priceRange[0] && car.price <= priceRange[1];
     const matchesMileage = car.mileage >= mileageRange[0] && car.mileage <= mileageRange[1];
     

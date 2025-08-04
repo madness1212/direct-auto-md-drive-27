@@ -188,21 +188,6 @@ const FeaturedCars = () => {
                             <h3 className="text-sm font-semibold text-auto-dark truncate">
                               {car.marca} {car.model}
                             </h3>
-                            <div className="flex items-center space-x-2 mt-1">
-                              <div className="flex items-center">
-                                {[...Array(5)].map((_, i) => (
-                                  <Star 
-                                    key={i} 
-                                    className={`h-3 w-3 ${
-                                      i < 4 // Placeholder rating de 4.5
-                                        ? 'text-auto-green fill-current' 
-                                        : 'text-muted-foreground'
-                                    }`} 
-                                  />
-                                ))}
-                              </div>
-                              <span className="text-sm text-muted-foreground">(4.5)</span>
-                            </div>
                           </div>
 
                            {/* Specifications */}
