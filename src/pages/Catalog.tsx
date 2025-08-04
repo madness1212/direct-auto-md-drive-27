@@ -52,7 +52,7 @@ const Catalog = () => {
   const [selectedModel, setSelectedModel] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedFuel, setSelectedFuel] = useState("");
-  const [selectedTransmission, setSelectedTransmission] = useState("");
+  
   const [selectedBodyType, setSelectedBodyType] = useState("");
   const [priceRange, setPriceRange] = useState([0, 100000]);
   const [mileageRange, setMileageRange] = useState([0, 400000]);
@@ -66,7 +66,7 @@ const Catalog = () => {
 
   // Updated fuel types with requested options
   const fuelTypes = [t('common.all'), "Benzină", "Diesel", "Gaz / Benzină (propan)", "Gaz / Benzină (metan)", "Hybrid", "Plug-In Hybrid", "Diesel-Hybrid"];
-  const transmissions = [t('common.all'), "Manuală", "Automată", "CVT"];
+  
   const bodyTypes = [t('common.all'), "SUV", "Sedan", "Hatchback", "Combi", "Coupe", "Cabriolet", "Crossover"];
   
   // Generate year options dynamically
@@ -151,15 +151,13 @@ const Catalog = () => {
     const matchesModel = !selectedModel || selectedModel === t('common.all') || car.model === selectedModel;
     const matchesYear = !selectedYear || selectedYear === t('common.all') || car.year.toString() === selectedYear;
     const matchesFuel = !selectedFuel || selectedFuel === t('common.all') || car.fuel.toLowerCase() === selectedFuel.toLowerCase();
-    const matchesTransmission = !selectedTransmission || selectedTransmission === t('common.all') || 
-      (car.transmission && car.transmission.toLowerCase().includes(selectedTransmission.toLowerCase()));
     const matchesBodyType = !selectedBodyType || selectedBodyType === t('common.all') || 
       (car.bodyType && car.bodyType.toLowerCase().includes(selectedBodyType.toLowerCase()));
     const matchesPrice = car.price >= priceRange[0] && car.price <= priceRange[1];
     const matchesMileage = car.mileage >= mileageRange[0] && car.mileage <= mileageRange[1];
     
     return matchesBrand && matchesModel && matchesYear && 
-           matchesFuel && matchesTransmission && matchesBodyType && 
+           matchesFuel &&  matchesBodyType && 
            matchesPrice && matchesMileage;
   }).sort((a, b) => {
     switch (sortBy) {
@@ -177,7 +175,7 @@ const Catalog = () => {
     setSelectedModel("");
     setSelectedYear("");
     setSelectedFuel("");
-    setSelectedTransmission("");
+    
     setSelectedBodyType("");
     setPriceRange([0, 100000]);
     setMileageRange([0, 400000]);
@@ -309,22 +307,6 @@ const Catalog = () => {
                         </Select>
                       </div>
 
-                      {/* Transmission Filter */}
-                      <div className="space-y-2">
-                        <Label>{t('catalog.transmission')}</Label>
-                        <Select value={selectedTransmission} onValueChange={setSelectedTransmission}>
-                          <SelectTrigger>
-                            <SelectValue placeholder={`${t('catalog.selectTransmission')}`} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {transmissions.map((transmission) => (
-                              <SelectItem key={transmission} value={transmission}>
-                                {transmission}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
 
                       {/* Body Type Filter */}
                       <div className="space-y-2">
@@ -464,22 +446,6 @@ const Catalog = () => {
                     </Select>
                   </div>
 
-                  {/* Transmission Filter */}
-                  <div className="space-y-2">
-                    <Label>Cutie de Viteze</Label>
-                    <Select value={selectedTransmission} onValueChange={setSelectedTransmission}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selectează cutia de viteze" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {transmissions.map((transmission) => (
-                          <SelectItem key={transmission} value={transmission}>
-                            {transmission}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
 
                   {/* Body Type Filter */}
                   <div className="space-y-2">
@@ -587,21 +553,6 @@ const Catalog = () => {
                           <h3 className="text-sm font-semibold text-foreground truncate">
                             {car.brand} {car.model}
                           </h3>
-                          <div className="flex items-center space-x-2 mt-1">
-                            <div className="flex items-center">
-                              {[...Array(5)].map((_, i) => (
-                                <Star 
-                                  key={i} 
-                                  className={`h-4 w-4 ${
-                                    i < Math.floor(car.rating) 
-                                      ? 'text-auto-green fill-current' 
-                                      : 'text-muted-foreground'
-                                  }`} 
-                                />
-                              ))}
-                            </div>
-                            <span className="text-sm text-muted-foreground">({car.rating})</span>
-                          </div>
                         </div>
 
                         {/* Specifications */}

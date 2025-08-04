@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, ChevronLeft, ChevronRight, Star, Calendar, Gauge, Fuel, Settings, Car } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight, Calendar, Gauge, Fuel, Settings, Car } from "lucide-react";
 import { Link } from "react-router-dom";
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
@@ -143,9 +143,9 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
           <div className="relative">
             {/* Carousel Container */}
             <div className="overflow-hidden" ref={emblaRef}>
-              <div className="flex gap-6">
+              <div className="flex gap-4">
                 {cars.map((car) => (
-                  <div key={car.id} className="flex-[0_0_100%] min-w-0 md:flex-[0_0_50%] lg:flex-[0_0_33.333%] xl:flex-[0_0_25%]">
+                  <div key={car.id} className="flex-[0_0_90%] min-w-0 sm:flex-[0_0_45%] lg:flex-[0_0_30%] xl:flex-[0_0_23%]">
                     <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 shadow-lg h-full">
                       <CardContent className="p-0">
                         {/* Image Container */}
