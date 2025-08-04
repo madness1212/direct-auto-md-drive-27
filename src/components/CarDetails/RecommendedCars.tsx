@@ -118,7 +118,7 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
 
   return (
     <section className="py-8 bg-background">
-      <div className="w-full px-4">
+      <div className="w-screen px-4"> {/* full width edge-to-edge */}
         <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             Mașini Recomandate
@@ -143,7 +143,7 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
           <div className="relative">
             {/* Carousel Container */}
             <div className="overflow-hidden" ref={emblaRef}>
-              <div className="flex gap-4">
+              <div className="flex gap-4 w-full"> {/* important: w-full aici */}
                 {cars.map((car) => (
                   <div 
                     key={car.id} 
