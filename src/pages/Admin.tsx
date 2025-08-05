@@ -46,6 +46,8 @@ interface CarListing {
   status: string;
   images: string[];
   created_at: string;
+  is_top_offer: boolean;
+  is_coming_soon: boolean;
 }
 
 export default function Admin() {
@@ -67,6 +69,7 @@ export default function Admin() {
       const { data, error } = await supabase
         .from('car_listings')
         .select('*')
+        .order('status', { ascending: true }) // sold cars (vandut) go to bottom
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -184,6 +187,13 @@ export default function Admin() {
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
+  };
+
+  const getCarCategory = (car: CarListing) => {
+    const categories = [];
+    if (car.is_top_offer) categories.push('Oferte Speciale');
+    if (car.is_coming_soon) categories.push('În Curând');
+    return categories.length > 0 ? ' - ' + categories.join(', ') : '';
   };
 
   if (showForm || editingCar) {
@@ -329,7 +339,7 @@ export default function Admin() {
                           </TableCell>
                           <TableCell>
                             <div>
-                              <div className="font-medium">{car.marca} {car.model}</div>
+                              <div className="font-medium">{car.marca} {car.model}{getCarCategory(car)}</div>
                             </div>
                           </TableCell>
                           <TableCell>{car.an_fabricatie}</TableCell>

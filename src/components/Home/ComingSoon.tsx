@@ -90,8 +90,7 @@ const ComingSoon = () => {
         .select('*')
         .eq('status', 'active')
         .eq('is_coming_soon', true)
-        .order('coming_soon_position', { ascending: true })
-        .limit(4);
+        .order('coming_soon_position', { ascending: true });
 
       if (error) {
         console.error('Error fetching coming soon cars:', error);

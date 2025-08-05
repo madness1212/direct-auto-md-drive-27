@@ -89,8 +89,7 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
         .select('*')
         .eq('status', 'active')
         .eq('is_coming_soon', false)
-        .neq('id', currentCarId)
-        .limit(8);
+        .neq('id', currentCarId);
 
       if (error) {
         console.error('Error fetching recommended cars:', error);
@@ -143,11 +142,11 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
           <div className="relative">
             {/* Carousel Container */}
             <div className="overflow-hidden" ref={emblaRef}>
-              <div className="flex gap-4 w-full"> {/* important: w-full aici */}
+              <div className="flex w-full"> {/* removed gap here */}
                 {cars.map((car) => (
                   <div 
                     key={car.id} 
-                    className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] xl:flex-[0_0_25%] min-w-0"
+                    className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] xl:flex-[0_0_25%] min-w-0 px-2"
                   >
                     <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 shadow-lg h-full">
                       <CardContent className="p-0">

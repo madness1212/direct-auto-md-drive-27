@@ -101,8 +101,7 @@ const FeaturedCars = () => {
         .select('*')
         .eq('is_top_offer', true)
         .eq('status', 'active')
-        .order('top_offer_position', { ascending: true })
-        .limit(4); // Limitează la primele 4 top oferte
+        .order('top_offer_position', { ascending: true });
 
       if (error) {
         console.error('Error fetching top offers:', error);
