@@ -128,6 +128,8 @@ const ComingSoon = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-foreground">
               {t('home.comingSoon.title')}
             </h2>
+          </div>
+        </div>
 
         {loading ? (
           <div className="flex justify-center items-center py-12">
