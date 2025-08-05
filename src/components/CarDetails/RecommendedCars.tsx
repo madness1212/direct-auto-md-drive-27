@@ -36,12 +36,7 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
     { 
       loop: true,
       align: 'start',
-      slidesToScroll: 4,
-      breakpoints: {
-        '(max-width: 768px)': { slidesToScroll: 1 },
-        '(max-width: 1024px)': { slidesToScroll: 2 },
-        '(max-width: 1280px)': { slidesToScroll: 3 }
-      }
+      slidesToScroll: 1
     },
     [Autoplay({ delay: 4000, stopOnInteraction: false })]
   );
@@ -144,10 +139,10 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
             <div className="overflow-hidden" ref={emblaRef}>
               <div className="flex w-full"> {/* removed gap here */}
                 {cars.map((car) => (
-                  <div 
-                    key={car.id} 
-                    className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] xl:flex-[0_0_25%] min-w-0 px-2"
-                  >
+                   <div 
+                     key={car.id} 
+                     className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] xl:flex-[0_0_25%] min-w-0 px-3"
+                   >
                     <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 shadow-lg h-full">
                       <CardContent className="p-0">
                         {/* Image Container */}
@@ -237,11 +232,11 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
               </div>
             </div>
 
-            {/* Navigation Arrows - Hidden on Mobile */}
+            {/* Navigation Arrows - Visible on all screens */}
             <Button
               variant="outline"
               size="icon"
-              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 bg-background/90 backdrop-blur-sm border-auto-green text-auto-green hover:bg-auto-green hover:text-white z-10"
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/90 backdrop-blur-sm border-auto-green text-auto-green hover:bg-auto-green hover:text-white z-10"
               onClick={scrollPrev}
             >
               <ChevronLeft className="h-4 w-4" />
@@ -249,7 +244,7 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
             <Button
               variant="outline"
               size="icon"
-              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 bg-background/90 backdrop-blur-sm border-auto-green text-auto-green hover:bg-auto-green hover:text-white z-10"
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/90 backdrop-blur-sm border-auto-green text-auto-green hover:bg-auto-green hover:text-white z-10"
               onClick={scrollNext}
             >
               <ChevronRight className="h-4 w-4" />

@@ -62,14 +62,11 @@ const Catalog = () => {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [availableBrands, setAvailableBrands] = useState<string[]>([]);
   const [availableModels, setAvailableModels] = useState<string[]>([]);
+  const [availableFuelTypes, setAvailableFuelTypes] = useState<string[]>([]);
+  const [availableBodyTypes, setAvailableBodyTypes] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("price-asc");
 
-  // Updated fuel types with requested options
-  const fuelTypes = [t('common.all'), "Benzină", "Diesel", "Gaz / Benzină (propan)", "Gaz / Benzină (metan)", "Hybrid", "Plug-In Hybrid", "Diesel-Hybrid"];
-  
   const transmissionTypes = [t('common.all'), "Automat", "Manual"];
-  
-  const bodyTypes = [t('common.all'), "SUV", "Sedan", "Hatchback", "Combi", "Coupe", "Cabriolet", "Crossover"];
   
   // Generate year options dynamically
   const currentYear = new Date().getFullYear();
@@ -114,6 +111,14 @@ const Catalog = () => {
         // Extract unique brands and models from actual data
         const uniqueBrands = [t('common.all'), ...new Set(transformedCars.map(car => car.brand))];
         setAvailableBrands(uniqueBrands);
+        
+        // Extract unique fuel types from actual data
+        const uniqueFuelTypes = [t('common.all'), ...new Set(transformedCars.map(car => car.fuel).filter(Boolean))];
+        setAvailableFuelTypes(uniqueFuelTypes);
+        
+        // Extract unique body types from actual data
+        const uniqueBodyTypes = [t('common.all'), ...new Set(transformedCars.map(car => car.bodyType).filter(Boolean))];
+        setAvailableBodyTypes(uniqueBodyTypes);
         
         // Models based on selected brand or all models if no brand selected
         const filteredModels = selectedBrand && selectedBrand !== t('common.all') 
@@ -262,22 +267,24 @@ const Catalog = () => {
                         </Select>
                       </div>
 
-                      {/* Model Filter */}
-                      <div className="space-y-2">
-                        <Label>{t('catalog.model')}</Label>
-                        <Select value={selectedModel} onValueChange={setSelectedModel}>
-                          <SelectTrigger>
-                            <SelectValue placeholder={`${t('catalog.selectModel')}`} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {availableModels.map((model) => (
-                              <SelectItem key={model} value={model}>
-                                {model}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
+                       {/* Model Filter - Only show if brand is selected */}
+                       {selectedBrand && selectedBrand !== t('common.all') && (
+                         <div className="space-y-2">
+                           <Label>{t('catalog.model')}</Label>
+                           <Select value={selectedModel} onValueChange={setSelectedModel}>
+                             <SelectTrigger>
+                               <SelectValue placeholder={`${t('catalog.selectModel')}`} />
+                             </SelectTrigger>
+                             <SelectContent>
+                               {availableModels.map((model) => (
+                                 <SelectItem key={model} value={model}>
+                                   {model}
+                                 </SelectItem>
+                               ))}
+                             </SelectContent>
+                           </Select>
+                         </div>
+                       )}
 
                       {/* Year Filter */}
                       <div className="space-y-2">
@@ -296,22 +303,22 @@ const Catalog = () => {
                         </Select>
                       </div>
 
-                      {/* Fuel Type Filter */}
-                      <div className="space-y-2">
-                        <Label>{t('catalog.fuelType')}</Label>
-                        <Select value={selectedFuel} onValueChange={setSelectedFuel}>
-                          <SelectTrigger>
-                            <SelectValue placeholder={`${t('catalog.selectFuel')}`} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {fuelTypes.map((fuel) => (
-                              <SelectItem key={fuel} value={fuel}>
-                                {fuel}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
+                       {/* Fuel Type Filter */}
+                       <div className="space-y-2">
+                         <Label>{t('catalog.fuelType')}</Label>
+                         <Select value={selectedFuel} onValueChange={setSelectedFuel}>
+                           <SelectTrigger>
+                             <SelectValue placeholder={`${t('catalog.selectFuel')}`} />
+                           </SelectTrigger>
+                           <SelectContent>
+                             {availableFuelTypes.map((fuel) => (
+                               <SelectItem key={fuel} value={fuel}>
+                                 {fuel}
+                               </SelectItem>
+                             ))}
+                           </SelectContent>
+                         </Select>
+                       </div>
 
                       {/* Transmission Filter */}
                       <div className="space-y-2">
@@ -330,22 +337,22 @@ const Catalog = () => {
                         </Select>
                       </div>
 
-                      {/* Body Type Filter */}
-                      <div className="space-y-2">
-                        <Label>{t('catalog.bodyType')}</Label>
-                        <Select value={selectedBodyType} onValueChange={setSelectedBodyType}>
-                          <SelectTrigger>
-                            <SelectValue placeholder={`${t('catalog.selectBodyType')}`} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {bodyTypes.map((bodyType) => (
-                              <SelectItem key={bodyType} value={bodyType}>
-                                {bodyType}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
+                       {/* Body Type Filter */}
+                       <div className="space-y-2">
+                         <Label>{t('catalog.bodyType')}</Label>
+                         <Select value={selectedBodyType} onValueChange={setSelectedBodyType}>
+                           <SelectTrigger>
+                             <SelectValue placeholder={`${t('catalog.selectBodyType')}`} />
+                           </SelectTrigger>
+                           <SelectContent>
+                             {availableBodyTypes.map((bodyType) => (
+                               <SelectItem key={bodyType} value={bodyType}>
+                                 {bodyType}
+                               </SelectItem>
+                             ))}
+                           </SelectContent>
+                         </Select>
+                       </div>
 
                       {/* Price Range */}
                       <div className="space-y-2">
@@ -417,22 +424,24 @@ const Catalog = () => {
                     </Select>
                   </div>
 
-                  {/* Model Filter */}
-                  <div className="space-y-2">
-                    <Label>Modelul</Label>
-                    <Select value={selectedModel} onValueChange={setSelectedModel}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selectează modelul" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {availableModels.map((model) => (
-                          <SelectItem key={model} value={model}>
-                            {model}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                   {/* Model Filter - Only show if brand is selected */}
+                   {selectedBrand && selectedBrand !== t('common.all') && (
+                     <div className="space-y-2">
+                       <Label>Modelul</Label>
+                       <Select value={selectedModel} onValueChange={setSelectedModel}>
+                         <SelectTrigger>
+                           <SelectValue placeholder="Selectează modelul" />
+                         </SelectTrigger>
+                         <SelectContent>
+                           {availableModels.map((model) => (
+                             <SelectItem key={model} value={model}>
+                               {model}
+                             </SelectItem>
+                           ))}
+                         </SelectContent>
+                       </Select>
+                     </div>
+                   )}
 
                   {/* Year Filter */}
                   <div className="space-y-2">
@@ -451,22 +460,22 @@ const Catalog = () => {
                     </Select>
                   </div>
 
-                  {/* Fuel Type Filter */}
-                  <div className="space-y-2">
-                    <Label>Tip Motor</Label>
-                    <Select value={selectedFuel} onValueChange={setSelectedFuel}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selectează tipul motorului" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {fuelTypes.map((fuel) => (
-                          <SelectItem key={fuel} value={fuel}>
-                            {fuel}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                   {/* Fuel Type Filter */}
+                   <div className="space-y-2">
+                     <Label>Tip Motor</Label>
+                     <Select value={selectedFuel} onValueChange={setSelectedFuel}>
+                       <SelectTrigger>
+                         <SelectValue placeholder="Selectează tipul motorului" />
+                       </SelectTrigger>
+                       <SelectContent>
+                         {availableFuelTypes.map((fuel) => (
+                           <SelectItem key={fuel} value={fuel}>
+                             {fuel}
+                           </SelectItem>
+                         ))}
+                       </SelectContent>
+                     </Select>
+                   </div>
 
                   {/* Transmission Filter */}
                   <div className="space-y-2">
@@ -485,22 +494,22 @@ const Catalog = () => {
                     </Select>
                   </div>
 
-                  {/* Body Type Filter */}
-                  <div className="space-y-2">
-                    <Label>Caroserie</Label>
-                    <Select value={selectedBodyType} onValueChange={setSelectedBodyType}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selectează caroseria" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {bodyTypes.map((bodyType) => (
-                          <SelectItem key={bodyType} value={bodyType}>
-                            {bodyType}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                   {/* Body Type Filter */}
+                   <div className="space-y-2">
+                     <Label>Caroserie</Label>
+                     <Select value={selectedBodyType} onValueChange={setSelectedBodyType}>
+                       <SelectTrigger>
+                         <SelectValue placeholder="Selectează caroseria" />
+                       </SelectTrigger>
+                       <SelectContent>
+                         {availableBodyTypes.map((bodyType) => (
+                           <SelectItem key={bodyType} value={bodyType}>
+                             {bodyType}
+                           </SelectItem>
+                         ))}
+                       </SelectContent>
+                     </Select>
+                   </div>
 
                   {/* Price Range */}
                   <div className="space-y-2">

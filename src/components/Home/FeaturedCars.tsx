@@ -48,12 +48,7 @@ const FeaturedCars = () => {
     { 
       loop: true,
       align: 'start',
-      slidesToScroll: 1,
-      breakpoints: {
-        '(min-width: 768px)': { slidesToScroll: 2 },
-        '(min-width: 1024px)': { slidesToScroll: 3 },
-        '(min-width: 1280px)': { slidesToScroll: 4 }
-      }
+      slidesToScroll: 1
     },
     [Autoplay({ delay: 2300, stopOnInteraction: false })]
   );

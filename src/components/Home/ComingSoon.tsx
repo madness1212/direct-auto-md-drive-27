@@ -37,12 +37,7 @@ const ComingSoon = () => {
     { 
       loop: true,
       align: 'start',
-      slidesToScroll: 1,
-      breakpoints: {
-        '(min-width: 768px)': { slidesToScroll: 2 },
-        '(min-width: 1024px)': { slidesToScroll: 3 },
-        '(min-width: 1280px)': { slidesToScroll: 4 }
-      }
+      slidesToScroll: 1
     },
     [Autoplay({ delay: 4000, stopOnInteraction: false })]
   );
@@ -155,92 +150,63 @@ const ComingSoon = () => {
             {/* Carousel Container */}
             <div className="overflow-hidden" ref={emblaRef}>
                 <div className="flex">
-                {cars.map((car) => (
-                  <div key={car.id} className="flex-[0_0_90%] min-w-0 md:flex-[0_0_45%] lg:flex-[0_0_30%] xl:flex-[0_0_22%] pl-4">
-                    <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 mr-4 shadow-lg">
-                      <CardContent className="p-0">
-                         {/* Image Container */}
-                         <div className="relative overflow-hidden rounded-t-lg">
-                           <Link to={`/catalog/${generateSlug(car)}`}>
-                             <img 
-                               src={car.images && car.images.length > 0 ? car.images[0] : "/placeholder.svg"} 
-                               alt={`${car.marca} ${car.model}`}
-                               className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-                             />
-                           </Link>
-                           <Badge className="absolute top-4 left-4 bg-blue-600 hover:bg-blue-700">
-                             {t('home.comingSoon.badge')}
-                           </Badge>
-                         </div>
-
-                        {/* Content */}
-                        <div className="p-4 space-y-3">
-                          <div>
-                            <h3 className="text-sm font-semibold text-auto-dark truncate">
-                              {car.marca} {car.model}
-                            </h3>
+                 {cars.map((car) => (
+                   <div key={car.id} className="flex-[0_0_90%] min-w-0 md:flex-[0_0_45%] lg:flex-[0_0_30%] xl:flex-[0_0_22%] pl-4">
+                     <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 mr-4 shadow-lg">
+                       <CardContent className="p-0">
+                          {/* Image Container */}
+                          <div className="relative overflow-hidden rounded-t-lg">
+                            <Link to={`/catalog/${generateSlug(car)}`}>
+                              <img 
+                                src={car.images && car.images.length > 0 ? car.images[0] : "/placeholder.svg"} 
+                                alt={`${car.marca} ${car.model}`}
+                                className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                              />
+                            </Link>
+                            <Badge className="absolute top-2 left-2 bg-blue-600 hover:bg-blue-700 text-xs">
+                              {t('home.comingSoon.badge')}
+                            </Badge>
                           </div>
 
-                           {/* Specifications */}
-                           <div className="grid grid-cols-2 gap-2 text-base">
-                             <div className="flex items-center space-x-1">
-                               <Calendar className="h-4 w-4 text-auto-green" />
-                               <span className="text-muted-foreground">{car.an_fabricatie}</span>
-                             </div>
-                             <div className="flex items-center space-x-1">
-                               <Gauge className="h-4 w-4 text-auto-green" />
-                               <span className="text-muted-foreground">{(car.kilometraj || 0).toLocaleString()} km</span>
-                             </div>
-                             <div className="flex items-center space-x-1">
-                               <Fuel className="h-4 w-4 text-auto-green" />
-                               <span className="text-muted-foreground capitalize">{car.tip_motor}</span>
-                             </div>
-                             <div className="flex items-center space-x-1">
-                               <Settings className="h-4 w-4 text-auto-green" />
-                               <span className="text-muted-foreground capitalize">{car.cutie_viteze}</span>
-                             </div>
-                             {car.capacitate_motor && (
-                               <div className="flex items-center space-x-1">
-                                 <Fuel className="h-4 w-4 text-auto-green" />
-                                 <span className="text-muted-foreground capitalize">{car.capacitate_motor}</span>
-                               </div>
-                             )}
-                             {car.caroserie && (
-                               <div className="flex items-center space-x-1">
-                                 <Car className="h-4 w-4 text-auto-green" />
-                                 <span className="text-muted-foreground capitalize">{car.caroserie}</span>
-                               </div>
-                             )}
+                         {/* Content */}
+                         <div className="p-2 space-y-2">
+                           <div>
+                             <h3 className="text-xs font-semibold text-auto-dark truncate">
+                               {car.marca} {car.model}
+                             </h3>
                            </div>
 
-                          {/* Price */}
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <div className="text-xl font-bold text-auto-green">
-                                €{car.pret.toLocaleString()}
+                            {/* Specifications - Only show essential ones */}
+                            <div className="grid grid-cols-2 gap-1 text-xs">
+                              <div className="flex items-center space-x-1">
+                                <Calendar className="h-3 w-3 text-auto-green" />
+                                <span className="text-muted-foreground">{car.an_fabricatie}</span>
+                              </div>
+                              <div className="flex items-center space-x-1">
+                                <Fuel className="h-3 w-3 text-auto-green" />
+                                <span className="text-muted-foreground capitalize">{car.tip_motor}</span>
                               </div>
                             </div>
-                          </div>
 
-                          {/* Action Buttons */}
-                          <div className="flex space-x-2">
-                            <Link 
-                              to={`/catalog/${generateSlug(car)}`}
-                              className="flex-1"
-                            >
-                              <Button className="w-full bg-gradient-primary hover:bg-auto-green-dark text-sm">
-                                {t('car.details')}
-                              </Button>
-                            </Link>
-                            <Button asChild variant="outline" className="flex-1 text-sm border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
-                              <Link to="/contact">{t('car.contact')}</Link>
-                            </Button>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                ))}
+                           {/* Action Buttons */}
+                           <div className="flex space-x-1">
+                             <Link 
+                               to={`/catalog/${generateSlug(car)}`}
+                               className="flex-1"
+                             >
+                               <Button className="w-full bg-gradient-primary hover:bg-auto-green-dark text-xs py-1 h-auto">
+                                 {t('car.details')}
+                               </Button>
+                             </Link>
+                             <Button asChild variant="outline" className="flex-1 text-xs py-1 h-auto border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
+                               <Link to="/contact">{t('car.contact')}</Link>
+                             </Button>
+                           </div>
+                         </div>
+                       </CardContent>
+                     </Card>
+                   </div>
+                 ))}
               </div>
             </div>
 
@@ -281,13 +247,6 @@ const ComingSoon = () => {
           </div>
         )}
 
-        <div className="text-center mt-8">
-          <Button asChild variant="outline" size="lg" className="border-auto-green text-auto-green hover:bg-auto-green hover:text-primary-foreground">
-            <Link to="/catalog">
-              {t('home.comingSoon.viewAll')}
-            </Link>
-          </Button>
-        </div>
       </div>
     </section>
   );
