@@ -50,7 +50,7 @@ const FeaturedCars = () => {
       align: 'start',
       slidesToScroll: 1
     },
-    [Autoplay({ delay: 2300, stopOnInteraction: true })]
+    [Autoplay({ delay: 3000, stopOnInteraction: false })]
   );
 
   const [selectedIndex, setSelectedIndex] = useState(0);
