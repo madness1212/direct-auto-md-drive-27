@@ -5,6 +5,7 @@ import { Import999Listings } from '@/components/Admin/Import999Listings';
 import { TopOffersManager } from '@/components/Admin/TopOffersManager';
 import { TestDriveManager } from '@/components/Admin/TestDriveManager';
 import { NotificationBell } from '@/components/Admin/NotificationBell';
+import { MobileAdminNav } from '@/components/Admin/MobileAdminNav';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -57,11 +58,28 @@ export default function Admin() {
   const [editingCar, setEditingCar] = useState<CarListing | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [activeTab, setActiveTab] = useState('listings');
+  const [pendingTestDrives, setPendingTestDrives] = useState(0);
   const { toast } = useToast();
 
   useEffect(() => {
     fetchCarListings();
+    fetchPendingTestDrives();
   }, []);
+
+  const fetchPendingTestDrives = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('test_drive_requests')
+        .select('id')
+        .eq('status', 'pending');
+
+      if (error) throw error;
+      setPendingTestDrives(data?.length || 0);
+    } catch (error: any) {
+      console.error('Error fetching pending test drives:', error);
+    }
+  };
 
   const fetchCarListings = async () => {
     setLoading(true);
@@ -206,6 +224,12 @@ export default function Admin() {
     return null;
   };
 
+  const handleNotificationClick = (type: string, relatedId: string) => {
+    if (type === 'test_drive_request') {
+      setActiveTab('testdrive');
+    }
+  };
+
   if (showForm || editingCar) {
     return (
       <AdminLayout>
@@ -228,9 +252,16 @@ export default function Admin() {
 
   return (
     <AdminLayout>
+      <MobileAdminNav 
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        onAddNew={() => setShowForm(true)}
+        pendingTestDrives={pendingTestDrives}
+      />
+      
       <div className="space-y-6">
-        {/* Header */}
-        <div className="flex justify-between items-center">
+        {/* Header - Hidden on mobile */}
+        <div className="hidden lg:flex justify-between items-center">
           <div>
             <h2 className="text-3xl font-bold tracking-tight">Panou Admin Direct Auto</h2>
             <p className="text-muted-foreground">
@@ -238,7 +269,7 @@ export default function Admin() {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <NotificationBell />
+            <NotificationBell onNotificationClick={handleNotificationClick} />
             <Button onClick={() => setShowForm(true)} className="bg-primary hover:bg-primary/90">
               <Plus className="h-4 w-4 mr-2" />
               Adaugă anunț nou
@@ -247,26 +278,39 @@ export default function Admin() {
         </div>
 
         {/* Tabs pentru diferite secțiuni */}
-        <Tabs defaultValue="listings" className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="listings">Anunțuri</TabsTrigger>
-            <TabsTrigger value="import">Import 999.md</TabsTrigger>
-            <TabsTrigger value="offers">Oferte Speciale</TabsTrigger>
-            <TabsTrigger value="testdrive">Test Drive</TabsTrigger>
-            <TabsTrigger value="stats">Statistici</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-5 gap-1">
+            <TabsTrigger value="listings" className="text-xs lg:text-sm">
+              <span className="lg:hidden">Anunțuri</span>
+              <span className="hidden lg:inline">Anunțuri</span>
+            </TabsTrigger>
+            <TabsTrigger value="import" className="text-xs lg:text-sm hidden lg:flex">
+              Import 999.md
+            </TabsTrigger>
+            <TabsTrigger value="offers" className="text-xs lg:text-sm">
+              <span className="lg:hidden">Oferte</span>
+              <span className="hidden lg:inline">Oferte Speciale</span>
+            </TabsTrigger>
+            <TabsTrigger value="testdrive" className="text-xs lg:text-sm">
+              <span className="lg:hidden">Test Drive</span>
+              <span className="hidden lg:inline">Test Drive</span>
+            </TabsTrigger>
+            <TabsTrigger value="stats" className="text-xs lg:text-sm hidden lg:flex">
+              Statistici
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="listings" className="space-y-6">
-            {/* Filters */}
+            {/* Filters - Mobile Optimized */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center">
+                <CardTitle className="flex items-center text-lg lg:text-xl">
                   <Filter className="h-5 w-5 mr-2" />
                   Filtre și Căutare
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex space-x-4">
+                <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
                   <div className="flex-1">
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -274,13 +318,13 @@ export default function Admin() {
                         placeholder="Caută după marcă sau model..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10"
+                        className="pl-10 h-12 lg:h-10"
                       />
                     </div>
                   </div>
                   
                   <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-full lg:w-[180px] h-12 lg:h-10">
                       <SelectValue placeholder="Filtrează după status" />
                     </SelectTrigger>
                     <SelectContent>
@@ -291,9 +335,14 @@ export default function Admin() {
                     </SelectContent>
                   </Select>
                   
-                  <Button variant="outline" onClick={fetchCarListings} disabled={loading}>
-                    <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-                    Reîmprospătează
+                  <Button 
+                    variant="outline" 
+                    onClick={fetchCarListings} 
+                    disabled={loading}
+                    className="h-12 lg:h-10"
+                  >
+                    <RefreshCw className={`h-4 w-4 lg:mr-2 ${loading ? 'animate-spin' : ''}`} />
+                    <span className="hidden lg:inline">Reîmprospătează</span>
                   </Button>
                 </div>
               </CardContent>
@@ -307,17 +356,18 @@ export default function Admin() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Imagine</TableHead>
-                      <TableHead>Marcă / Model</TableHead>
-                      <TableHead>An</TableHead>
-                      <TableHead>Preț</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Acțiuni</TableHead>
-                    </TableRow>
-                  </TableHeader>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="hidden sm:table-cell">Imagine</TableHead>
+                        <TableHead>Marcă / Model</TableHead>
+                        <TableHead className="hidden lg:table-cell">An</TableHead>
+                        <TableHead>Preț</TableHead>
+                        <TableHead className="hidden md:table-cell">Status</TableHead>
+                        <TableHead>Acțiuni</TableHead>
+                      </TableRow>
+                    </TableHeader>
                   <TableBody>
                     {loading ? (
                       <TableRow>
@@ -334,7 +384,7 @@ export default function Admin() {
                     ) : (
                       filteredListings.map((car) => (
                         <TableRow key={car.id}>
-                          <TableCell>
+                          <TableCell className="hidden sm:table-cell">
                             {car.images && car.images.length > 0 ? (
                               <img
                                 src={car.images[0]}
@@ -348,30 +398,37 @@ export default function Admin() {
                             )}
                           </TableCell>
                           <TableCell>
-                            <div className="flex flex-col">
-                              <div className="font-medium">{car.marca} {car.model}</div>
+                            <div className="flex flex-col space-y-1">
+                              <div className="font-medium text-sm lg:text-base">{car.marca} {car.model}</div>
+                              <div className="lg:hidden text-xs text-muted-foreground">
+                                {car.an_fabricatie} • {car.pret.toLocaleString()} EUR
+                              </div>
+                              <div className="md:hidden">{getStatusBadge(car.status)}</div>
                               {getDisplayBadge(car)}
                             </div>
                           </TableCell>
-                          <TableCell>{car.an_fabricatie}</TableCell>
-                          <TableCell className="font-medium">
+                          <TableCell className="hidden lg:table-cell">{car.an_fabricatie}</TableCell>
+                          <TableCell className="font-medium hidden lg:table-cell">
                             {car.pret.toLocaleString()} EUR
                           </TableCell>
-                          <TableCell>{getStatusBadge(car.status)}</TableCell>
+                          <TableCell className="hidden md:table-cell">{getStatusBadge(car.status)}</TableCell>
                           <TableCell>
-                            <div className="flex space-x-2">
+                            <div className="flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-2">
                               <Button
                                 variant="outline"
                                 size="sm"
                                 onClick={() => setEditingCar(car)}
+                                className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
                               >
-                                <Edit className="h-4 w-4" />
+                                <Edit className="h-4 w-4 lg:mr-1" />
+                                <span className="hidden lg:inline">Edit</span>
                               </Button>
                               
                               <Button
                                 variant="outline"
                                 size="sm"
                                 onClick={() => handleToggleStatus(car.id, car.status)}
+                                className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
                               >
                                 {car.status === 'active' ? (
                                   <EyeOff className="h-4 w-4" />
@@ -384,13 +441,18 @@ export default function Admin() {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => handleCloneCar(car)}
+                                className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
                               >
                                 <Copy className="h-4 w-4" />
                               </Button>
                               
                               <AlertDialog>
                                 <AlertDialogTrigger asChild>
-                                  <Button variant="outline" size="sm">
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
+                                  >
                                     <Trash2 className="h-4 w-4" />
                                   </Button>
                                 </AlertDialogTrigger>
@@ -419,7 +481,8 @@ export default function Admin() {
                       ))
                     )}
                   </TableBody>
-                </Table>
+                  </Table>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>

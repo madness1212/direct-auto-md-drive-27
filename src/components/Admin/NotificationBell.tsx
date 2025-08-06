@@ -18,7 +18,11 @@ interface Notification {
   created_at: string;
 }
 
-export function NotificationBell() {
+interface NotificationBellProps {
+  onNotificationClick?: (type: string, relatedId: string) => void;
+}
+
+export function NotificationBell({ onNotificationClick }: NotificationBellProps) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -179,9 +183,13 @@ export function NotificationBell() {
                   {notifications.map((notification) => (
                     <div
                       key={notification.id}
-                      className={`p-3 border-b border-border hover:bg-muted/50 transition-colors ${
+                      className={`p-3 border-b border-border hover:bg-muted/50 transition-colors cursor-pointer ${
                         !notification.read ? 'bg-blue-50/50' : ''
                       }`}
+                      onClick={() => {
+                        markAsRead(notification.id);
+                        onNotificationClick?.(notification.type, notification.related_id);
+                      }}
                     >
                       <div className="flex items-start gap-3">
                         {getNotificationIcon(notification.type)}
@@ -201,7 +209,10 @@ export function NotificationBell() {
                                   variant="ghost"
                                   size="sm"
                                   className="h-4 w-4 p-0"
-                                  onClick={() => markAsRead(notification.id)}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    markAsRead(notification.id);
+                                  }}
                                 >
                                   <X className="h-3 w-3" />
                                 </Button>

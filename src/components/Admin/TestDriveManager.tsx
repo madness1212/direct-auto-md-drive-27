@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { TestDriveDetails } from "./TestDriveDetails";
 import { Calendar, Car, Clock, Mail, Phone, User, CheckCircle, XCircle, AlertCircle, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
@@ -213,9 +214,9 @@ export const TestDriveManager = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Client</TableHead>
+                  <TableHead className="hidden lg:table-cell">Client</TableHead>
                   <TableHead>Automobil</TableHead>
-                  <TableHead>Data dorită</TableHead>
+                  <TableHead className="hidden sm:table-cell">Data dorită</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Acțiuni</TableHead>
                 </TableRow>
@@ -223,7 +224,7 @@ export const TestDriveManager = () => {
               <TableBody>
                 {requests.map((request) => (
                   <TableRow key={request.id}>
-                    <TableCell>
+                    <TableCell className="hidden lg:table-cell">
                       <div className="space-y-1">
                         <div className="flex items-center space-x-2">
                           <User className="h-4 w-4 text-auto-green" />
@@ -237,11 +238,6 @@ export const TestDriveManager = () => {
                           <Mail className="h-3 w-3" />
                           <span>{request.email}</span>
                         </div>
-                        {request.message && (
-                          <div className="text-sm text-muted-foreground mt-2 p-2 bg-muted rounded">
-                            <strong>Mesaj:</strong> {request.message}
-                          </div>
-                        )}
                       </div>
                     </TableCell>
                     <TableCell>
@@ -270,37 +266,43 @@ export const TestDriveManager = () => {
                         <span className="text-muted-foreground">Mașină necunoscută</span>
                       )}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="hidden sm:table-cell">
                       <div className="flex items-center space-x-2">
                         <Calendar className="h-4 w-4 text-auto-green" />
-                        <span>{formatDate(request.preferred_date)}</span>
+                        <span className="text-sm">{formatDate(request.preferred_date)}</span>
                       </div>
                       <div className="text-xs text-muted-foreground mt-1">
-                        Cerere trimisă: {formatDate(request.created_at)}
+                        Trimisă: {formatDate(request.created_at)}
                       </div>
                     </TableCell>
                     <TableCell>
                       {getStatusBadge(request.status)}
                     </TableCell>
                     <TableCell>
-                      <div className="flex space-x-2">
+                      <div className="flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-2">
+                        <TestDriveDetails 
+                          request={request} 
+                          carDetails={carDetails[request.car_id] || null} 
+                        />
                         {request.status === 'pending' && (
                           <>
                             <Button
                               size="sm"
                               variant="outline"
                               onClick={() => updateRequestStatus(request.id, 'confirmed')}
-                              className="border-blue-500 text-blue-700 hover:bg-blue-50"
+                              className="border-blue-500 text-blue-700 hover:bg-blue-50 min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
                             >
-                              Confirmă
+                              <CheckCircle className="h-4 w-4 lg:mr-1" />
+                              <span className="hidden lg:inline">Confirmă</span>
                             </Button>
                             <Button
                               size="sm"
                               variant="outline"
                               onClick={() => updateRequestStatus(request.id, 'cancelled')}
-                              className="border-red-500 text-red-700 hover:bg-red-50"
+                              className="border-red-500 text-red-700 hover:bg-red-50 min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
                             >
-                              Anulează
+                              <XCircle className="h-4 w-4 lg:mr-1" />
+                              <span className="hidden lg:inline">Anulează</span>
                             </Button>
                           </>
                         )}
@@ -309,9 +311,10 @@ export const TestDriveManager = () => {
                             size="sm"
                             variant="outline"
                             onClick={() => updateRequestStatus(request.id, 'completed')}
-                            className="border-green-500 text-green-700 hover:bg-green-50"
+                            className="border-green-500 text-green-700 hover:bg-green-50 min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
                           >
-                            Finalizează
+                            <CheckCircle className="h-4 w-4 lg:mr-1" />
+                            <span className="hidden lg:inline">Finalizează</span>
                           </Button>
                         )}
                       </div>
