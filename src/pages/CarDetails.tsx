@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { resetScrollToTop } from "@/utils/scrollUtils";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -60,6 +61,9 @@ const CarDetails = () => {
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
+    // Reset scroll to top when component mounts
+    resetScrollToTop();
+    
     const fetchCarDetails = async () => {
       if (!slug) return;
       

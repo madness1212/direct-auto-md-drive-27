@@ -173,17 +173,17 @@ const ComingSoon = () => {
                              </h3>
                            </div>
 
-                            {/* Specifications - Only show essential ones */}
-                            <div className="grid grid-cols-2 gap-1 text-xs">
-                              <div className="flex items-center space-x-1">
-                                <Calendar className="h-3 w-3 text-auto-green" />
-                                <span className="text-muted-foreground">{car.an_fabricatie}</span>
-                              </div>
-                              <div className="flex items-center space-x-1">
-                                <Fuel className="h-3 w-3 text-auto-green" />
-                                <span className="text-muted-foreground capitalize">{car.tip_motor}</span>
-                              </div>
-                            </div>
+                             {/* Specifications - Larger text for easier reading */}
+                             <div className="grid grid-cols-2 gap-1 text-sm">
+                               <div className="flex items-center space-x-1">
+                                 <Calendar className="h-4 w-4 text-auto-green" />
+                                 <span className="text-muted-foreground font-medium">{car.an_fabricatie}</span>
+                               </div>
+                               <div className="flex items-center space-x-1">
+                                 <Fuel className="h-4 w-4 text-auto-green" />
+                                 <span className="text-muted-foreground capitalize font-medium">{car.tip_motor}</span>
+                               </div>
+                             </div>
 
                            {/* Action Buttons */}
                            <div className="flex space-x-1">

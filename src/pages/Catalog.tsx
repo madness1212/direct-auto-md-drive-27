@@ -64,7 +64,7 @@ const Catalog = () => {
   const [availableModels, setAvailableModels] = useState<string[]>([]);
   const [availableFuelTypes, setAvailableFuelTypes] = useState<string[]>([]);
   const [availableBodyTypes, setAvailableBodyTypes] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState("price-asc");
+  const [sortBy, setSortBy] = useState("newest");
 
   const transmissionTypes = [t('common.all'), "Automat", "Manual"];
   
@@ -116,8 +116,11 @@ const Catalog = () => {
         const uniqueFuelTypes = [t('common.all'), ...new Set(transformedCars.map(car => car.fuel).filter(Boolean))];
         setAvailableFuelTypes(uniqueFuelTypes);
         
-        // Extract unique body types from actual data
+        // Extract unique body types from actual data and add Universal
         const uniqueBodyTypes = [t('common.all'), ...new Set(transformedCars.map(car => car.bodyType).filter(Boolean))];
+        if (!uniqueBodyTypes.includes('Universal')) {
+          uniqueBodyTypes.splice(1, 0, 'Universal'); // Add Universal after "All"
+        }
         setAvailableBodyTypes(uniqueBodyTypes);
         
         // Models based on selected brand or all models if no brand selected
@@ -176,6 +179,8 @@ const Catalog = () => {
         return a.price - b.price;
       case "price-desc":
         return b.price - a.price;
+      case "newest":
+        return b.year - a.year;
       default:
         return 0;
     }
@@ -550,6 +555,7 @@ const Catalog = () => {
                     <SelectValue placeholder="Sortează după" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="newest">Cele mai noi</SelectItem>
                     <SelectItem value="price-asc">Preț crescător</SelectItem>
                     <SelectItem value="price-desc">Preț descrescător</SelectItem>
                   </SelectContent>

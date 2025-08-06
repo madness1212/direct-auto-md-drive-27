@@ -196,6 +196,16 @@ export default function Admin() {
     return categories.length > 0 ? ' - ' + categories.join(', ') : '';
   };
 
+  const getDisplayBadge = (car: CarListing) => {
+    if (car.is_top_offer) {
+      return <Badge className="bg-green-500 text-white ml-2">Afișare: Oferte Speciale</Badge>;
+    }
+    if (car.is_coming_soon) {
+      return <Badge className="bg-blue-500 text-white ml-2">Afișare: În Curând</Badge>;
+    }
+    return null;
+  };
+
   if (showForm || editingCar) {
     return (
       <AdminLayout>
@@ -338,8 +348,9 @@ export default function Admin() {
                             )}
                           </TableCell>
                           <TableCell>
-                            <div>
-                              <div className="font-medium">{car.marca} {car.model}{getCarCategory(car)}</div>
+                            <div className="flex flex-col">
+                              <div className="font-medium">{car.marca} {car.model}</div>
+                              {getDisplayBadge(car)}
                             </div>
                           </TableCell>
                           <TableCell>{car.an_fabricatie}</TableCell>

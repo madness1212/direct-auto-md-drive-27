@@ -42,6 +42,131 @@ interface CarListingFormProps {
   isEditing?: boolean;
 }
 
+const modelsByBrand: { [key: string]: string[] } = {
+  "Audi": [
+    "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "Q2", "Q3", "Q5", "Q7", "Q8",
+    "TT", "R8", "e-tron", "allroad", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8",
+    "SQ2", "SQ5", "SQ7", "RS3", "RS4", "RS5", "RS6", "RS7", "RS Q3", "RS Q8", "100", "80", "90"
+  ],
+  "BMW": [
+    "Seria 1", "Seria 2", "Seria 3", "Seria 4", "Seria 5", "Seria 6", "Seria 7", "Seria 8",
+    "X1", "X2", "X3", "X4", "X5", "X6", "X7", "Z4", "M2", "M3", "M4", "M5", "M6", "M8",
+    "X3 M", "X4 M", "X5 M", "X6 M", "i3", "i4", "i8", "iX", "iX1", "iX3", "3 Compact", "5 Compact"
+  ],
+  "Chevrolet": [
+    "Aveo", "Camaro", "Captiva", "Cobalt", "Corvette", "Cruze", "Epica", "Evanda", "Lacetti",
+    "Malibu", "Nubira", "Orlando", "Rezzo", "Spark", "Tacuma", "Trailblazer", "Trax", "Blazer"
+  ],
+  "Citroën": [
+    "Berlingo", "C1", "C2", "C3", "C3 Aircross", "C3 Picasso", "C4", "C4 Aircross", "C4 Cactus",
+    "C4 Picasso", "C5", "C5 Aircross", "C6", "C8", "DS3", "DS4", "DS5", "Jumper", "Jumpy", "Nemo", 
+    "SpaceTourer", "Xantia", "Xsara", "Saxo", "BX", "AX", "XM"
+  ],
+  "Dacia": [
+    "1300", "1310", "Duster", "Lodgy", "Logan", "Sandero", "Solenza", "Spring",
+    "Nova", "SuperNova", "1307", "1410"
+  ],
+  "DS Automobiles": [
+    "DS 3", "DS 3 Crossback", "DS 4", "DS 4 Crossback", "DS 5", "DS 7 Crossback", "DS 9"
+  ],
+  "Ford": [
+    "B-MAX", "C-MAX", "EcoSport", "Edge", "Escape", "Escort", "Fiesta", "Focus", "Fusion",
+    "Galaxy", "Grand C-MAX", "KA", "Kuga", "Mondeo", "Mustang", "Puma", "Ranger", "S-MAX",
+    "Tourneo Connect", "Tourneo Courier", "Tourneo Custom", "Probe", "Sierra", "Scorpio"
+  ],
+  "Haval": [
+    "F7", "H2", "H6", "H9", "Jolion", "M6"
+  ],
+  "Honda": [
+    "Accord", "Civic", "CR-V", "CR-Z", "FR-V", "HR-V", "Insight", "Jazz", "Legend", "Prelude"
+  ],
+  "Hyundai": [
+    "Accent", "Atos", "Bayon", "Creta", "Elantra", "Genesis", "Getz", "Grand i10", "i10", "i20",
+    "i30", "i40", "Ioniq", "Ioniq 5", "Ioniq 6", "Kona", "Santa Fe", "Sonata", "Tucson", "Veloster",
+    "Terracan", "Matrix"
+  ],
+  "Infiniti": [
+    "EX", "FX", "G", "M", "Q30", "Q50", "Q60", "Q70", "QX30", "QX50", "QX55", "QX70", "QX80"
+  ],
+  "Jaguar": [
+    "E-PACE", "F-PACE", "F-TYPE", "I-PACE", "S-TYPE", "XF", "XJ", "XK", "X-TYPE", "X-Type"
+  ],
+  "Kia": [
+    "Carnival", "Carens", "Ceed", "Cerato", "Magentis", "Niro", "Optima", "Picanto", "ProCeed",
+    "Rio", "Sedona", "Sorento", "Soul", "Sportage", "Stinger", "Xceed", "Shuma", "Clarus"
+  ],
+  "Land Rover": [
+    "Defender", "Discovery", "Discovery Sport", "Freelander", "Range Rover", "Range Rover Evoque",
+    "Range Rover Sport", "Range Rover Velar"
+  ],
+  "Lexus": [
+    "CT", "ES", "GS", "IS", "LC", "LS", "LX", "NX", "RC", "RX", "UX", "HS"
+  ],
+  "Mazda": [
+    "2", "3", "5", "6", "CX-3", "CX-30", "CX-5", "CX-7", "CX-9", "MX-5", "RX-7", "RX-8", "323", "626", "Xedos 6"
+  ],
+  "Mercedes-Benz": [
+    "Clasa A", "Clasa B", "Clasa C", "Clasa CLA", "Clasa CLC", "Clasa CLK", "Clasa CLS",
+    "Clasa E", "Clasa G", "Clasa GL", "Clasa GLA", "Clasa GLB", "Clasa GLC", "Clasa GLE",
+    "Clasa GLK", "Clasa GLS", "Clasa M", "Clasa R", "Clasa S", "Clasa SL", "Clasa SLC",
+    "Clasa SLK", "Clasa V", "Clasa Vito", "Clasa X", "AMG GT", "EQC", "EQE", "EQS", "Maybach",
+    "190", "W124", "W140", "W201", "W202", "W203", "W204", "W210", "W211", "W212", "W220", "W221"
+  ],
+  "Mitsubishi": [
+    "ASX", "Carisma", "Colt", "Eclipse", "Eclipse Cross", "Galant", "Grandis", "L200",
+    "Lancer", "Lancer Evolution", "Mirage", "Outlander", "Outlander PHEV", "Pajero", "Space Star",
+    "Space Wagon", "L300", "Sigma"
+  ],
+  "Nissan": [
+    "350Z", "370Z", "Almera", "Altima", "Cube", "GT-R", "Juke", "Leaf", "Maxima", "Micra",
+    "Murano", "Navara", "Note", "NP300", "Pathfinder", "Patrol", "Primera", "Qashqai", "Serena",
+    "Sunny", "Terrano", "Tiida", "X-Trail", "Almera Tino", "Bluebird"
+  ],
+  "Opel": [
+    "Adam", "Agila", "Antara", "Astra", "Calibra", "Combo", "Corsa", "Crossland", "Grandland",
+    "Insignia", "Karl", "Meriva", "Mokka", "Movano", "Omega", "Signum", "Tigra", "Vectra", "Zafira",
+    "Ascona", "Kadett", "Senator", "Monza"
+  ],
+  "Peugeot": [
+    "107", "108", "2008", "206", "207", "208", "3008", "306", "307", "308", "405", "406", "407",
+    "508", "5008", "Partner", "Rifter", "Traveller", "205", "605", "806", "807", "1007", "4007", "4008"
+  ],
+  "Porsche": [
+    "911", "Boxster", "Cayenne", "Cayman", "Macan", "Panamera", "Taycan", "924", "928", "944", "968"
+  ],
+  "Renault": [
+    "19", "21", "Captive", "Clio", "Duster", "Fluence", "Kadjar", "Kangoo", "Koleos", "Laguna",
+    "Latitude", "Logan", "Master", "Mégane", "Modus", "Scénic", "Symbol", "Taliant", "Twingo",
+    "Zoe", "12", "9", "18", "25", "Fuego", "Safrane"
+  ],
+  "SEAT": [
+    "Alhambra", "Altea", "Arona", "Ateca", "Cordoba", "Exeo", "Ibiza", "Leon", "Mii", "Toledo",
+    "Marbella", "Malaga", "Ronda"
+  ],
+  "Škoda": [
+    "Citigo", "Enyaq", "Fabia", "Felicia", "Kamiq", "Karoq", "Kodiaq", "Octavia", "Praktik",
+    "Rapid", "Roomster", "Scala", "Superb", "Yeti", "100", "110", "120", "130", "Favorit"
+  ],
+  "Subaru": [
+    "Forester", "Impreza", "Legacy", "Outback", "Tribeca", "XV", "Justy", "Alcyone"
+  ],
+  "Toyota": [
+    "Auris", "Avensis", "Aygo", "C-HR", "Camry", "Corolla", "Corolla Verso", "GT86", "Highlander",
+    "Hilux", "Land Cruiser", "Prius", "RAV4", "Urban Cruiser", "Verso", "Yaris", "Carina", "Carina E",
+    "Celica", "Corona", "Starlet"
+  ],
+  "Volkswagen": [
+    "Amarok", "Arteon", "Beetle", "Bora", "Caddy", "CC", "Cross Polo", "Eos", "Fox", "Golf",
+    "ID.3", "ID.4", "ID.5", "Jetta", "Lupo", "Multivan", "Passat", "Phaeton", "Polo", "Scirocco",
+    "Sharan", "T-Cross", "T-Roc", "Tiguan", "Touareg", "Touran", "Up", "Golf Plus", "Golf Variant",
+    "Vento", "Santana", "Derby", "Iltis"
+  ],
+  "Volvo": [
+    "C30", "C70", "S40", "S60", "S80", "S90", "V40", "V50", "V60", "V70", "V90", "XC40", "XC60",
+    "XC90", "850", "940", "960", "240", "740", "760", "440", "460"
+  ]
+};
+
 export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = false }: CarListingFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedImages, setUploadedImages] = useState<string[]>(initialData?.images || []);
@@ -179,16 +304,16 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <Tabs defaultValue="basic" className="w-full">
-            <TabsList className="grid w-full grid-cols-5">
-              <TabsTrigger value="basic">Informații de bază</TabsTrigger>
-              <TabsTrigger value="details">Detalii tehnice</TabsTrigger>
-              <TabsTrigger value="descriptions">Descrieri</TabsTrigger>
-              <TabsTrigger value="media">Media</TabsTrigger>
-              <TabsTrigger value="settings">Setări</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-3 md:grid-cols-5">
+              <TabsTrigger value="basic" className="text-xs md:text-sm">Info bază</TabsTrigger>
+              <TabsTrigger value="details" className="text-xs md:text-sm">Tehnice</TabsTrigger>
+              <TabsTrigger value="descriptions" className="text-xs md:text-sm">Descrieri</TabsTrigger>
+              <TabsTrigger value="media" className="text-xs md:text-sm">Media</TabsTrigger>
+              <TabsTrigger value="settings" className="text-xs md:text-sm">Setări</TabsTrigger>
             </TabsList>
             
             <TabsContent value="basic" className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="marca">Marca *</Label>
                   <Select 
@@ -237,18 +362,29 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                 
                 <div>
                   <Label htmlFor="model">Model *</Label>
-                  <Input
-                    id="model"
-                    {...register('model', { required: 'Modelul este obligatoriu' })}
-                    placeholder="ex: X5, E-Class, A4"
-                  />
+                  <Select 
+                    onValueChange={(value) => setValue('model', value)}
+                    defaultValue={watch('model')}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selectează modelul" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border border-border shadow-lg z-50 max-h-60 overflow-y-auto">
+                      {watch('marca') && modelsByBrand[watch('marca')] ? 
+                        modelsByBrand[watch('marca')].map((model: string) => (
+                          <SelectItem key={model} value={model}>{model}</SelectItem>
+                        ))
+                        : <SelectItem value="" disabled>Selectează mai întâi marca</SelectItem>
+                      }
+                    </SelectContent>
+                  </Select>
                   {errors.model && (
                     <span className="text-sm text-destructive">{errors.model.message}</span>
                   )}
                 </div>
               </div>
 
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
                   <Label htmlFor="an_fabricatie">An fabricație *</Label>
                   <Input
@@ -294,7 +430,7 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
             </TabsContent>
 
             <TabsContent value="details" className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="tip_motor">Tip motor *</Label>
                   <Select 
@@ -373,12 +509,13 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                       <SelectItem value="limuzina">Limuzină</SelectItem>
                       <SelectItem value="microbus">Microbus</SelectItem>
                       <SelectItem value="furgoneta">Furgoneta</SelectItem>
+                      <SelectItem value="universal">Universal</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="capacitate_motor">Capacitate motor</Label>
                   <Input

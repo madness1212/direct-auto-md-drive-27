@@ -172,9 +172,8 @@ export default function Auth() {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-1">
               <TabsTrigger value="signin">Conectare</TabsTrigger>
-              <TabsTrigger value="signup">Înregistrare</TabsTrigger>
             </TabsList>
             
             <TabsContent value="signin">
@@ -211,105 +210,6 @@ export default function Auth() {
               </form>
             </TabsContent>
             
-            <TabsContent value="signup">
-              {!codeRequested ? (
-                <div className="space-y-4">
-                  <div className="text-center p-4 bg-muted rounded-lg">
-                    <Mail className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
-                    <h3 className="font-semibold mb-1">Solicitare cod administrator</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Pentru înregistrare, apăsați butonul pentru a solicita un cod de la administrator.
-                    </p>
-                  </div>
-                  
-                  <form onSubmit={handleGenerateCode} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="request-email">Email</Label>
-                      <Input
-                        id="request-email"
-                        name="email"
-                        type="email"
-                        placeholder="admin@directauto.md"
-                        required
-                      />
-                    </div>
-                    <Button type="submit" className="w-full" disabled={isGeneratingCode}>
-                      {isGeneratingCode && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                      Cere Cod Administrator
-                    </Button>
-                  </form>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <div className="text-center p-4 bg-green-50 border border-green-200 rounded-lg">
-                    <Clock className="mx-auto h-8 w-8 text-green-600 mb-2" />
-                    <h3 className="font-semibold text-green-800 mb-1">Cod solicitat cu succes</h3>
-                    <p className="text-sm text-green-700">
-                      Codul de înregistrare a fost trimis administratorului pentru email-ul <strong>{requestEmail}</strong>.
-                      Veți primi codul de la administrator. Codul este valabil pentru 1 oră.
-                    </p>
-                  </div>
-                  
-                  <form onSubmit={handleSignUp} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-code">Cod de înregistrare</Label>
-                      <Input
-                        id="signup-code"
-                        name="registrationCode"
-                        type="text"
-                        placeholder="Introdu codul primit de la administrator"
-                        className="text-center font-mono text-lg tracking-widest"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-name">Numele complet</Label>
-                      <Input
-                        id="signup-name"
-                        name="fullName"
-                        type="text"
-                        placeholder="Ion Popescu"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-email">Email</Label>
-                      <Input
-                        id="signup-email"
-                        name="email"
-                        type="email"
-                        value={requestEmail}
-                        readOnly
-                        className="bg-muted"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="signup-password">Parolă</Label>
-                      <Input
-                        id="signup-password"
-                        name="password"
-                        type="password"
-                        required
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                      <Button 
-                        type="button" 
-                        variant="outline" 
-                        className="flex-1"
-                        onClick={() => setCodeRequested(false)}
-                      >
-                        Înapoi
-                      </Button>
-                      <Button type="submit" className="flex-1" disabled={isLoading}>
-                        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        Înregistrează-te
-                      </Button>
-                    </div>
-                  </form>
-                </div>
-              )}
-            </TabsContent>
           </Tabs>
         </CardContent>
       </Card>
