@@ -25,6 +25,7 @@ interface CarListingFormData {
   pret: number;
   caroserie?: string;
   capacitate_motor?: string;
+  putere?: string;
   descriere?: string;
   descriere_ro?: string;
   descriere_ru?: string;
@@ -340,15 +341,15 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                       <SelectItem value="Land Rover">Land Rover</SelectItem>
                       <SelectItem value="Lexus">Lexus</SelectItem>
                       <SelectItem value="Mazda">Mazda</SelectItem>
-                      <SelectItem value="Mercedes‑Benz">Mercedes‑Benz</SelectItem>
+                      <SelectItem value="Mercedes-Benz">Mercedes-Benz</SelectItem>
                       <SelectItem value="Mitsubishi">Mitsubishi</SelectItem>
                       <SelectItem value="Nissan">Nissan</SelectItem>
                       <SelectItem value="Opel">Opel</SelectItem>
                       <SelectItem value="Peugeot">Peugeot</SelectItem>
                       <SelectItem value="Porsche">Porsche</SelectItem>
                       <SelectItem value="Renault">Renault</SelectItem>
-                      <SelectItem value="Seat">Seat</SelectItem>
-                      <SelectItem value="Skoda">Skoda</SelectItem>
+                      <SelectItem value="SEAT">SEAT</SelectItem>
+                      <SelectItem value="Škoda">Škoda</SelectItem>
                       <SelectItem value="Subaru">Subaru</SelectItem>
                       <SelectItem value="Toyota">Toyota</SelectItem>
                       <SelectItem value="Volkswagen">Volkswagen</SelectItem>
@@ -522,6 +523,15 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                     id="capacitate_motor"
                     {...register('capacitate_motor')}
                     placeholder="ex: 2.0L, 1.8L TSI, 3.0L V6"
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="putere">Putere (CP)</Label>
+                  <Input
+                    id="putere"
+                    {...register('putere')}
+                    placeholder="ex: 150 CP, 200 CP"
                   />
                 </div>
               </div>

@@ -39,6 +39,7 @@ interface CarListing {
   pret: number;
   caroserie: string;
   capacitate_motor: string;
+  putere?: string;
   descriere: string;
   descriere_ro: string;
   descriere_ru: string;
@@ -46,6 +47,7 @@ interface CarListing {
   images: string[];
   video_url: string;
   status: string;
+  is_coming_soon?: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -343,8 +345,15 @@ const CarDetails = () => {
                 <CardContent className="space-y-6">
                   {/* Price */}
                   <div className="text-center p-4 bg-auto-green/5 rounded-lg border border-auto-green/20">
-                    <div className="text-4xl font-bold text-auto-green">
-                      {formatPrice(car.pret)}
+                    <div className="flex items-center justify-center gap-2">
+                      {car.is_coming_soon && (
+                        <span className="text-lg font-medium text-muted-foreground">
+                          Preț Estimativ
+                        </span>
+                      )}
+                      <div className="text-4xl font-bold text-auto-green">
+                        {formatPrice(car.pret)}
+                      </div>
                     </div>
                   </div>
 
@@ -386,6 +395,16 @@ const CarDetails = () => {
                             <span className="font-medium">Capacitate motor</span>
                           </div>
                           <span className="text-muted-foreground">{car.capacitate_motor}</span>
+                        </div>
+                      )}
+                      
+                      {car.putere && (
+                        <div className="flex items-center justify-between py-3 border-b border-border/50">
+                          <div className="flex items-center space-x-3">
+                            <Settings className="h-5 w-5 text-auto-green" />
+                            <span className="font-medium">Putere</span>
+                          </div>
+                          <span className="text-muted-foreground">{car.putere}</span>
                         </div>
                       )}
                       
