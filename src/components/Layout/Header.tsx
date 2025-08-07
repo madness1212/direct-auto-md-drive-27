@@ -116,14 +116,14 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="/" className="text-foreground hover:text-auto-green transition-colors">
-              {t('header.home')}
+            <a href="/credit" className="text-foreground hover:text-auto-green transition-colors">
+              Credit
             </a>
-            <a href="/catalog" className="text-foreground hover:text-auto-green transition-colors">
-              {t('header.catalog')}
+            <a href="/leasing" className="text-foreground hover:text-auto-green transition-colors">
+              Leasing
             </a>
-            <a href="/despre" className="text-foreground hover:text-auto-green transition-colors">
-              {t('header.about')}
+            <a href="/trade-in" className="text-foreground hover:text-auto-green transition-colors">
+              Trade-In
             </a>
             <a href="/contact" className="text-foreground hover:text-auto-green transition-colors">
               {t('header.contact')}
@@ -177,14 +177,14 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
         {isMobileMenuOpen && (
           <nav className="md:hidden mt-4 py-4 border-t border-border">
             <div className="flex flex-col space-y-4">
-              <a href="/" className="text-foreground hover:text-auto-green transition-colors py-2">
-                {t('header.home')}
+              <a href="/credit" className="text-foreground hover:text-auto-green transition-colors py-2">
+                Credit
               </a>
-              <a href="/catalog" className="text-foreground hover:text-auto-green transition-colors py-2">
-                {t('header.catalog')}
+              <a href="/leasing" className="text-foreground hover:text-auto-green transition-colors py-2">
+                Leasing
               </a>
-              <a href="/despre" className="text-foreground hover:text-auto-green transition-colors py-2">
-                {t('header.about')}
+              <a href="/trade-in" className="text-foreground hover:text-auto-green transition-colors py-2">
+                Trade-In
               </a>
               <a href="/contact" className="text-foreground hover:text-auto-green transition-colors py-2">
                 {t('header.contact')}

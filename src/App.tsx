@@ -10,6 +10,9 @@ import Catalog from "./pages/Catalog";
 import CarDetails from "./pages/CarDetails";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Credit from "./pages/Credit";
+import Leasing from "./pages/Leasing";
+import TradeIn from "./pages/TradeIn";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
@@ -28,6 +31,9 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/catalog" element={<Catalog />} />
             <Route path="/catalog/:slug" element={<CarDetails />} />
+            <Route path="/credit" element={<Credit />} />
+            <Route path="/leasing" element={<Leasing />} />
+            <Route path="/trade-in" element={<TradeIn />} />
             <Route path="/despre" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/auth" element={<Auth />} />
