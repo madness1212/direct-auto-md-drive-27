@@ -374,7 +374,7 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                         modelsByBrand[watch('marca')].map((model: string) => (
                           <SelectItem key={model} value={model}>{model}</SelectItem>
                         ))
-                        : <SelectItem value="" disabled>Selectează mai întâi marca</SelectItem>
+                        : <SelectItem value="placeholder" disabled>Selectează mai întâi marca</SelectItem>
                       }
                     </SelectContent>
                   </Select>
