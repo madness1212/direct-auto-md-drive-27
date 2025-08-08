@@ -10,10 +10,10 @@ const TradeIn = () => {
         <div className="container mx-auto px-4">
           {/* Hero Section */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-8 leading-relaxed">
               Schimbă-ți mașina veche cu una nouă de la Direct Auto
             </h1>
-            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               La Direct Auto, îți oferim posibilitatea de a schimba mașina ta actuală cu un model din parcul nostru – 
               rapid, sigur și fără complicații.
             </p>

@@ -61,7 +61,7 @@ const CatalogHome = () => {
   const [sortBy, setSortBy] = useState("newest");
 
   const transmissionTypes = [t('common.all'), "Automat", "Manual"];
-  const carsPerPage = 16; // 4 rows x 4 cars
+  const carsPerPage = 12; // 3 cars x 4 rows for desktop
   
   // Generate year options dynamically
   const currentYear = new Date().getFullYear();
@@ -318,7 +318,7 @@ const CatalogHome = () => {
   };
 
   return (
-    <section className="py-8 bg-background">
+    <section className="py-8 bg-auto-gray">
       <div className="container mx-auto px-4">
 
         <div className="flex flex-col lg:flex-row gap-8">
@@ -671,40 +671,30 @@ const CatalogHome = () => {
               </div>
             ) : (
               <>
-                {/* Cars Grid - 4x4 layout */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {/* Cars Grid - 3x4 layout for desktop */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {currentCars.map((car) => (
-                    <Card key={car.id} className="border-0 shadow-card hover:shadow-lg transition-all duration-300 group cursor-pointer">
-                      <CardContent className="p-0">
-                        {/* Image Container */}
-                        <div className="relative overflow-hidden rounded-t-lg">
-                          <img
-                            src={car.image}
-                            alt={`${car.brand} ${car.model}`}
-                            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                          
-                          {/* Badges */}
-                          <div className="absolute top-2 left-2 flex flex-col gap-1">
-                            {car.isTopOffer && (
-                              <Badge className="bg-gradient-primary text-white">
-                                <Star className="h-3 w-3 mr-1 fill-current" />
-                                Ofertă Top
-                              </Badge>
-                            )}
+                    <Link key={car.id} to={`/catalog/${generateSlug(car.brand, car.model, car.year, car.id)}`}>
+                      <Card className="border-0 shadow-card hover:shadow-lg transition-all duration-300 group cursor-pointer">
+                        <CardContent className="p-0">
+                          {/* Image Container */}
+                          <div className="relative overflow-hidden rounded-t-lg">
+                            <img
+                              src={car.image}
+                              alt={`${car.brand} ${car.model}`}
+                              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                            
+                            {/* Badges */}
+                            <div className="absolute top-2 left-2 flex flex-col gap-1">
+                              {car.isTopOffer && (
+                                <Badge className="bg-gradient-primary text-white">
+                                  <Star className="h-3 w-3 mr-1 fill-current" />
+                                  Ofertă Top
+                                </Badge>
+                              )}
+                            </div>
                           </div>
-                          
-                          {/* Heart Icon - Top Right */}
-                          <div className="absolute top-2 right-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="w-8 h-8 rounded-full bg-white/90 hover:bg-white text-gray-600 hover:text-red-500 shadow-sm"
-                            >
-                              <Heart className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </div>
 
                         {/* Content */}
                         <div className="p-5 space-y-4">
@@ -749,23 +739,25 @@ const CatalogHome = () => {
 
                           {/* Action Buttons */}
                           <div className="flex space-x-2">
-                            <Link to={`/catalog/${generateSlug(car.brand, car.model, car.year, car.id)}`} className="flex-1">
-                              <Button className="w-full bg-auto-green hover:bg-auto-green-dark text-white">
-                                Vezi Detalii
-                              </Button>
-                            </Link>
+                            <Button className="w-full bg-auto-green hover:bg-auto-green-dark text-white">
+                              Vezi Detalii
+                            </Button>
                             <Button 
                               variant="outline" 
                               className="flex-1 border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
-                              onClick={() => window.open(`tel:${car.phone}`, '_self')}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                window.open(`tel:${car.phone}`, '_self');
+                              }}
                             >
                               <Phone className="h-4 w-4 mr-1" />
                               Sună
                             </Button>
                           </div>
                         </div>
-                      </CardContent>
-                    </Card>
+                        </CardContent>
+                      </Card>
+                    </Link>
                   ))}
                 </div>
 

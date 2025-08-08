@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -47,8 +48,21 @@ interface TestDriveDetailsProps {
 }
 
 export function TestDriveDetails({ request, carDetails }: TestDriveDetailsProps) {
+  const navigate = useNavigate();
+  
   const formatDate = (dateString: string) => {
     return format(new Date(dateString), 'dd MMMM yyyy, HH:mm', { locale: ro });
+  };
+
+  const generateSlug = (brand: string, model: string, year: number, id: string) => {
+    const cleanString = (str: string) => 
+      str.toLowerCase()
+         .replace(/[^\w\s-]/g, '')
+         .replace(/\s+/g, '-')
+         .replace(/-+/g, '-')
+         .trim();
+    
+    return `${cleanString(brand)}-${cleanString(model)}-${year}-${id}`;
   };
 
   const getStatusBadge = (status: TestDriveRequest['status']) => {
@@ -68,14 +82,28 @@ export function TestDriveDetails({ request, carDetails }: TestDriveDetailsProps)
 
   return (
     <Dialog>
+      <Button 
+        size="sm" 
+        className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto bg-auto-green hover:bg-auto-green-dark text-white"
+        onClick={() => {
+          if (carDetails) {
+            const slug = generateSlug(carDetails.marca, carDetails.model, carDetails.an_fabricatie, request.car_id);
+            navigate(`/catalog/${slug}`);
+          }
+        }}
+      >
+        <Info className="h-4 w-4 lg:mr-2" />
+        <span className="hidden lg:inline">Detalii</span>
+      </Button>
       <DialogTrigger asChild>
         <Button 
           size="sm" 
           variant="outline"
           className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
+          style={{ display: 'none' }}
         >
           <Info className="h-4 w-4 lg:mr-2" />
-          <span className="hidden lg:inline">Detalii</span>
+          <span className="hidden lg:inline">Detalii Modal</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">

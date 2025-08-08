@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { resetScrollToTop } from "@/utils/scrollUtils";
 import { supabase } from "@/integrations/supabase/client";
@@ -61,6 +61,7 @@ const CarDetails = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showImageModal, setShowImageModal] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const imageContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Reset scroll to top when component mounts
@@ -98,6 +99,48 @@ const CarDetails = () => {
 
     fetchCarDetails();
   }, [slug, navigate]);
+
+  // Touch/swipe handling for mobile
+  useEffect(() => {
+    let startX = 0;
+    let startY = 0;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (!car?.images || car.images.length <= 1) return;
+      
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+      const diffX = startX - endX;
+      const diffY = startY - endY;
+
+      // Only handle horizontal swipes (ignore vertical scrolling)
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+        if (diffX > 0) {
+          // Swipe left - next image
+          nextImage();
+        } else {
+          // Swipe right - previous image
+          prevImage();
+        }
+      }
+    };
+
+    const imageContainer = imageContainerRef.current;
+    if (imageContainer) {
+      imageContainer.addEventListener('touchstart', handleTouchStart);
+      imageContainer.addEventListener('touchend', handleTouchEnd);
+      
+      return () => {
+        imageContainer.removeEventListener('touchstart', handleTouchStart);
+        imageContainer.removeEventListener('touchend', handleTouchEnd);
+      };
+    }
+  }, [car?.images]);
 
   const nextImage = () => {
     if (car?.images) {
@@ -171,13 +214,14 @@ const CarDetails = () => {
               {/* Main Image */}
               <Card className="border-0 shadow-card overflow-hidden">
                 <CardContent className="p-0">
-                  <div className="relative">
+                  <div className="relative" ref={imageContainerRef}>
                     {car.images && car.images.length > 0 ? (
                       <img 
                         src={car.images[currentImageIndex]} 
                         alt={`${car.marca} ${car.model}`}
-                        className="w-full h-96 object-cover cursor-pointer"
+                        className="w-full h-96 object-cover cursor-pointer select-none"
                         onClick={() => setShowImageModal(true)}
+                        draggable={false}
                       />
                     ) : (
                       <div className="w-full h-96 bg-muted flex items-center justify-center">
@@ -330,10 +374,10 @@ const CarDetails = () => {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
-                      <CardTitle className="text-2xl text-foreground">
+                      <CardTitle className="text-3xl text-foreground">
                         {car.marca} {car.model}
                       </CardTitle>
-                      <p className="text-lg text-muted-foreground mt-1">
+                      <p className="text-xl text-muted-foreground mt-1 font-medium">
                         {car.an_fabricatie}
                       </p>
                     </div>
@@ -383,7 +427,7 @@ const CarDetails = () => {
                       <div className="flex items-center justify-between py-3 border-b border-border/50">
                         <div className="flex items-center space-x-3">
                           <Fuel className="h-5 w-5 text-auto-green" />
-                          <span className="font-medium">Tip motor</span>
+                          <span className="font-medium">Tip Combustibil</span>
                         </div>
                         <span className="text-muted-foreground">{car.tip_motor?.replace(/\b\w/g, l => l.toUpperCase())}</span>
                       </div>

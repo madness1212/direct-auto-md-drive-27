@@ -43,7 +43,7 @@ export const TestDriveForm = ({ carId, carTitle }: TestDriveFormProps) => {
 
     try {
       // Validare câmpuri obligatorii
-      if (!formData.fullName || !formData.phone || !formData.email || !formData.preferredDate) {
+      if (!formData.fullName || !formData.phone || !formData.preferredDate) {
         toast({
           title: "Eroare",
           description: "Toate câmpurile obligatorii trebuie completate.",
@@ -178,7 +178,7 @@ export const TestDriveForm = ({ carId, carTitle }: TestDriveFormProps) => {
           <div className="space-y-2">
             <Label htmlFor="email" className="text-sm font-medium flex items-center">
               <Mail className="h-4 w-4 mr-1 text-auto-green" />
-              Adresa de e-mail *
+              Adresa de e-mail
             </Label>
             <Input
               id="email"
@@ -186,7 +186,6 @@ export const TestDriveForm = ({ carId, carTitle }: TestDriveFormProps) => {
               value={formData.email}
               onChange={(e) => handleInputChange("email", e.target.value)}
               placeholder="Ex: ion.popescu@email.com"
-              required
               className="border-border focus:border-auto-green"
             />
           </div>

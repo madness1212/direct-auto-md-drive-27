@@ -9,20 +9,18 @@ const Credit = () => {
         <div className="container mx-auto px-4">
           {/* Hero Section */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              CONDIȚII FAVOABILE DE FINANȚARE <br />
-              PENTRU VIITOAREA TA MAȘINĂ
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-8 leading-relaxed">
+              Condiții favorabile de finanțare pentru viitoarea ta mașină
             </h1>
-            <div className="max-w-4xl mx-auto space-y-6 text-lg text-muted-foreground">
-              <p>
+            <div className="max-w-3xl mx-auto space-y-4 text-muted-foreground">
+              <p className="text-lg">
                 Planifici să îți achiziționezi un automobil?
               </p>
-              <p>
+              <p className="text-lg">
                 Oferim consultare dedicată și asistență profesională pentru obținerea celui mai potrivit credit sau leasing.
               </p>
-              <p className="text-xl font-semibold text-foreground">
-                Alege metoda de finanțare ideală pentru tine<br />
-                împreună cu rata lunară convenabilă și termeni flexibili.
+              <p className="text-lg font-medium text-foreground mt-6">
+                Alege metoda de finanțare ideală pentru tine împreună cu rata lunară convenabilă și termeni flexibili.
               </p>
             </div>
           </div>
