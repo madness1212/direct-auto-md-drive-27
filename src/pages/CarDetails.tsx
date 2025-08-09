@@ -185,6 +185,41 @@ const CarDetails = () => {
     return `€${price.toLocaleString()}`;
   };
 
+  const formatEngineCapacity = (value?: string | null) => {
+    if (!value) return '';
+    const original = value.toString();
+    try {
+      const lower = original.toLowerCase();
+      const match = original.match(/[\d.,]+/);
+      if (!match) return original;
+      const numericStr = match[0].replace(/\s/g, '');
+      const isLiters = lower.includes('l');
+      let cc = 0;
+      if (isLiters) {
+        const liters = parseFloat(numericStr.replace(/,/g, '.'));
+        if (isNaN(liters)) return original;
+        cc = Math.round(liters * 1000);
+      } else {
+        const parsed = parseInt(numericStr.replace(/[.,]/g, ''), 10);
+        if (isNaN(parsed)) return original;
+        cc = parsed;
+      }
+      return `${cc.toLocaleString()} cm³`;
+    } catch {
+      return original;
+    }
+  };
+
+  const formatPower = (value?: string | null) => {
+    if (!value) return '';
+    const match = value.toString().match(/\d+/);
+    if (match) {
+      const num = parseInt(match[0], 10);
+      if (!isNaN(num)) return `${num} CP`;
+    }
+    return value.toString().toUpperCase().includes('CP') ? value.toString() : `${value} CP`;
+  };
+
 
   return (
     <Layout>
@@ -438,7 +473,7 @@ const CarDetails = () => {
                             <Fuel className="h-5 w-5 text-auto-green" />
                             <span className="font-medium">Capacitate motor</span>
                           </div>
-                          <span className="text-muted-foreground">{car.capacitate_motor}</span>
+                          <span className="text-muted-foreground">{formatEngineCapacity(car.capacitate_motor)}</span>
                         </div>
                       )}
                       
@@ -448,7 +483,7 @@ const CarDetails = () => {
                             <Settings className="h-5 w-5 text-auto-green" />
                             <span className="font-medium">Putere</span>
                           </div>
-                          <span className="text-muted-foreground">{car.putere}</span>
+                          <span className="text-muted-foreground">{formatPower(car.putere)}</span>
                         </div>
                       )}
                       

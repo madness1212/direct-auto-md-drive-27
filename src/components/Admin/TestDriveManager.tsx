@@ -5,8 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { TestDriveDetails } from "./TestDriveDetails";
-import { Calendar, Car, Clock, Mail, Phone, User, CheckCircle, XCircle, AlertCircle, ExternalLink } from "lucide-react";
+import { CarPreviewDialog } from "./CarPreviewDialog";
+import { Calendar, Car, Clock, Mail, Phone, User, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
@@ -249,18 +251,19 @@ export const TestDriveManager = () => {
                               {carDetails[request.car_id].marca} {carDetails[request.car_id].model} ({carDetails[request.car_id].an_fabricatie})
                             </span>
                           </div>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => {
-                              const slug = generateCarSlug(request.car_id, carDetails[request.car_id]);
-                              navigate(`/car/${slug}`);
-                            }}
-                            className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
-                          >
-                            <ExternalLink className="h-3 w-3 mr-1" />
-                            Vezi detalii
-                          </Button>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button
+                                size="sm"
+                                className="bg-auto-green hover:bg-auto-green-dark text-white"
+                              >
+                                Vezi detaliile mașinii
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-3xl">
+                              <CarPreviewDialog carId={request.car_id} />
+                            </DialogContent>
+                          </Dialog>
                         </div>
                       ) : (
                         <span className="text-muted-foreground">Mașină necunoscută</span>
