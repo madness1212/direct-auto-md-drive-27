@@ -251,14 +251,16 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
 
     setIsLoading(true);
     try {
+      // Omit fields not present in DB schema (e.g., putere)
+      const { putere, ...formData } = data;
       const carData = {
-        ...data,
+        ...formData,
         images: uploadedImages,
         images_order: uploadedImages.map((_, index) => index), // Salvează ordinea imaginilor
         created_by: user.id,
-        an_fabricatie: Number(data.an_fabricatie),
-        pret: Number(data.pret),
-        kilometraj: data.kilometraj ? Number(data.kilometraj) : null,
+        an_fabricatie: Number(formData.an_fabricatie),
+        pret: Number(formData.pret),
+        kilometraj: formData.kilometraj ? Number(formData.kilometraj) : null,
         is_top_offer: isTopOffer,
         is_coming_soon: isComingSoon,
       };
