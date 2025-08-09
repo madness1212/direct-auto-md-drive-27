@@ -251,13 +251,13 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
 
     setIsLoading(true);
     try {
-      // Pregătește datele, cu suport pentru câmpul opțional "putere"
-      const sanitizedPutere = data.putere ? parseInt(data.putere.toString().replace(/\D/g, ''), 10) : null;
-
-      const carDataBase = {
-        ...data,
+      // Exclude 'putere' field since it doesn't exist in the database schema
+      const { putere, ...carDataWithoutPutere } = data;
+      
+      const carData = {
+        ...carDataWithoutPutere,
         images: uploadedImages,
-        images_order: uploadedImages.map((_, index) => index), // Salvează ordinea imaginilor
+        images_order: uploadedImages.map((_, index) => index),
         created_by: user.id,
         an_fabricatie: Number(data.an_fabricatie),
         pret: Number(data.pret),
@@ -266,37 +266,17 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
         is_coming_soon: isComingSoon,
       };
 
-      // Include "putere" dacă există; dacă schema nu are coloana, vom reîncerca fără ea
-      const carDataWithPutere = sanitizedPutere !== null ? { ...carDataBase, putere: sanitizedPutere } : carDataBase;
-
       let result: any;
-      let putereSaved = true;
 
       if (isEditing && initialData?.id) {
         result = await supabase
           .from('car_listings')
-          .update(carDataWithPutere as any)
+          .update(carData)
           .eq('id', initialData.id);
       } else {
         result = await supabase
           .from('car_listings')
-          .insert([carDataWithPutere]);
-      }
-
-      if (result.error && `${result.error.message}`.toLowerCase().includes('putere')) {
-        // Reîncearcă fără "putere"
-        putereSaved = false;
-        const fallbackData = { ...carDataBase };
-        if (isEditing && initialData?.id) {
-          result = await supabase
-            .from('car_listings')
-            .update(fallbackData)
-            .eq('id', initialData.id);
-        } else {
-          result = await supabase
-            .from('car_listings')
-            .insert([fallbackData]);
-        }
+          .insert([carData]);
       }
 
       if (result.error) {
@@ -307,12 +287,14 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
         title: 'Succes',
         description: `Anunțul a fost ${isEditing ? 'actualizat' : 'creat'} cu succes.`,
       });
-      if (!putereSaved && data.putere) {
+      
+      if (data.putere) {
         toast({
           title: 'Atenție',
-          description: 'Câmpul "Putere (CP)" nu a fost salvat deoarece lipsește coloana din baza de date. Pot adăuga coloana la cerere.',
+          description: 'Câmpul "Putere (CP)" nu a fost salvat deoarece coloana nu există în baza de date.',
         });
       }
+      
       onSuccess();
     } catch (error: any) {
       toast({
