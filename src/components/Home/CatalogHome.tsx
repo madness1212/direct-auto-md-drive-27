@@ -38,6 +38,7 @@ import {
   ChevronRight
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { resetScrollToTop } from "@/utils/scrollUtils";
 
 const CatalogHome = () => {
   const { t } = useLanguage();
@@ -227,7 +228,10 @@ const CatalogHome = () => {
           key="prev"
           variant="outline"
           size="sm"
-          onClick={() => setCurrentPage(currentPage - 1)}
+          onClick={() => {
+            setCurrentPage(currentPage - 1);
+            resetScrollToTop();
+          }}
           className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
         >
           <ChevronLeft className="h-4 w-4" />
@@ -242,7 +246,10 @@ const CatalogHome = () => {
           key={1}
           variant={currentPage === 1 ? "default" : "outline"}
           size="sm"
-          onClick={() => setCurrentPage(1)}
+          onClick={() => {
+            setCurrentPage(1);
+            resetScrollToTop();
+          }}
           className={currentPage === 1 
             ? "bg-auto-green text-white" 
             : "border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
@@ -263,7 +270,10 @@ const CatalogHome = () => {
           key={i}
           variant={currentPage === i ? "default" : "outline"}
           size="sm"
-          onClick={() => setCurrentPage(i)}
+          onClick={() => {
+            setCurrentPage(i);
+            resetScrollToTop();
+          }}
           className={currentPage === i 
             ? "bg-auto-green text-white" 
             : "border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
@@ -284,7 +294,10 @@ const CatalogHome = () => {
           key={totalPages}
           variant={currentPage === totalPages ? "default" : "outline"}
           size="sm"
-          onClick={() => setCurrentPage(totalPages)}
+          onClick={() => {
+            setCurrentPage(totalPages);
+            resetScrollToTop();
+          }}
           className={currentPage === totalPages 
             ? "bg-auto-green text-white" 
             : "border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
@@ -302,7 +315,10 @@ const CatalogHome = () => {
           key="next"
           variant="outline"
           size="sm"
-          onClick={() => setCurrentPage(currentPage + 1)}
+          onClick={() => {
+            setCurrentPage(currentPage + 1);
+            resetScrollToTop();
+          }}
           className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
         >
           <ChevronRight className="h-4 w-4" />
