@@ -69,6 +69,7 @@ export type Database = {
           marca: string
           model: string
           pret: number
+          putere: string | null
           status: string | null
           tip_motor: string
           top_offer_position: number | null
@@ -97,6 +98,7 @@ export type Database = {
           marca: string
           model: string
           pret: number
+          putere?: string | null
           status?: string | null
           tip_motor: string
           top_offer_position?: number | null
@@ -125,6 +127,7 @@ export type Database = {
           marca?: string
           model?: string
           pret?: number
+          putere?: string | null
           status?: string | null
           tip_motor?: string
           top_offer_position?: number | null
