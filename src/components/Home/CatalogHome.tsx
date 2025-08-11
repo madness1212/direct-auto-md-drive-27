@@ -61,20 +61,8 @@ const CatalogHome = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("newest");
 
-  // Set cars per page based on screen size
-  useEffect(() => {
-    const updateCarsPerPage = () => {
-      setCarsPerPage(window.innerWidth < 768 ? 8 : 12);
-    };
-    
-    updateCarsPerPage();
-    window.addEventListener('resize', updateCarsPerPage);
-    
-    return () => window.removeEventListener('resize', updateCarsPerPage);
-  }, []);
-
   const transmissionTypes = [t('common.all'), "Automat", "Manual"];
-  const [carsPerPage, setCarsPerPage] = useState(12);
+  const carsPerPage = 12; // 3 cars x 4 rows for desktop
   
   // Generate year options dynamically
   const currentYear = new Date().getFullYear();

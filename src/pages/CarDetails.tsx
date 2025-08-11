@@ -223,8 +223,8 @@ const CarDetails = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-background max-w-full overflow-x-hidden">
-        <div className="container mx-auto px-4 py-8 max-w-full">
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8">
           {/* Breadcrumb */}
           <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-6">
             <Button 
@@ -249,25 +249,15 @@ const CarDetails = () => {
               {/* Main Image */}
               <Card className="border-0 shadow-card overflow-hidden">
                 <CardContent className="p-0">
-                  <div className="relative h-96 overflow-hidden" ref={imageContainerRef}>
+                  <div className="relative" ref={imageContainerRef}>
                     {car.images && car.images.length > 0 ? (
-                      <>
-                        {/* Background blurred image */}
-                        <div 
-                          className="absolute inset-0 bg-cover bg-center filter blur-lg scale-110"
-                          style={{
-                            backgroundImage: `url(${car.images[currentImageIndex]})`
-                          }}
-                        />
-                        {/* Main image */}
-                        <img 
-                          src={car.images[currentImageIndex]} 
-                          alt={`${car.marca} ${car.model}`}
-                          className="relative z-10 w-full h-full object-contain cursor-pointer select-none"
-                          onClick={() => setShowImageModal(true)}
-                          draggable={false}
-                        />
-                      </>
+                      <img 
+                        src={car.images[currentImageIndex]} 
+                        alt={`${car.marca} ${car.model}`}
+                        className="w-full h-96 object-cover cursor-pointer select-none"
+                        onClick={() => setShowImageModal(true)}
+                        draggable={false}
+                      />
                     ) : (
                       <div className="w-full h-96 bg-muted flex items-center justify-center">
                         <Car className="h-24 w-24 text-muted-foreground" />
@@ -392,11 +382,11 @@ const CarDetails = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                     <div className={`text-muted-foreground whitespace-pre-wrap break-words ${
-                       showFullDescription ? '' : 'line-clamp-3'
-                     }`}>
-                       {car.descriere}
-                     </div>
+                      <div className={`text-muted-foreground whitespace-pre-wrap ${
+                        showFullDescription ? '' : 'line-clamp-3'
+                      }`}>
+                        {car.descriere}
+                      </div>
                       {car.descriere.length > 150 && (
                         <Button
                           variant="ghost"
