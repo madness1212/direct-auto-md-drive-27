@@ -251,11 +251,8 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
 
     setIsLoading(true);
     try {
-      // Exclude 'putere' field since it doesn't exist in the database schema
-      const { putere, ...carDataWithoutPutere } = data;
-      
       const carData = {
-        ...carDataWithoutPutere,
+        ...data,
         images: uploadedImages,
         images_order: uploadedImages.map((_, index) => index),
         created_by: user.id,
@@ -287,13 +284,6 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
         title: 'Succes',
         description: `Anunțul a fost ${isEditing ? 'actualizat' : 'creat'} cu succes.`,
       });
-      
-      if (data.putere) {
-        toast({
-          title: 'Atenție',
-          description: 'Câmpul "Putere (CP)" nu a fost salvat deoarece coloana nu există în baza de date.',
-        });
-      }
       
       onSuccess();
     } catch (error: any) {
