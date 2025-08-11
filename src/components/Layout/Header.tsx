@@ -69,33 +69,11 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
               </div>
             </div>
             
-            {/* Language Selector - Now in top bar removed, moved to logo area */}
-          </div>
-        </div>
-      </div>
-
-      {/* Main Navigation */}
-      <div className="container mx-auto px-4 py-2 md:py-4">
-        <div className="flex justify-between items-center">
-          {/* Logo - Mobile Optimized */}
-          <div className="flex items-center space-x-2 md:space-x-4">
-            <a href="/" className="flex items-center space-x-2 md:space-x-4 cursor-pointer">
-              <img 
-                src={logo} 
-                alt="Direct Auto" 
-                className="h-12 w-12 md:h-24 md:w-24 object-contain"
-              />
-              <div>
-                <h1 className="text-xl md:text-4xl font-bold text-auto-green">Direct Auto</h1>
-                <p className="text-xs md:text-sm text-muted-foreground">Automobile importate din Europa</p>
-              </div>
-            </a>
-            
-            {/* Language Selector - Desktop */}
+            {/* Language Selector - Desktop only */}
             <div className="hidden md:block">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="text-foreground hover:bg-auto-green-light">
+                  <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-auto-green-light">
                     <Globe className="h-4 w-4 mr-2" />
                     {currentLanguage.flag} {currentLanguage.name}
                     <ChevronDown className="h-4 w-4 ml-1" />
@@ -118,17 +96,37 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
               </DropdownMenu>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Main Navigation */}
+      <div className="container mx-auto px-4 py-2 md:py-4">
+        <div className="flex justify-between items-center">
+          {/* Logo - Mobile Optimized */}
+          <a href="/" className="flex items-center space-x-2 md:space-x-4 cursor-pointer">
+            <img 
+              src={logo} 
+              alt="Direct Auto" 
+              className="h-12 w-12 md:h-24 md:w-24 object-contain"
+            />
+            <div>
+              <h1 className="text-xl md:text-4xl font-bold text-auto-green">Direct Auto</h1>
+            </div>
+          </a>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="/credit" className="text-lg font-bold text-foreground hover:text-auto-green transition-colors">
+            <a href="/credit" className="text-foreground hover:text-auto-green transition-colors">
               Credit
             </a>
-            <a href="/leasing" className="text-lg font-bold text-foreground hover:text-auto-green transition-colors">
+            <a href="/leasing" className="text-foreground hover:text-auto-green transition-colors">
               Leasing
             </a>
-            <a href="/trade-in" className="text-lg font-bold text-foreground hover:text-auto-green transition-colors">
+            <a href="/trade-in" className="text-foreground hover:text-auto-green transition-colors">
               Trade-In
+            </a>
+            <a href="/contact" className="text-foreground hover:text-auto-green transition-colors">
+              {t('header.contact')}
             </a>
             <Button 
               className="bg-gradient-primary hover:bg-auto-green-dark shadow-card"
@@ -136,13 +134,6 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
             >
               {t('header.viewStock')}
             </Button>
-            <div className="flex items-center space-x-2 text-auto-green font-semibold">
-              <Phone className="h-4 w-4" />
-              <span>+373 696 88 999</span>
-            </div>
-            <a href="/contact" className="text-lg font-bold text-foreground hover:text-auto-green transition-colors">
-              {t('header.contact')}
-            </a>
           </nav>
 
           {/* Mobile Language & Menu */}
