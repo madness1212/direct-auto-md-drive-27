@@ -223,8 +223,8 @@ const CarDetails = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
+      <div className="min-h-screen bg-background max-w-full overflow-x-hidden">
+        <div className="container mx-auto px-4 py-8 max-w-full">
           {/* Breadcrumb */}
           <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-6">
             <Button 
@@ -382,11 +382,11 @@ const CarDetails = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      <div className={`text-muted-foreground whitespace-pre-wrap ${
-                        showFullDescription ? '' : 'line-clamp-3'
-                      }`}>
-                        {car.descriere}
-                      </div>
+                     <div className={`text-muted-foreground whitespace-pre-wrap break-words ${
+                       showFullDescription ? '' : 'line-clamp-3'
+                     }`}>
+                       {car.descriere}
+                     </div>
                       {car.descriere.length > 150 && (
                         <Button
                           variant="ghost"
