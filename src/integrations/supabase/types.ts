@@ -64,6 +64,7 @@ export type Database = {
           images: string[] | null
           images_order: Json | null
           is_coming_soon: boolean | null
+          is_price_negotiable: boolean
           is_top_offer: boolean | null
           kilometraj: number | null
           marca: string
@@ -93,6 +94,7 @@ export type Database = {
           images?: string[] | null
           images_order?: Json | null
           is_coming_soon?: boolean | null
+          is_price_negotiable?: boolean
           is_top_offer?: boolean | null
           kilometraj?: number | null
           marca: string
@@ -122,6 +124,7 @@ export type Database = {
           images?: string[] | null
           images_order?: Json | null
           is_coming_soon?: boolean | null
+          is_price_negotiable?: boolean
           is_top_offer?: boolean | null
           kilometraj?: number | null
           marca?: string

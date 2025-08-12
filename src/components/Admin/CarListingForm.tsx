@@ -23,6 +23,7 @@ interface CarListingFormData {
   cutie_viteze: string;
   tractiune?: string;
   pret: number;
+  is_price_negotiable?: boolean;
   caroserie?: string;
   capacitate_motor?: string;
   putere?: string;
@@ -185,6 +186,7 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
       cutie_viteze: initialData?.cutie_viteze || 'manuala',
       is_top_offer: initialData?.is_top_offer || false,
       is_coming_soon: initialData?.is_coming_soon || false,
+      is_price_negotiable: initialData?.is_price_negotiable || false,
     },
   });
 
@@ -261,6 +263,7 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
         kilometraj: data.kilometraj ? Number(data.kilometraj) : null,
         is_top_offer: isTopOffer,
         is_coming_soon: isComingSoon,
+        is_price_negotiable: data.is_price_negotiable || false,
       };
 
       let result: any;
@@ -419,15 +422,29 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                 
                 <div>
                   <Label htmlFor="pret">Preț (EUR) *</Label>
-                  <Input
-                    id="pret"
-                    type="number"
-                    min="0"
-                    {...register('pret', { required: 'Prețul este obligatoriu' })}
-                  />
-                  {errors.pret && (
-                    <span className="text-sm text-destructive">{errors.pret.message}</span>
-                  )}
+                  <div className="flex gap-2 items-end">
+                    <div className="flex-1">
+                      <Input
+                        id="pret"
+                        type="number"
+                        min="0"
+                        {...register('pret', { required: 'Prețul este obligatoriu' })}
+                      />
+                      {errors.pret && (
+                        <span className="text-sm text-destructive">{errors.pret.message}</span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Switch
+                        id="is_price_negotiable"
+                        checked={watch('is_price_negotiable') || false}
+                        onCheckedChange={(checked) => setValue('is_price_negotiable', checked)}
+                      />
+                      <Label htmlFor="is_price_negotiable" className="text-sm">
+                        Negociabil
+                      </Label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </TabsContent>

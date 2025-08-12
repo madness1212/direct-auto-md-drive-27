@@ -138,8 +138,7 @@ export default function Admin() {
     }
   };
 
-  const handleToggleStatus = async (id: string, currentStatus: string) => {
-    const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+  const handleToggleStatus = async (id: string, newStatus: string) => {
     
     try {
       const { error } = await supabase
@@ -424,18 +423,16 @@ export default function Admin() {
                                 <span className="hidden lg:inline">Edit</span>
                               </Button>
                               
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleToggleStatus(car.id, car.status)}
-                                className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
-                              >
-                                {car.status === 'active' ? (
-                                  <EyeOff className="h-4 w-4" />
-                                ) : (
-                                  <Eye className="h-4 w-4" />
-                                )}
-                              </Button>
+                              <Select value={car.status} onValueChange={(newStatus) => handleToggleStatus(car.id, newStatus)}>
+                                <SelectTrigger className="min-h-12 min-w-20 lg:min-h-8 lg:min-w-24 text-xs">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="active">Activ</SelectItem>
+                                  <SelectItem value="inactive">Inactiv</SelectItem>
+                                  <SelectItem value="sold">Vândut</SelectItem>
+                                </SelectContent>
+                              </Select>
                               
                               <Button
                                 variant="outline"

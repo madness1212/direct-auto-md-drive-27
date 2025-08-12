@@ -64,9 +64,9 @@ const CatalogHome = () => {
   const transmissionTypes = [t('common.all'), "Automat", "Manual"];
   const carsPerPage = 12; // 3 cars x 4 rows for desktop
   
-  // Generate year options dynamically
-  const currentYear = new Date().getFullYear();
-  const years = [t('common.all'), ...Array.from({length: 30}, (_, i) => (currentYear - i).toString())];
+  // Generate year options dynamically based on available cars
+  const availableYears = [...new Set(cars.map(car => car.year.toString()))].sort((a, b) => parseInt(b) - parseInt(a));
+  const years = [t('common.all'), ...availableYears];
 
   // Fetch cars from Supabase
   useEffect(() => {

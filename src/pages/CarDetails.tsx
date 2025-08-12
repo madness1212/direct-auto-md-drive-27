@@ -48,6 +48,7 @@ interface CarListing {
   video_url: string;
   status: string;
   is_coming_soon?: boolean;
+  is_price_negotiable?: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -423,17 +424,23 @@ const CarDetails = () => {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {/* Price */}
-                  <div className="text-center p-4 bg-auto-green/5 rounded-lg border border-auto-green/20">
-                    <div className="flex items-center justify-center gap-2">
-                      {car.is_coming_soon && (
-                        <span className="text-lg font-medium text-muted-foreground">
-                          Preț Estimativ
-                        </span>
-                      )}
+                  <div className="text-center p-6 bg-auto-green/5 rounded-lg border border-auto-green/20">
+                    {car.is_coming_soon && car.is_price_negotiable ? (
                       <div className="text-4xl font-bold text-auto-green">
-                        {formatPrice(car.pret)}
+                        Negociabil
                       </div>
-                    </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {car.is_coming_soon && (
+                          <div className="text-xl font-semibold text-muted-foreground">
+                            Preț Estimativ
+                          </div>
+                        )}
+                        <div className="text-4xl font-bold text-auto-green">
+                          {formatPrice(car.pret)}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Technical Specifications */}

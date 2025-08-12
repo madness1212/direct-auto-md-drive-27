@@ -68,9 +68,9 @@ const Catalog = () => {
 
   const transmissionTypes = [t('common.all'), "Automat", "Manual"];
   
-  // Generate year options dynamically
-  const currentYear = new Date().getFullYear();
-  const years = [t('common.all'), ...Array.from({length: 30}, (_, i) => (currentYear - i).toString())];
+  // Generate year options dynamically based on available cars
+  const availableYears = [...new Set(cars.map(car => car.year.toString()))].sort((a, b) => parseInt(b) - parseInt(a));
+  const years = [t('common.all'), ...availableYears];
 
   // Funcție pentru încărcarea datelor din Supabase
   useEffect(() => {
