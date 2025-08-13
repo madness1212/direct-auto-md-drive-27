@@ -140,6 +140,78 @@ export type Database = {
         }
         Relationships: []
       }
+      clients: {
+        Row: {
+          adresa: string
+          created_at: string
+          id: string
+          idnp: string
+          nume_cumparator: string
+          nume_prenume_cumparator: string
+          telefon: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          adresa: string
+          created_at?: string
+          id?: string
+          idnp: string
+          nume_cumparator: string
+          nume_prenume_cumparator: string
+          telefon: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          adresa?: string
+          created_at?: string
+          id?: string
+          idnp?: string
+          nume_cumparator?: string
+          nume_prenume_cumparator?: string
+          telefon?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      contracts: {
+        Row: {
+          car_id: string
+          client_id: string
+          contract_date: string
+          contract_number: string
+          created_at: string
+          id: string
+          template_path: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          car_id: string
+          client_id: string
+          contract_date: string
+          contract_number: string
+          created_at?: string
+          id?: string
+          template_path: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          car_id?: string
+          client_id?: string
+          contract_date?: string
+          contract_number?: string
+          created_at?: string
+          id?: string
+          template_path?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -241,7 +313,72 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      cars: {
+        Row: {
+          an_fabricatie: number | null
+          capacitate_motor: string | null
+          culoare: string | null
+          greutatea_masinii: number | null
+          id: string | null
+          kilometraj: number | null
+          marca: string | null
+          model_masina: string | null
+          numar_usi: number | null
+          pret: number | null
+          pret_in_cuvinte: string | null
+          pret_total: number | null
+          putere_motor: number | null
+          sarcina_incarcata: number | null
+          status: string | null
+          tip_caroserie: string | null
+          tractiune: string | null
+          transmisie: string | null
+          vin: string | null
+        }
+        Insert: {
+          an_fabricatie?: number | null
+          capacitate_motor?: string | null
+          culoare?: never
+          greutatea_masinii?: never
+          id?: string | null
+          kilometraj?: number | null
+          marca?: string | null
+          model_masina?: never
+          numar_usi?: never
+          pret?: number | null
+          pret_in_cuvinte?: never
+          pret_total?: number | null
+          putere_motor?: never
+          sarcina_incarcata?: never
+          status?: string | null
+          tip_caroserie?: string | null
+          tractiune?: string | null
+          transmisie?: string | null
+          vin?: never
+        }
+        Update: {
+          an_fabricatie?: number | null
+          capacitate_motor?: string | null
+          culoare?: never
+          greutatea_masinii?: never
+          id?: string | null
+          kilometraj?: number | null
+          marca?: string | null
+          model_masina?: never
+          numar_usi?: never
+          pret?: number | null
+          pret_in_cuvinte?: never
+          pret_total?: number | null
+          putere_motor?: never
+          sarcina_incarcata?: never
+          status?: string | null
+          tip_caroserie?: string | null
+          tractiune?: string | null
+          transmisie?: string | null
+          vin?: never
+        }
+        Relationships: []
+      }
     }
     Functions: {
       cleanup_expired_codes: {

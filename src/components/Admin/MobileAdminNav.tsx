@@ -10,13 +10,15 @@ import {
   TestTube, 
   BarChart3,
   Plus,
-  X
+  X,
+  FileText
 } from 'lucide-react';
 
 interface MobileAdminNavProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
   onAddNew: () => void;
+  onGenerateContract: () => void;
   pendingTestDrives?: number;
 }
 
@@ -24,6 +26,7 @@ export function MobileAdminNav({
   activeTab, 
   onTabChange, 
   onAddNew,
+  onGenerateContract,
   pendingTestDrives = 0 
 }: MobileAdminNavProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -83,28 +86,44 @@ export function MobileAdminNav({
               </SheetHeader>
               
               <div className="mt-6 space-y-2">
-                {menuItems.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <Button
-                      key={item.id}
-                      variant={activeTab === item.id ? "default" : "ghost"}
-                      className="w-full justify-start h-12"
-                      onClick={() => {
-                        onTabChange(item.id);
-                        setIsOpen(false);
-                      }}
-                    >
-                      <Icon className="h-5 w-5 mr-3" />
-                      <span className="flex-1 text-left">{item.label}</span>
-                      {item.badge && (
-                        <Badge variant="destructive" className="ml-2">
-                          {item.badge}
-                        </Badge>
-                      )}
-                    </Button>
-                  );
-                })}
+                 {menuItems.map((item) => {
+                   const Icon = item.icon;
+                   return (
+                     <Button
+                       key={item.id}
+                       variant={activeTab === item.id ? "default" : "ghost"}
+                       className="w-full justify-start h-12"
+                       onClick={() => {
+                         onTabChange(item.id);
+                         setIsOpen(false);
+                       }}
+                     >
+                       <Icon className="h-5 w-5 mr-3" />
+                       <span className="flex-1 text-left">{item.label}</span>
+                       {item.badge && (
+                         <Badge variant="destructive" className="ml-2">
+                           {item.badge}
+                         </Badge>
+                       )}
+                     </Button>
+                   );
+                 })}
+                 
+                 {/* Separator */}
+                 <div className="border-t my-4" />
+                 
+                 {/* Contract Generator */}
+                 <Button
+                   variant="outline"
+                   className="w-full justify-start h-12 border-blue-500 text-blue-600"
+                   onClick={() => {
+                     onGenerateContract();
+                     setIsOpen(false);
+                   }}
+                 >
+                   <FileText className="h-5 w-5 mr-3" />
+                   <span className="flex-1 text-left">Generează Contract</span>
+                 </Button>
               </div>
             </SheetContent>
           </Sheet>

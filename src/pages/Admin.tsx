@@ -6,6 +6,7 @@ import { TopOffersManager } from '@/components/Admin/TopOffersManager';
 import { TestDriveManager } from '@/components/Admin/TestDriveManager';
 import { NotificationBell } from '@/components/Admin/NotificationBell';
 import { MobileAdminNav } from '@/components/Admin/MobileAdminNav';
+import { ContractGenerator } from '@/components/Admin/ContractGenerator';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -24,7 +25,8 @@ import {
   EyeOff, 
   Copy,
   Filter,
-  RefreshCw 
+  RefreshCw,
+  FileText
 } from 'lucide-react';
 import {
   AlertDialog,
@@ -60,6 +62,7 @@ export default function Admin() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [activeTab, setActiveTab] = useState('listings');
   const [pendingTestDrives, setPendingTestDrives] = useState(0);
+  const [showContractGenerator, setShowContractGenerator] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -249,12 +252,27 @@ export default function Admin() {
     );
   }
 
+  if (showContractGenerator) {
+    return (
+      <AdminLayout>
+        <ContractGenerator
+          onClose={() => setShowContractGenerator(false)}
+          onContractGenerated={() => {
+            setShowContractGenerator(false);
+            fetchCarListings();
+          }}
+        />
+      </AdminLayout>
+    );
+  }
+
   return (
     <AdminLayout>
       <MobileAdminNav 
         activeTab={activeTab}
         onTabChange={setActiveTab}
         onAddNew={() => setShowForm(true)}
+        onGenerateContract={() => setShowContractGenerator(true)}
         pendingTestDrives={pendingTestDrives}
       />
       
@@ -269,6 +287,14 @@ export default function Admin() {
           </div>
           <div className="flex items-center gap-3">
             <NotificationBell onNotificationClick={handleNotificationClick} />
+            <Button 
+              onClick={() => setShowContractGenerator(true)} 
+              variant="outline"
+              className="border-blue-500 text-blue-600 hover:bg-blue-50"
+            >
+              <FileText className="h-4 w-4 mr-2" />
+              Generează Contract
+            </Button>
             <Button onClick={() => setShowForm(true)} className="bg-primary hover:bg-primary/90">
               <Plus className="h-4 w-4 mr-2" />
               Adaugă anunț nou
