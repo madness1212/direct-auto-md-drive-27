@@ -179,10 +179,19 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
     try {
       let clientData = selectedClient;
       
-      // Dacă folosim client nou, îl salvăm mai întâi
+      // Dacă folosim client nou, îl salvăm mai întâi cu validare
       if (useNewClient) {
         const { data: { user }, error: authError } = await supabase.auth.getUser();
         if (authError || !user) throw new Error('Nu ești autentificat');
+        
+        // Validare date client
+        if (!newClient.idnp || newClient.idnp.length !== 13 || !/^[0-9]{13}$/.test(newClient.idnp)) {
+          throw new Error('IDNP-ul trebuie să conțină exact 13 cifre');
+        }
+        
+        if (!newClient.telefon || !/^\+?[0-9\s\-\(\)]+$/.test(newClient.telefon)) {
+          throw new Error('Numărul de telefon are un format invalid');
+        }
         
         const { data: newClientData, error } = await supabase
           .from('clients')
@@ -588,7 +597,10 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
                     value={newClient.idnp}
                     onChange={(e) => setNewClient({...newClient, idnp: e.target.value})}
                     placeholder="Ex: 2001234567890"
+                    maxLength={13}
+                    pattern="[0-9]{13}"
                   />
+                  <p className="text-xs text-muted-foreground">IDNP trebuie să conțină exact 13 cifre</p>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="telefon">Telefon</Label>
