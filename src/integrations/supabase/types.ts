@@ -140,6 +140,36 @@ export type Database = {
         }
         Relationships: []
       }
+      client_access_logs: {
+        Row: {
+          accessed_at: string
+          action: string
+          client_id: string
+          id: string
+          ip_address: unknown | null
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          accessed_at?: string
+          action: string
+          client_id: string
+          id?: string
+          ip_address?: unknown | null
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          accessed_at?: string
+          action?: string
+          client_id?: string
+          id?: string
+          ip_address?: unknown | null
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       clients: {
         Row: {
           adresa: string
@@ -387,6 +417,18 @@ export type Database = {
       }
       is_admin: {
         Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      mask_sensitive_data: {
+        Args: { original_text: string; show_length?: number }
+        Returns: string
+      }
+      validate_idnp_format: {
+        Args: { idnp_value: string }
+        Returns: boolean
+      }
+      validate_phone_format: {
+        Args: { phone_value: string }
         Returns: boolean
       }
     }
