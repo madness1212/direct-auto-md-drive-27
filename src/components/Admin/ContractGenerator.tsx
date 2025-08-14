@@ -9,12 +9,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Upload, FileText, Download, Car, User, Search } from "lucide-react";
-import { Buffer } from 'buffer';
-
-// Polyfill pentru Buffer în browser
-if (typeof window !== 'undefined') {
-  window.Buffer = Buffer;
-}
 
 interface Car {
   id: string;
@@ -173,6 +167,9 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
 
       // Citim template-ul și populăm datele
       const templateBuffer = await template.arrayBuffer();
+      
+      // Importăm Buffer dinamic pentru compatibilitate browser
+      const { Buffer } = await import('buffer');
       
       // Pregătim datele pentru înlocuire
       const templateData: Record<string, any> = {
