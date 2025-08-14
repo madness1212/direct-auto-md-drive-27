@@ -142,6 +142,39 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
       return;
     }
 
+    // Validate new client data if using new client
+    if (useNewClient) {
+      // Validate IDNP format (13 digits)
+      if (!/^[0-9]{13}$/.test(newClient.idnp)) {
+        toast({
+          title: "IDNP invalid",
+          description: "IDNP-ul trebuie să conțină exact 13 cifre.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Validate phone format
+      if (!/^\+?[0-9\s\-\(\)]+$/.test(newClient.telefon)) {
+        toast({
+          title: "Telefon invalid",
+          description: "Numărul de telefon conține caractere invalide.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Validate required fields
+      if (!newClient.nume_cumparator || !newClient.nume_prenume_cumparator || !newClient.adresa) {
+        toast({
+          title: "Date incomplete",
+          description: "Te rog să completezi toate câmpurile obligatorii.",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
     setIsLoading(true);
     try {
       let clientData = selectedClient;
