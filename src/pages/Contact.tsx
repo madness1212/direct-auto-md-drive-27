@@ -132,7 +132,7 @@ const Contact = () => {
                 <div className="text-center text-muted-foreground">
                   <MapPin className="h-12 w-12 mx-auto mb-2 text-auto-green" />
                   <p className="font-semibold">Hartă Google Maps</p>
-                  <p className="text-sm">Chisinau, Grenbole175</p>
+                  <p className="text-sm">Chisinau, Grenoble175</p>
                   <Button 
                     size="sm" 
                     className="mt-2 bg-gradient-primary hover:bg-auto-green-dark"
