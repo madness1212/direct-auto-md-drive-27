@@ -69,7 +69,7 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
   const fetchCarsAndClients = async () => {
     try {
       const [carsResponse, clientsResponse] = await Promise.all([
-        supabase.from('cars').select('*').eq('status', 'active'),
+        supabase.from('cars').select('*').eq('status', 'valabil'),
         supabase.from('clients').select('*')
       ]);
 
@@ -204,18 +204,19 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
       }
 
       // Obținem user-ul curent pentru RLS
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-      if (authError || !user) throw new Error('Nu ești autentificat');
+      const { data: { user: currentUser }, error: currentAuthError } = await supabase.auth.getUser();
+      if (currentAuthError || !currentUser) throw new Error('Nu ești autentificat');
+
+      // Generăm numărul contractului
+      const contractNumber = `CT-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`;
 
       // Citim template-ul și populăm datele
       const templateBuffer = await template.arrayBuffer();
       
-      // Importăm Buffer dinamic pentru compatibilitate browser
-      const { Buffer } = await import('buffer');
-      
-      // Pregătim datele pentru înlocuire
+      // Pregătim datele pentru înlocuire - adăugăm numarContract
       const templateData: Record<string, any> = {
         "data": new Date().toLocaleDateString('ro-RO'),
+        "numarContract": contractNumber,
         "numeCumparator": clientData?.nume_cumparator || '',
         "modelMasina": `${selectedCar.marca || ''} ${selectedCar.model_masina || ''}`.trim(),
         "vin": selectedCar.vin || '',
@@ -245,14 +246,19 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
         template: new Uint8Array(templateBuffer),
         data: templateData,
         cmdDelimiter: ['#', '#'],
-        noSandbox: true
+        noSandbox: false, // Activăm sandbox-ul pentru siguranță
+        additionalJsContext: {
+          // Adăugăm funcții helper dacă sunt necesare
+          formatNumber: (num: number) => num?.toLocaleString() || '0',
+          formatDate: (date: string) => new Date(date).toLocaleDateString('ro-RO')
+        }
       });
 
-      // Generăm un număr unic pentru fișier
-      const fileNumber = `CT-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`;
+      // Generăm un număr unic pentru fișier (folosim contractNumber)
+      const fileNumber = contractNumber;
       
       // Încărcăm template-ul procesat în storage
-      const processedFileName = `${user.id}/contracts/${fileNumber}_contract.docx`;
+      const processedFileName = `${currentUser.id}/contracts/${fileNumber}_contract.docx`;
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('car-documents')
         .upload(processedFileName, new Uint8Array(processedDoc));
@@ -263,12 +269,12 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
       const { data: contractData, error: contractError } = await supabase
         .from('contracts')
         .insert([{
-          contract_number: fileNumber,
+          contract_number: contractNumber,
           car_id: selectedCar.id,
           client_id: clientData!.id,
           contract_date: new Date().toISOString().split('T')[0],
           template_path: uploadData.path,
-          user_id: user.id
+          user_id: currentUser.id
         }])
         .select()
         .single();
@@ -278,12 +284,12 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
       // Actualizăm statusul mașinii
       await supabase
         .from('car_listings')
-        .update({ status: 'vandut' })
+        .update({ status: 'sold' })
         .eq('id', selectedCar.id);
 
       toast({
         title: "Contract generat",
-        description: `Contractul ${fileNumber} a fost generat cu succes.`,
+        description: `Contractul ${contractNumber} a fost generat cu succes.`,
       });
 
       onContractGenerated();
@@ -410,9 +416,10 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
                   <strong>Date contract:</strong>
                   <ul className="list-disc list-inside text-muted-foreground mt-1">
                     <li>#data#</li>
+                    <li>#numarContract#</li>
                   </ul>
-                  <p className="text-xs text-amber-600 mt-1">
-                    Notă: #numarContract# nu va fi înlocuit - rămâne ca în șablon
+                  <p className="text-xs text-green-600 mt-1">
+                    Notă: Numărul contractului se generează automat
                   </p>
                 </div>
               </div>
