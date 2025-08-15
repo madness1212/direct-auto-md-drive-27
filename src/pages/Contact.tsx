@@ -53,7 +53,7 @@ const Contact = () => {
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Suntem aici să te ajutăm! Contactează-ne prin oricare dintre metodele de mai jos 
-            sau vizitează showroom-ul nostru pentru o experiență personalizată.
+            sau vizitează parcul auto pentru o experiență personalizată.
           </p>
         </div>
 
