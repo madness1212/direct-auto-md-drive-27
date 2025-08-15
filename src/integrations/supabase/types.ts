@@ -52,14 +52,17 @@ export type Database = {
           an_fabricatie: number
           capacitate_motor: string | null
           caroserie: string | null
+          categoria_vehicului: string | null
           coming_soon_position: number | null
           created_at: string
           created_by: string | null
+          culoare: string | null
           cutie_viteze: string
           descriere: string | null
           descriere_en: string | null
           descriere_ro: string | null
           descriere_ru: string | null
+          greutatea_masinii: number | null
           id: string
           images: string[] | null
           images_order: Json | null
@@ -70,26 +73,33 @@ export type Database = {
           marca: string
           model: string
           pret: number
+          pret_in_cuvinte: string | null
+          pret_total: number | null
           putere: string | null
+          sarcina_incarcata: number | null
           status: string | null
           tip_motor: string
           top_offer_position: number | null
           tractiune: string | null
           updated_at: string
           video_url: string | null
+          vin: string | null
         }
         Insert: {
           an_fabricatie: number
           capacitate_motor?: string | null
           caroserie?: string | null
+          categoria_vehicului?: string | null
           coming_soon_position?: number | null
           created_at?: string
           created_by?: string | null
+          culoare?: string | null
           cutie_viteze: string
           descriere?: string | null
           descriere_en?: string | null
           descriere_ro?: string | null
           descriere_ru?: string | null
+          greutatea_masinii?: number | null
           id?: string
           images?: string[] | null
           images_order?: Json | null
@@ -100,26 +110,33 @@ export type Database = {
           marca: string
           model: string
           pret: number
+          pret_in_cuvinte?: string | null
+          pret_total?: number | null
           putere?: string | null
+          sarcina_incarcata?: number | null
           status?: string | null
           tip_motor: string
           top_offer_position?: number | null
           tractiune?: string | null
           updated_at?: string
           video_url?: string | null
+          vin?: string | null
         }
         Update: {
           an_fabricatie?: number
           capacitate_motor?: string | null
           caroserie?: string | null
+          categoria_vehicului?: string | null
           coming_soon_position?: number | null
           created_at?: string
           created_by?: string | null
+          culoare?: string | null
           cutie_viteze?: string
           descriere?: string | null
           descriere_en?: string | null
           descriere_ro?: string | null
           descriere_ru?: string | null
+          greutatea_masinii?: number | null
           id?: string
           images?: string[] | null
           images_order?: Json | null
@@ -130,13 +147,17 @@ export type Database = {
           marca?: string
           model?: string
           pret?: number
+          pret_in_cuvinte?: string | null
+          pret_total?: number | null
           putere?: string | null
+          sarcina_incarcata?: number | null
           status?: string | null
           tip_motor?: string
           top_offer_position?: number | null
           tractiune?: string | null
           updated_at?: string
           video_url?: string | null
+          vin?: string | null
         }
         Relationships: []
       }
@@ -421,6 +442,10 @@ export type Database = {
       }
       mask_sensitive_data: {
         Args: { original_text: string; show_length?: number }
+        Returns: string
+      }
+      number_to_words_ro: {
+        Args: { num: number }
         Returns: string
       }
       validate_idnp_format: {

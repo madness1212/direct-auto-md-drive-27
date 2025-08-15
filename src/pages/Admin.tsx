@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { 
@@ -26,7 +27,8 @@ import {
   Copy,
   Filter,
   RefreshCw,
-  FileText
+  FileText,
+  Info
 } from 'lucide-react';
 import {
   AlertDialog,
@@ -437,69 +439,112 @@ export default function Admin() {
                             {car.pret.toLocaleString()} EUR
                           </TableCell>
                           <TableCell className="hidden md:table-cell">{getStatusBadge(car.status)}</TableCell>
-                          <TableCell>
-                            <div className="flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setEditingCar(car)}
-                                className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
-                              >
-                                <Edit className="h-4 w-4 lg:mr-1" />
-                                <span className="hidden lg:inline">Edit</span>
-                              </Button>
-                              
-                              <Select value={car.status} onValueChange={(newStatus) => handleToggleStatus(car.id, newStatus)}>
-                                <SelectTrigger className="min-h-12 min-w-20 lg:min-h-8 lg:min-w-24 text-xs">
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="active">Activ</SelectItem>
-                                  <SelectItem value="inactive">Inactiv</SelectItem>
-                                  <SelectItem value="sold">Vândut</SelectItem>
-                                </SelectContent>
-                              </Select>
-                              
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleCloneCar(car)}
-                                className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
-                              >
-                                <Copy className="h-4 w-4" />
-                              </Button>
-                              
-                              <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                  <Button 
-                                    variant="outline" 
-                                    size="sm"
-                                    className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
-                                  >
-                                    <Trash2 className="h-4 w-4" />
-                                  </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                  <AlertDialogHeader>
-                                    <AlertDialogTitle>Confirmare ștergere</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                      Ești sigur că vrei să ștergi anunțul pentru {car.marca} {car.model}? 
-                                      Această acțiune nu poate fi anulată.
-                                    </AlertDialogDescription>
-                                  </AlertDialogHeader>
-                                  <AlertDialogFooter>
-                                    <AlertDialogCancel>Anulează</AlertDialogCancel>
-                                    <AlertDialogAction 
-                                      onClick={() => handleDelete(car.id)}
-                                      className="bg-destructive hover:bg-destructive/90"
-                                    >
-                                      Șterge
-                                    </AlertDialogAction>
-                                  </AlertDialogFooter>
-                                </AlertDialogContent>
-                              </AlertDialog>
-                            </div>
-                          </TableCell>
+                           <TableCell>
+                             <div className="flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-2">
+                               <Button
+                                 variant="outline"
+                                 size="sm"
+                                 onClick={() => setEditingCar(car)}
+                                 className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
+                               >
+                                 <Edit className="h-4 w-4 lg:mr-1" />
+                                 <span className="hidden lg:inline">Edit</span>
+                               </Button>
+                               
+                               <Dialog>
+                                 <DialogTrigger asChild>
+                                   <Button
+                                     variant="outline"
+                                     size="sm"
+                                     className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
+                                   >
+                                     <Info className="h-4 w-4 lg:mr-1" />
+                                     <span className="hidden lg:inline">Info</span>
+                                   </Button>
+                                 </DialogTrigger>
+                                 <DialogContent className="max-w-2xl">
+                                   <DialogHeader>
+                                     <DialogTitle>Informații complete - {car.marca} {car.model}</DialogTitle>
+                                   </DialogHeader>
+                                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                                     <div className="space-y-2">
+                                       <h4 className="font-semibold text-sm">Informații de bază</h4>
+                                       <div className="text-sm space-y-1">
+                                         <p><span className="font-medium">Marcă:</span> {car.marca}</p>
+                                         <p><span className="font-medium">Model:</span> {car.model}</p>
+                                         <p><span className="font-medium">An fabricație:</span> {car.an_fabricatie}</p>
+                                         <p><span className="font-medium">Preț afișat:</span> {car.pret?.toLocaleString()} EUR</p>
+                                         <p><span className="font-medium">Status:</span> {car.status}</p>
+                                       </div>
+                                     </div>
+                                     
+                                     <div className="space-y-2">
+                                       <h4 className="font-semibold text-sm">Informații pentru contracte</h4>
+                                       <div className="text-sm space-y-1">
+                                         <p><span className="font-medium">VIN:</span> {(car as any).vin || 'Nu este specificat'}</p>
+                                         <p><span className="font-medium">Culoare:</span> {(car as any).culoare || 'Nu este specificată'}</p>
+                                         <p><span className="font-medium">Categoria vehicului:</span> {(car as any).categoria_vehicului || 'Nu este specificată'}</p>
+                                         <p><span className="font-medium">Greutatea mașinii:</span> {(car as any).greutatea_masinii ? `${(car as any).greutatea_masinii} kg` : 'Nu este specificată'}</p>
+                                         <p><span className="font-medium">Sarcina încărcată:</span> {(car as any).sarcina_incarcata ? `${(car as any).sarcina_incarcata} kg` : 'Nu este specificată'}</p>
+                                         <p><span className="font-medium">Preț total contract:</span> {(car as any).pret_total ? `${(car as any).pret_total?.toLocaleString()} EUR` : 'Nu este specificat'}</p>
+                                         <p><span className="font-medium">Preț în cuvinte:</span> {(car as any).pret_in_cuvinte || 'Se va genera automat'}</p>
+                                       </div>
+                                     </div>
+                                   </div>
+                                 </DialogContent>
+                               </Dialog>
+                               
+                               <Select value={car.status} onValueChange={(newStatus) => handleToggleStatus(car.id, newStatus)}>
+                                 <SelectTrigger className="min-h-12 min-w-20 lg:min-h-8 lg:min-w-24 text-xs">
+                                   <SelectValue />
+                                 </SelectTrigger>
+                                 <SelectContent>
+                                   <SelectItem value="active">Activ</SelectItem>
+                                   <SelectItem value="inactive">Inactiv</SelectItem>
+                                   <SelectItem value="sold">Vândut</SelectItem>
+                                 </SelectContent>
+                               </Select>
+                               
+                               <Button
+                                 variant="outline"
+                                 size="sm"
+                                 onClick={() => handleCloneCar(car)}
+                                 className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
+                               >
+                                 <Copy className="h-4 w-4" />
+                               </Button>
+                               
+                               <AlertDialog>
+                                 <AlertDialogTrigger asChild>
+                                   <Button 
+                                     variant="outline" 
+                                     size="sm"
+                                     className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
+                                   >
+                                     <Trash2 className="h-4 w-4" />
+                                   </Button>
+                                 </AlertDialogTrigger>
+                                 <AlertDialogContent>
+                                   <AlertDialogHeader>
+                                     <AlertDialogTitle>Confirmare ștergere</AlertDialogTitle>
+                                     <AlertDialogDescription>
+                                       Ești sigur că vrei să ștergi anunțul pentru {car.marca} {car.model}? 
+                                       Această acțiune nu poate fi anulată.
+                                     </AlertDialogDescription>
+                                   </AlertDialogHeader>
+                                   <AlertDialogFooter>
+                                     <AlertDialogCancel>Anulează</AlertDialogCancel>
+                                     <AlertDialogAction 
+                                       onClick={() => handleDelete(car.id)}
+                                       className="bg-destructive hover:bg-destructive/90"
+                                     >
+                                       Șterge
+                                     </AlertDialogAction>
+                                   </AlertDialogFooter>
+                                 </AlertDialogContent>
+                               </AlertDialog>
+                             </div>
+                           </TableCell>
                         </TableRow>
                       ))
                     )}
