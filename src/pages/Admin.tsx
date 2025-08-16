@@ -438,30 +438,44 @@ export default function Admin() {
                           <TableCell className="font-medium hidden lg:table-cell">
                             {car.pret.toLocaleString()} EUR
                           </TableCell>
-                          <TableCell className="hidden md:table-cell">{getStatusBadge(car.status)}</TableCell>
+                           <TableCell className="hidden md:table-cell">
+                             <div className="space-y-2">
+                               {getStatusBadge(car.status)}
+                               <Select value={car.status} onValueChange={(newStatus) => handleToggleStatus(car.id, newStatus)}>
+                                 <SelectTrigger className="w-full text-xs">
+                                   <SelectValue />
+                                 </SelectTrigger>
+                                 <SelectContent>
+                                   <SelectItem value="active">Activ</SelectItem>
+                                   <SelectItem value="inactive">Inactiv</SelectItem>
+                                   <SelectItem value="sold">Vândut</SelectItem>
+                                 </SelectContent>
+                               </Select>
+                             </div>
+                           </TableCell>
                            <TableCell>
                              <div className="flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-2">
                                <Button
                                  variant="outline"
                                  size="sm"
                                  onClick={() => setEditingCar(car)}
-                                 className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
+                                 className="w-full lg:w-20 h-10 text-sm font-medium"
                                >
                                  <Edit className="h-4 w-4 lg:mr-1" />
-                                 <span className="hidden lg:inline">Edit</span>
+                                 <span className="lg:inline">Editare</span>
                                </Button>
                                
-                               <Dialog>
-                                 <DialogTrigger asChild>
-                                   <Button
-                                     variant="outline"
-                                     size="sm"
-                                     className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
-                                   >
-                                     <Info className="h-4 w-4 lg:mr-1" />
-                                     <span className="hidden lg:inline">Info</span>
-                                   </Button>
-                                 </DialogTrigger>
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className="w-full lg:w-20 h-10 text-sm font-medium"
+                                    >
+                                      <Info className="h-4 w-4 lg:mr-1" />
+                                      <span className="lg:inline">Info</span>
+                                    </Button>
+                                  </DialogTrigger>
                                  <DialogContent className="max-w-2xl">
                                    <DialogHeader>
                                      <DialogTitle>Informații complete - {car.marca} {car.model}</DialogTitle>

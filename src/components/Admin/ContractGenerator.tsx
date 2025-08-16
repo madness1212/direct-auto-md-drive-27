@@ -12,24 +12,24 @@ import { ArrowLeft, Upload, FileText, Download, Car, User, Search } from "lucide
 
 interface Car {
   id: string;
-  model_masina: string;
+  model: string;
   marca?: string;
-  vin: string;
+  vin?: string;
   an_fabricatie: number;
-  culoare: string;
-  tip_caroserie: string;
-  capacitate_motor: string;
+  culoare?: string;
+  caroserie?: string;
+  capacitate_motor?: string;
   greutatea_masinii?: number;
   sarcina_incarcata?: number;
   pret?: number;
-  pret_total: number;
+  pret_total?: number;
   pret_in_cuvinte?: string;
   status: string;
-  transmisie?: string;
+  cutie_viteze?: string;
   kilometraj?: number;
-  putere_motor?: number;
+  putere?: string;
   tractiune?: string;
-  numar_usi?: number;
+  categoria_vehicului?: string;
 }
 
 interface Client {
@@ -69,7 +69,7 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
   const fetchCarsAndClients = async () => {
     try {
       const [carsResponse, clientsResponse] = await Promise.all([
-        supabase.from('cars').select('*').eq('status', 'valabil'),
+        supabase.from('car_listings').select('*').eq('status', 'active'),
         supabase.from('clients').select('*')
       ]);
 
@@ -218,11 +218,11 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
         "data": new Date().toLocaleDateString('ro-RO'),
         "numarContract": contractNumber,
         "numeCumparator": clientData?.nume_cumparator || '',
-        "modelMasina": `${selectedCar.marca || ''} ${selectedCar.model_masina || ''}`.trim(),
+        "modelMasina": `${selectedCar.marca || ''} ${selectedCar.model || ''}`.trim(),
         "vin": selectedCar.vin || '',
         "anFabricatie": selectedCar.an_fabricatie?.toString() || '',
         "culoare": selectedCar.culoare || '',
-        "categoriaVehiculului": selectedCar.tip_caroserie || '',
+        "categoriaVehiculului": selectedCar.caroserie || selectedCar.categoria_vehicului || '',
         "capacitateMotor": selectedCar.capacitate_motor || '',
         "greutateaMasinii": selectedCar.greutatea_masinii?.toString() || '',
         "sarcinaIncarcata": selectedCar.sarcina_incarcata?.toString() || '',
@@ -465,7 +465,7 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
                 {(() => {
                   const filteredCars = cars.filter(car => 
                     (car.marca?.toLowerCase().includes(carSearchTerm.toLowerCase()) || false) ||
-                    car.model_masina.toLowerCase().includes(carSearchTerm.toLowerCase())
+                    car.model.toLowerCase().includes(carSearchTerm.toLowerCase())
                   );
                   
                   return filteredCars.length === 0 ? (
@@ -487,13 +487,13 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
                           onClick={() => setSelectedCar(car)}
                         >
                           <div className="flex justify-between items-start mb-2">
-                            <h3 className="font-semibold">{car.marca ? `${car.marca} ${car.model_masina}` : car.model_masina}</h3>
+                            <h3 className="font-semibold">{car.marca ? `${car.marca} ${car.model}` : car.model}</h3>
                             {getStatusBadge(car.status)}
                           </div>
                           <div className="space-y-1 text-sm text-muted-foreground">
-                            <p>VIN: {car.vin}</p>
-                            <p>An: {car.an_fabricatie} • {car.culoare}</p>
-                            <p>Preț: {car.pret_total?.toLocaleString()} EUR</p>
+                            <p>VIN: {car.vin || 'Nu este specificat'}</p>
+                            <p>An: {car.an_fabricatie} • {car.culoare || 'Nu este specificată'}</p>
+                            <p>Preț: {car.pret_total?.toLocaleString() || car.pret?.toLocaleString()} EUR</p>
                           </div>
                         </div>
                       ))}
@@ -665,14 +665,14 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
                 <h4 className="font-medium">Date Mașină:</h4>
                 {selectedCar && (
                   <div className="bg-muted/50 p-4 rounded-lg text-sm space-y-1">
-                    <p><strong>Model:</strong> {selectedCar.model_masina}</p>
-                    <p><strong>VIN:</strong> {selectedCar.vin}</p>
+                    <p><strong>Model:</strong> {selectedCar.model}</p>
+                    <p><strong>VIN:</strong> {selectedCar.vin || 'Nu este specificat'}</p>
                     <p><strong>An fabricație:</strong> {selectedCar.an_fabricatie}</p>
-                    <p><strong>Culoare:</strong> {selectedCar.culoare}</p>
-                    <p><strong>Tip caroserie:</strong> {selectedCar.tip_caroserie}</p>
-                    <p><strong>Capacitate motor:</strong> {selectedCar.capacitate_motor}</p>
-                    <p><strong>Greutate:</strong> {selectedCar.greutatea_masinii} kg</p>
-                    <p><strong>Preț:</strong> {selectedCar.pret_total?.toLocaleString()} EUR</p>
+                    <p><strong>Culoare:</strong> {selectedCar.culoare || 'Nu este specificată'}</p>
+                    <p><strong>Tip caroserie:</strong> {selectedCar.caroserie || selectedCar.categoria_vehicului || 'Nu este specificat'}</p>
+                    <p><strong>Capacitate motor:</strong> {selectedCar.capacitate_motor || 'Nu este specificată'}</p>
+                    <p><strong>Greutate:</strong> {selectedCar.greutatea_masinii ? `${selectedCar.greutatea_masinii} kg` : 'Nu este specificată'}</p>
+                    <p><strong>Preț:</strong> {selectedCar.pret_total?.toLocaleString() || selectedCar.pret?.toLocaleString()} EUR</p>
                   </div>
                 )}
               </div>
