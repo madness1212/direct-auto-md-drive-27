@@ -7,6 +7,7 @@ import { TestDriveManager } from '@/components/Admin/TestDriveManager';
 import { NotificationBell } from '@/components/Admin/NotificationBell';
 import { MobileAdminNav } from '@/components/Admin/MobileAdminNav';
 import { ContractGenerator } from '@/components/Admin/ContractGenerator';
+import { ContractsManager } from '@/components/Admin/ContractsManager';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -306,7 +307,7 @@ export default function Admin() {
 
         {/* Tabs pentru diferite secțiuni */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-5 gap-1">
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-6 gap-1">
             <TabsTrigger value="listings" className="text-xs lg:text-sm">
               <span className="lg:hidden">Anunțuri</span>
               <span className="hidden lg:inline">Anunțuri</span>
@@ -321,6 +322,10 @@ export default function Admin() {
             <TabsTrigger value="testdrive" className="text-xs lg:text-sm">
               <span className="lg:hidden">Test Drive</span>
               <span className="hidden lg:inline">Test Drive</span>
+            </TabsTrigger>
+            <TabsTrigger value="contracts" className="text-xs lg:text-sm">
+              <span className="lg:hidden">Contracte</span>
+              <span className="hidden lg:inline">Contracte</span>
             </TabsTrigger>
             <TabsTrigger value="stats" className="text-xs lg:text-sm hidden lg:flex">
               Statistici
@@ -565,6 +570,10 @@ export default function Admin() {
 
           <TabsContent value="testdrive">
             <TestDriveManager />
+          </TabsContent>
+
+          <TabsContent value="contracts">
+            <ContractsManager />
           </TabsContent>
 
           <TabsContent value="stats" className="space-y-6">
