@@ -1,6 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { createReport } from 'https://esm.sh/docx-templates@4.14.1';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -128,17 +127,16 @@ serve(async (req) => {
     // Decode base64 template file
     const templateBuffer = Uint8Array.from(atob(templateFile), c => c.charCodeAt(0));
 
-    // Process template with docx-templates
-    const processedDoc = await createReport({
-      template: templateBuffer,
-      data: templateData,
-      cmdDelimiter: ['#', '#'],
-      noSandbox: false,
-      additionalJsContext: {
-        formatNumber: (num: number) => num?.toLocaleString() || '0',
-        formatDate: (date: string) => new Date(date).toLocaleDateString('ro-RO')
-      }
+    // Simple placeholder replacement for DOCX
+    let docContent = new TextDecoder().decode(templateBuffer);
+    
+    // Replace placeholders in the format #{placeholder}
+    Object.entries(templateData).forEach(([key, value]) => {
+      const placeholder = `#{${key}}`;
+      docContent = docContent.replaceAll(placeholder, String(value || ''));
     });
+
+    const processedDoc = new TextEncoder().encode(docContent);
 
     // Upload processed document to storage
     const processedFileName = `${user.id}/contracts/${contractNumber}_contract.docx`;
