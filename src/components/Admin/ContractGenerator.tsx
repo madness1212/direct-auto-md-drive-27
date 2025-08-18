@@ -177,119 +177,36 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
 
     setIsLoading(true);
     try {
-      let clientData = selectedClient;
-      
-      // Dacă folosim client nou, îl salvăm mai întâi cu validare
-      if (useNewClient) {
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
-        if (authError || !user) throw new Error('Nu ești autentificat');
-        
-        // Validare date client
-        if (!newClient.idnp || newClient.idnp.length !== 13 || !/^[0-9]{13}$/.test(newClient.idnp)) {
-          throw new Error('IDNP-ul trebuie să conțină exact 13 cifre');
-        }
-        
-        if (!newClient.telefon || !/^\+?[0-9\s\-\(\)]+$/.test(newClient.telefon)) {
-          throw new Error('Numărul de telefon are un format invalid');
-        }
-        
-        const { data: newClientData, error } = await supabase
-          .from('clients')
-          .insert([{ ...newClient, user_id: user.id }])
-          .select()
-          .single();
-        
-        if (error) throw error;
-        clientData = newClientData;
-      }
+      // Get current user for authentication
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError || !user) throw new Error('Nu ești autentificat');
 
-      // Obținem user-ul curent pentru RLS
-      const { data: { user: currentUser }, error: currentAuthError } = await supabase.auth.getUser();
-      if (currentAuthError || !currentUser) throw new Error('Nu ești autentificat');
-
-      // Generăm numărul contractului
-      const contractNumber = `CT-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`;
-
-      // Citim template-ul și populăm datele
+      // Convert template file to base64
       const templateBuffer = await template.arrayBuffer();
-      
-      // Pregătim datele pentru înlocuire - adăugăm numarContract
-      const templateData: Record<string, any> = {
-        "data": new Date().toLocaleDateString('ro-RO'),
-        "numarContract": contractNumber,
-        "numeCumparator": clientData?.nume_cumparator || '',
-        "modelMasina": `${selectedCar.marca || ''} ${selectedCar.model || ''}`.trim(),
-        "vin": selectedCar.vin || '',
-        "anFabricatie": selectedCar.an_fabricatie?.toString() || '',
-        "culoare": selectedCar.culoare || '',
-        "categoriaVehiculului": selectedCar.caroserie || selectedCar.categoria_vehicului || '',
-        "capacitateMotor": selectedCar.capacitate_motor || '',
-        "greutateaMasinii": selectedCar.greutatea_masinii?.toString() || '',
-        "sarcinaIncarcata": selectedCar.sarcina_incarcata?.toString() || '',
-        "pret": selectedCar.pret?.toString() || '',
-        "pretTotal": selectedCar.pret_total?.toString() || '',
-        "pretInCuvinte": selectedCar.pret_in_cuvinte || '',
-        "pret2": selectedCar.pret?.toString() || '',
-        "pretInCuvinte2": selectedCar.pret_in_cuvinte || '',
-        "numePrenumeCumparator": clientData?.nume_prenume_cumparator || '',
-        "idnp": clientData?.idnp || '',
-        "adresa": clientData?.adresa || '',
-        "tel": clientData?.telefon || '',
-        "numePrenume": clientData?.nume_prenume_cumparator || ''
+      const templateBase64 = btoa(String.fromCharCode(...new Uint8Array(templateBuffer)));
+
+      // Prepare request data for edge function
+      const requestData = {
+        carId: selectedCar.id,
+        clientId: useNewClient ? undefined : selectedClient?.id,
+        newClient: useNewClient ? newClient : undefined,
+        templateFile: templateBase64
       };
 
-      // Importăm createReport dinamic
-      const { createReport } = await import('docx-templates');
-      
-      // Procesăm template-ul cu delimitatori standard
-      const processedDoc = await createReport({
-        template: new Uint8Array(templateBuffer),
-        data: templateData,
-        cmdDelimiter: ['#', '#'],
-        noSandbox: false, // Activăm sandbox-ul pentru siguranță
-        additionalJsContext: {
-          // Adăugăm funcții helper dacă sunt necesare
-          formatNumber: (num: number) => num?.toLocaleString() || '0',
-          formatDate: (date: string) => new Date(date).toLocaleDateString('ro-RO')
-        }
+      // Call the edge function to generate contract
+      const { data, error } = await supabase.functions.invoke('generate-contract', {
+        body: requestData
       });
 
-      // Generăm un număr unic pentru fișier (folosim contractNumber)
-      const fileNumber = contractNumber;
-      
-      // Încărcăm template-ul procesat în storage
-      const processedFileName = `${currentUser.id}/contracts/${fileNumber}_contract.docx`;
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('car-documents')
-        .upload(processedFileName, new Uint8Array(processedDoc));
+      if (error) throw error;
 
-      if (uploadError) throw uploadError;
-
-      // Salvăm contractul în baza de date
-      const { data: contractData, error: contractError } = await supabase
-        .from('contracts')
-        .insert([{
-          contract_number: contractNumber,
-          car_id: selectedCar.id,
-          client_id: clientData!.id,
-          contract_date: new Date().toISOString().split('T')[0],
-          template_path: uploadData.path,
-          user_id: currentUser.id
-        }])
-        .select()
-        .single();
-
-      if (contractError) throw contractError;
-
-      // Actualizăm statusul mașinii
-      await supabase
-        .from('car_listings')
-        .update({ status: 'sold' })
-        .eq('id', selectedCar.id);
+      if (!data.success) {
+        throw new Error(data.error || 'Contract generation failed');
+      }
 
       toast({
         title: "Contract generat",
-        description: `Contractul ${contractNumber} a fost generat cu succes.`,
+        description: data.message,
       });
 
       onContractGenerated();
@@ -298,7 +215,7 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
       console.error('Eroare la generarea contractului:', error);
       toast({
         title: "Eroare",
-        description: "A apărut o eroare la generarea contractului.",
+        description: `Eroare la generarea contractului: ${error.message}`,
         variant: "destructive",
       });
     } finally {
