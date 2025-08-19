@@ -98,7 +98,7 @@ const CatalogHome = () => {
           isTopOffer: car.is_top_offer || false,
           isComingSoon: car.is_coming_soon || false,
           rating: 4.5,
-          phone: "+373 69 123 456"
+          phone: "+373 696 88 999"
         })) || [];
         
         setCars(transformedCars);
