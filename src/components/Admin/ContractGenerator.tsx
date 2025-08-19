@@ -47,7 +47,7 @@ interface ContractGeneratorProps {
 }
 
 export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGeneratorProps) => {
-  const [step, setStep] = useState<'template' | 'select' | 'client' | 'generate'>('template');
+  const [step, setStep] = useState<'template' | 'select' | 'client' | 'extraInfo' | 'generate'>('template');
   const [template, setTemplate] = useState<File | null>(null);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
@@ -57,6 +57,15 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
     idnp: '',
     adresa: '',
     telefon: ''
+  });
+  const [extraInfo, setExtraInfo] = useState({
+    vin: '',
+    culoare: '',
+    categoria_vehicului: '',
+    greutatea_masinii: '',
+    sarcina_incarcata: '',
+    pret_total: '',
+    descriere: ''
   });
   const [cars, setCars] = useState<Car[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
@@ -132,6 +141,14 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
     setStep('client');
   };
 
+  const proceedToExtraInfo = () => {
+    setStep('extraInfo');
+  };
+
+  const proceedToGenerate = () => {
+    setStep('generate');
+  };
+
   const generateContract = async () => {
     if (!selectedCar || (!selectedClient && !useNewClient) || !template) {
       toast({
@@ -185,12 +202,22 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
       const templateBuffer = await template.arrayBuffer();
       const templateBase64 = btoa(String.fromCharCode(...new Uint8Array(templateBuffer)));
 
+      // Merge extra info with selected car data
+      const updatedCarData = {
+        ...selectedCar,
+        ...extraInfo,
+        pret_total: extraInfo.pret_total ? parseInt(extraInfo.pret_total) : selectedCar.pret,
+        greutatea_masinii: extraInfo.greutatea_masinii ? parseInt(extraInfo.greutatea_masinii) : undefined,
+        sarcina_incarcata: extraInfo.sarcina_incarcata ? parseInt(extraInfo.sarcina_incarcata) : undefined
+      };
+
       // Prepare request data for edge function
       const requestData = {
         carId: selectedCar.id,
         clientId: useNewClient ? undefined : selectedClient?.id,
         newClient: useNewClient ? newClient : undefined,
-        templateFile: templateBase64
+        templateFile: templateBase64,
+        extraInfo: updatedCarData
       };
 
       // Call the edge function to generate contract
@@ -249,16 +276,16 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
 
       {/* Steps */}
       <div className="flex items-center gap-4 mb-8">
-        {['template', 'select', 'client', 'generate'].map((s, index) => (
+        {['template', 'select', 'client', 'extraInfo', 'generate'].map((s, index) => (
           <div key={s} className="flex items-center">
             <div className={`
               w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
               ${step === s ? 'bg-primary text-primary-foreground' : 
-                ['template', 'select', 'client', 'generate'].indexOf(step) > index ? 'bg-green-500 text-white' : 'bg-muted text-muted-foreground'}
+                ['template', 'select', 'client', 'extraInfo', 'generate'].indexOf(step) > index ? 'bg-green-500 text-white' : 'bg-muted text-muted-foreground'}
             `}>
               {index + 1}
             </div>
-            {index < 3 && <div className="w-8 h-px bg-muted mx-2" />}
+            {index < 4 && <div className="w-8 h-px bg-muted mx-2" />}
           </div>
         ))}
       </div>
@@ -552,10 +579,152 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
                 Înapoi
               </Button>
               <Button 
-                onClick={() => setStep('generate')} 
+                onClick={proceedToExtraInfo} 
                 disabled={!selectedClient && (!useNewClient || !newClient.nume_cumparator)}
                 className="flex-1"
               >
+                Continuă cu informațiile extra
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Step 4: Extra Information */}
+      {step === 'extraInfo' && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              Informații Extra pentru Contract
+            </CardTitle>
+            <CardDescription>
+              Completează informațiile adiționale necesare pentru contract
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="bg-muted/50 p-4 rounded-lg mb-4">
+              <h3 className="font-medium text-foreground mb-2">Informații adiționale pentru contracte</h3>
+              <p className="text-sm text-muted-foreground">
+                Aceste informații vor fi folosite pentru generarea automată a contractelor și vor completa datele mașinii.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="vin">VIN (Codul mașinii)</Label>
+                <Input
+                  id="vin"
+                  value={extraInfo.vin}
+                  onChange={(e) => setExtraInfo({...extraInfo, vin: e.target.value})}
+                  placeholder="ex: WVWZZZ1JZ2W386752"
+                  className="font-mono"
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Codul de identificare al vehiculului (17 caractere)
+                </p>
+              </div>
+              
+              <div>
+                <Label htmlFor="culoare">Culoare</Label>
+                <Input
+                  id="culoare"
+                  value={extraInfo.culoare}
+                  onChange={(e) => setExtraInfo({...extraInfo, culoare: e.target.value})}
+                  placeholder="ex: Negru metallic, Alb perlat"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="categoria_vehicului">Categoria vehicului</Label>
+                <Select onValueChange={(value) => setExtraInfo({...extraInfo, categoria_vehicului: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selectează categoria" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="M1">M1 - Autoturisme până la 8 locuri</SelectItem>
+                    <SelectItem value="M2">M2 - Autobuze până la 5 tone</SelectItem>
+                    <SelectItem value="M3">M3 - Autobuze peste 5 tone</SelectItem>
+                    <SelectItem value="N1">N1 - Autovehicule marfă până la 3.5 tone</SelectItem>
+                    <SelectItem value="N2">N2 - Autovehicule marfă 3.5-12 tone</SelectItem>
+                    <SelectItem value="N3">N3 - Autovehicule marfă peste 12 tone</SelectItem>
+                    <SelectItem value="O1">O1 - Remorci până la 0.75 tone</SelectItem>
+                    <SelectItem value="O2">O2 - Remorci 0.75-3.5 tone</SelectItem>
+                    <SelectItem value="O3">O3 - Remorci 3.5-10 tone</SelectItem>
+                    <SelectItem value="O4">O4 - Remorci peste 10 tone</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <Label htmlFor="greutatea_masinii">Greutatea mașinii (kg)</Label>
+                <Input
+                  id="greutatea_masinii"
+                  type="number"
+                  min="0"
+                  value={extraInfo.greutatea_masinii}
+                  onChange={(e) => setExtraInfo({...extraInfo, greutatea_masinii: e.target.value})}
+                  placeholder="ex: 1450"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="sarcina_incarcata">Sarcina încărcată (kg)</Label>
+                <Input
+                  id="sarcina_incarcata"
+                  type="number"
+                  min="0"
+                  value={extraInfo.sarcina_incarcata}
+                  onChange={(e) => setExtraInfo({...extraInfo, sarcina_incarcata: e.target.value})}
+                  placeholder="ex: 500"
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="pret_total">Preț total pentru contract (EUR)</Label>
+                <Input
+                  id="pret_total"
+                  type="number"
+                  min="0"
+                  value={extraInfo.pret_total}
+                  onChange={(e) => setExtraInfo({...extraInfo, pret_total: e.target.value})}
+                  placeholder="ex: 15000"
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Prețul va fi convertit automat în cuvinte pentru contract
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="descriere">Descriere suplimentară</Label>
+              <Textarea
+                id="descriere"
+                value={extraInfo.descriere}
+                onChange={(e) => setExtraInfo({...extraInfo, descriere: e.target.value})}
+                placeholder="Descrierea suplimentară a vehiculului pentru contract..."
+                rows={3}
+              />
+            </div>
+
+            {extraInfo.pret_total && (
+              <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
+                <Label className="text-green-800 font-medium">Preț în cuvinte (va fi generat automat):</Label>
+                <p className="text-green-700 mt-1 font-mono">
+                  {extraInfo.pret_total} EUR (va fi generat automat în română)
+                </p>
+              </div>
+            )}
+
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setStep('client')}>
+                Înapoi
+              </Button>
+              <Button onClick={proceedToGenerate} className="flex-1">
                 Continuă cu generarea
               </Button>
             </div>
@@ -563,7 +732,7 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
         </Card>
       )}
 
-      {/* Step 4: Generate */}
+      {/* Step 5: Generate */}
       {step === 'generate' && (
         <Card>
           <CardHeader>
@@ -609,7 +778,7 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
             </div>
 
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => setStep('client')}>
+              <Button variant="outline" onClick={() => setStep('extraInfo')}>
                 Înapoi
               </Button>
               <Button 

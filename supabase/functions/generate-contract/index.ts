@@ -17,7 +17,7 @@ async function processDocxFile(templateBuffer: Uint8Array, replacements: Record<
       
       // Replace placeholders in the XML content
       for (const [key, value] of Object.entries(replacements)) {
-        const placeholder = `#{${key}}`;
+        const placeholder = `#${key}#`;
         processedXml = processedXml.replaceAll(placeholder, String(value || ''));
       }
       
@@ -32,7 +32,7 @@ async function processDocxFile(templateBuffer: Uint8Array, replacements: Record<
       if (headerXml) {
         let processedHeaderXml = headerXml;
         for (const [key, value] of Object.entries(replacements)) {
-          const placeholder = `#{${key}}`;
+          const placeholder = `#${key}#`;
           processedHeaderXml = processedHeaderXml.replaceAll(placeholder, String(value || ''));
         }
         zip.file(headerFile, processedHeaderXml);
@@ -46,7 +46,7 @@ async function processDocxFile(templateBuffer: Uint8Array, replacements: Record<
       if (footerXml) {
         let processedFooterXml = footerXml;
         for (const [key, value] of Object.entries(replacements)) {
-          const placeholder = `#{${key}}`;
+          const placeholder = `#${key}#`;
           processedFooterXml = processedFooterXml.replaceAll(placeholder, String(value || ''));
         }
         zip.file(footerFile, processedFooterXml);
@@ -83,6 +83,7 @@ interface ContractGenerationRequest {
     telefon: string;
   };
   templateFile: string; // base64 encoded DOCX file
+  extraInfo?: any; // Additional car information for contract
 }
 
 serve(async (req) => {
@@ -107,7 +108,7 @@ serve(async (req) => {
       throw new Error('Unauthorized');
     }
 
-    const { carId, clientId, newClient, templateFile }: ContractGenerationRequest = await req.json();
+    const { carId, clientId, newClient, templateFile, extraInfo }: ContractGenerationRequest = await req.json();
 
     // Fetch car data
     const { data: carData, error: carError } = await supabaseClient
@@ -165,29 +166,53 @@ serve(async (req) => {
     // Generate contract number
     const contractNumber = `CT-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`;
 
+    // Merge extra info with car data if provided
+    const finalCarData = extraInfo ? { ...carData, ...extraInfo } : carData;
+
     // Prepare template data
     const templateData: Record<string, any> = {
       "data": new Date().toLocaleDateString('ro-RO'),
       "numarContract": contractNumber,
       "numeCumparator": clientData.nume_cumparator || '',
-      "modelMasina": `${carData.marca || ''} ${carData.model || ''}`.trim(),
-      "vin": carData.vin || '',
-      "anFabricatie": carData.an_fabricatie?.toString() || '',
-      "culoare": carData.culoare || '',
-      "categoriaVehiculului": carData.caroserie || carData.categoria_vehicului || '',
-      "capacitateMotor": carData.capacitate_motor || '',
-      "greutateaMasinii": carData.greutatea_masinii?.toString() || '',
-      "sarcinaIncarcata": carData.sarcina_incarcata?.toString() || '',
-      "pret": carData.pret?.toString() || '',
-      "pretTotal": carData.pret_total?.toString() || '',
-      "pretInCuvinte": carData.pret_in_cuvinte || '',
-      "pret2": carData.pret?.toString() || '',
-      "pretInCuvinte2": carData.pret_in_cuvinte || '',
       "numePrenumeCumparator": clientData.nume_prenume_cumparator || '',
+      "numePrenume": clientData.nume_prenume_cumparator || '',
       "idnp": clientData.idnp || '',
       "adresa": clientData.adresa || '',
       "tel": clientData.telefon || '',
-      "numePrenume": clientData.nume_prenume_cumparator || ''
+      "telefon": clientData.telefon || '',
+      
+      // Car information
+      "marca": finalCarData.marca || '',
+      "model": finalCarData.model || '',
+      "modelMasina": `${finalCarData.marca || ''} ${finalCarData.model || ''}`.trim(),
+      "anFabricatie": finalCarData.an_fabricatie?.toString() || '',
+      "kilometraj": finalCarData.kilometraj?.toString() || '',
+      "tipMotor": finalCarData.tip_motor || '',
+      "cutieViteze": finalCarData.cutie_viteze || '',
+      "tractiune": finalCarData.tractiune || '',
+      "putere": finalCarData.putere || '',
+      "caroserie": finalCarData.caroserie || '',
+      
+      // Additional contract information
+      "vin": finalCarData.vin || '',
+      "culoare": finalCarData.culoare || '',
+      "categoriaVehiculului": finalCarData.categoria_vehicului || finalCarData.caroserie || '',
+      "capacitateMotor": finalCarData.capacitate_motor || '',
+      "greutateaMasinii": finalCarData.greutatea_masinii?.toString() || '',
+      "sarcinaIncarcata": finalCarData.sarcina_incarcata?.toString() || '',
+      
+      // Pricing information
+      "pret": finalCarData.pret?.toString() || '',
+      "pretTotal": finalCarData.pret_total?.toString() || finalCarData.pret?.toString() || '',
+      "pretInCuvinte": finalCarData.pret_in_cuvinte || '',
+      "pret2": finalCarData.pret?.toString() || '',
+      "pretInCuvinte2": finalCarData.pret_in_cuvinte || '',
+      
+      // Descriptions
+      "descriere": finalCarData.descriere || '',
+      "descriereRo": finalCarData.descriere_ro || '',
+      "descriereRu": finalCarData.descriere_ru || '',
+      "descriereEn": finalCarData.descriere_en || ''
     };
 
     // Decode base64 template file
