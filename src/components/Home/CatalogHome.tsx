@@ -656,10 +656,6 @@ const CatalogHome = () => {
           {/* Cars Grid */}
           <div className="lg:w-3/4">
             {/* Sort Options */}
-            <div className="flex justify-between items-center mb-6">
-              <p className="text-muted-foreground">
-                {filteredCars.length} automobile găsite
-              </p>
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-48">
                   <SelectValue />
