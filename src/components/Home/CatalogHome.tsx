@@ -334,6 +334,9 @@ const CatalogHome = () => {
   };
 
   return (
+    <section className="py-8 bg-auto-gray">
+      <div className="container mx-auto px-4">
+
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Mobile Filter Button */}
           <div className="lg:hidden mb-4">
@@ -653,6 +656,10 @@ const CatalogHome = () => {
           {/* Cars Grid */}
           <div className="lg:w-3/4">
             {/* Sort Options */}
+            <div className="flex justify-between items-center mb-6">
+              <p className="text-muted-foreground">
+                {filteredCars.length} automobile găsite
+              </p>
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-48">
                   <SelectValue />
