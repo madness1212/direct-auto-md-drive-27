@@ -1,6 +1,72 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
+// Helper function to process DOCX file properly
+async function processDocxFile(templateBuffer: Uint8Array, replacements: Record<string, string>): Promise<Uint8Array> {
+  // Import JSZip for handling DOCX files (which are ZIP archives)
+  const JSZip = (await import('https://esm.sh/jszip@3.10.1')).default;
+  
+  try {
+    // Load the DOCX file as a ZIP
+    const zip = await JSZip.loadAsync(templateBuffer);
+    
+    // Process the main document content
+    const documentXml = await zip.file('word/document.xml')?.async('string');
+    if (documentXml) {
+      let processedXml = documentXml;
+      
+      // Replace placeholders in the XML content
+      for (const [key, value] of Object.entries(replacements)) {
+        const placeholder = `#{${key}}`;
+        processedXml = processedXml.replaceAll(placeholder, String(value || ''));
+      }
+      
+      // Update the file in the ZIP
+      zip.file('word/document.xml', processedXml);
+    }
+    
+    // Process header files if they exist
+    const headerFiles = Object.keys(zip.files).filter(name => name.startsWith('word/header'));
+    for (const headerFile of headerFiles) {
+      const headerXml = await zip.file(headerFile)?.async('string');
+      if (headerXml) {
+        let processedHeaderXml = headerXml;
+        for (const [key, value] of Object.entries(replacements)) {
+          const placeholder = `#{${key}}`;
+          processedHeaderXml = processedHeaderXml.replaceAll(placeholder, String(value || ''));
+        }
+        zip.file(headerFile, processedHeaderXml);
+      }
+    }
+    
+    // Process footer files if they exist
+    const footerFiles = Object.keys(zip.files).filter(name => name.startsWith('word/footer'));
+    for (const footerFile of footerFiles) {
+      const footerXml = await zip.file(footerFile)?.async('string');
+      if (footerXml) {
+        let processedFooterXml = footerXml;
+        for (const [key, value] of Object.entries(replacements)) {
+          const placeholder = `#{${key}}`;
+          processedFooterXml = processedFooterXml.replaceAll(placeholder, String(value || ''));
+        }
+        zip.file(footerFile, processedFooterXml);
+      }
+    }
+    
+    // Generate the new DOCX file
+    const processedBuffer = await zip.generateAsync({ 
+      type: 'uint8array',
+      compression: 'DEFLATE',
+      compressionOptions: { level: 6 }
+    });
+    
+    return processedBuffer;
+  } catch (error) {
+    console.error('Error processing DOCX file:', error);
+    throw new Error(`Failed to process DOCX file: ${error.message}`);
+  }
+}
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -127,16 +193,9 @@ serve(async (req) => {
     // Decode base64 template file
     const templateBuffer = Uint8Array.from(atob(templateFile), c => c.charCodeAt(0));
 
-    // Simple placeholder replacement for DOCX
-    let docContent = new TextDecoder().decode(templateBuffer);
-    
-    // Replace placeholders in the format #{placeholder}
-    Object.entries(templateData).forEach(([key, value]) => {
-      const placeholder = `#{${key}}`;
-      docContent = docContent.replaceAll(placeholder, String(value || ''));
-    });
-
-    const processedDoc = new TextEncoder().encode(docContent);
+    // Process DOCX file properly using JSZip
+    console.log('Processing DOCX file with proper ZIP handling');
+    const processedDoc = await processDocxFile(templateBuffer, templateData);
 
     // Upload processed document to storage
     const processedFileName = `${user.id}/contracts/${contractNumber}_contract.docx`;
