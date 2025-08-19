@@ -334,7 +334,6 @@ const CatalogHome = () => {
   };
 
   return (
-    <section className="py-8 bg-auto-gray">
       <div className="container mx-auto px-4">
 
         <div className="flex flex-col lg:flex-row gap-8">
