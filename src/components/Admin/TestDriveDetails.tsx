@@ -82,28 +82,13 @@ export function TestDriveDetails({ request, carDetails }: TestDriveDetailsProps)
 
   return (
     <Dialog>
-      <Button 
-        size="sm" 
-        className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto bg-auto-green hover:bg-auto-green-dark text-white"
-        onClick={() => {
-          if (carDetails) {
-            const slug = generateSlug(carDetails.marca, carDetails.model, carDetails.an_fabricatie, request.car_id);
-            navigate(`/catalog/${slug}`);
-          }
-        }}
-      >
-        <Info className="h-4 w-4 lg:mr-2" />
-        <span className="hidden lg:inline">Detalii</span>
-      </Button>
       <DialogTrigger asChild>
         <Button 
           size="sm" 
-          variant="outline"
-          className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto"
-          style={{ display: 'none' }}
+          className="min-h-12 min-w-12 lg:min-h-8 lg:min-w-auto bg-auto-green hover:bg-auto-green-dark text-white"
         >
           <Info className="h-4 w-4 lg:mr-2" />
-          <span className="hidden lg:inline">Detalii Modal</span>
+          <span className="hidden lg:inline">Detalii</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">

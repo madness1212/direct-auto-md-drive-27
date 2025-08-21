@@ -65,6 +65,7 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
     greutatea_masinii: '',
     sarcina_incarcata: '',
     pret_total: '',
+    pret_mdl: '',
     descriere: ''
   });
   const [cars, setCars] = useState<Car[]>([]);
@@ -146,6 +147,14 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
   };
 
   const proceedToGenerate = () => {
+    if (!extraInfo.pret_mdl) {
+      toast({
+        title: "Preț MDL obligatoriu",
+        description: "Te rog să completezi prețul în MDL.",
+        variant: "destructive",
+      });
+      return;
+    }
     setStep('generate');
   };
 
@@ -701,6 +710,22 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
             </div>
 
             <div>
+              <Label htmlFor="pret_mdl">Preț în MDL pentru contract *</Label>
+              <Input
+                id="pret_mdl"
+                type="number"
+                min="0"
+                value={extraInfo.pret_mdl}
+                onChange={(e) => setExtraInfo({...extraInfo, pret_mdl: e.target.value})}
+                placeholder="ex: 270000"
+                required
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Acest preț în MDL va fi folosit în contract și convertit automat în cuvinte
+              </p>
+            </div>
+
+            <div>
               <Label htmlFor="descriere">Descriere suplimentară</Label>
               <Textarea
                 id="descriere"
@@ -711,12 +736,19 @@ export const ContractGenerator = ({ onClose, onContractGenerated }: ContractGene
               />
             </div>
 
-            {extraInfo.pret_total && (
+            {(extraInfo.pret_total || extraInfo.pret_mdl) && (
               <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
-                <Label className="text-green-800 font-medium">Preț în cuvinte (va fi generat automat):</Label>
-                <p className="text-green-700 mt-1 font-mono">
-                  {extraInfo.pret_total} EUR (va fi generat automat în română)
-                </p>
+                <Label className="text-green-800 font-medium">Prețuri pentru contract:</Label>
+                {extraInfo.pret_total && (
+                  <p className="text-green-700 mt-1">
+                    Preț EUR: {extraInfo.pret_total} EUR
+                  </p>
+                )}
+                {extraInfo.pret_mdl && (
+                  <p className="text-green-700 mt-1 font-medium">
+                    Preț MDL: {extraInfo.pret_mdl} MDL (va fi convertit în cuvinte)
+                  </p>
+                )}
               </div>
             )}
 

@@ -278,18 +278,18 @@ const FeaturedCars = () => {
           </div>
         )}
 
-        {/* Dots Indicators */}
+        {/* Dots Indicators - Fixed to 6 dots */}
         {!loading && cars.length > 0 && (
           <div className="flex justify-center mt-6 space-x-2">
-            {scrollSnaps.map((_, index) => (
+            {Array.from({ length: Math.min(6, scrollSnaps.length) }).map((_, index) => (
               <button
                 key={index}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === selectedIndex
+                  Math.floor(selectedIndex * 6 / scrollSnaps.length) === index
                     ? 'bg-auto-green scale-110'
                     : 'bg-auto-green/30 hover:bg-auto-green/50'
                 }`}
-                onClick={() => scrollTo(index)}
+                onClick={() => scrollTo(Math.floor(index * scrollSnaps.length / 6))}
               />
             ))}
           </div>

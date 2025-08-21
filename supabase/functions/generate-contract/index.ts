@@ -168,6 +168,27 @@ serve(async (req) => {
 
     // Merge extra info with car data if provided
     const finalCarData = extraInfo ? { ...carData, ...extraInfo } : carData;
+    
+    // Calculate price in words for MDL
+    let pretMdlInCuvinte = '';
+    if (extraInfo?.pret_mdl) {
+      try {
+        const { data: wordsData, error: wordsError } = await supabaseClient
+          .from('dummy_table')
+          .select(`number_to_words_ro(${parseInt(extraInfo.pret_mdl)})`)
+          .limit(1);
+        
+        if (!wordsError) {
+          pretMdlInCuvinte = `${wordsData?.[0]?.number_to_words_ro || ''} lei moldovenești`;
+        } else {
+          // Fallback to simple conversion if function fails
+          pretMdlInCuvinte = `${parseInt(extraInfo.pret_mdl).toLocaleString()} lei moldovenești`;
+        }
+      } catch (error) {
+        console.log('Error converting to words, using numeric format:', error);
+        pretMdlInCuvinte = `${parseInt(extraInfo.pret_mdl).toLocaleString()} lei moldovenești`;
+      }
+    }
 
     // Prepare template data
     const templateData: Record<string, any> = {
@@ -201,12 +222,12 @@ serve(async (req) => {
       "greutateaMasinii": finalCarData.greutatea_masinii?.toString() || '',
       "sarcinaIncarcata": finalCarData.sarcina_incarcata?.toString() || '',
       
-      // Pricing information
-      "pret": finalCarData.pret?.toString() || '',
-      "pretTotal": finalCarData.pret_total?.toString() || finalCarData.pret?.toString() || '',
-      "pretInCuvinte": finalCarData.pret_in_cuvinte || '',
-      "pret2": finalCarData.pret?.toString() || '',
-      "pretInCuvinte2": finalCarData.pret_in_cuvinte || '',
+      // Pricing information - Use MDL price if provided
+      "pret": extraInfo?.pret_mdl || finalCarData.pret?.toString() || '',
+      "pretTotal": extraInfo?.pret_mdl || finalCarData.pret_total?.toString() || finalCarData.pret?.toString() || '',
+      "pretInCuvinte": pretMdlInCuvinte || finalCarData.pret_in_cuvinte || '',
+      "pret2": extraInfo?.pret_mdl || finalCarData.pret?.toString() || '',
+      "pretInCuvinte2": pretMdlInCuvinte || finalCarData.pret_in_cuvinte || '',
       
       // Descriptions
       "descriere": finalCarData.descriere || '',
