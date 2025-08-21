@@ -38,7 +38,7 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
       align: 'start',
       slidesToScroll: 1
     },
-    [Autoplay({ delay: 3200, stopOnInteraction: false })]
+    [Autoplay({ delay: 1800, stopOnInteraction: false })]
   );
 
   const [selectedIndex, setSelectedIndex] = useState(0);
