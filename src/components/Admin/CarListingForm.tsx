@@ -765,7 +765,7 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                            className="flex flex-wrap gap-3"
                           >
                             {uploadedImages.map((imageUrl, index) => (
                               <Draggable key={`image-${imageUrl}-${index}`} draggableId={`image-${imageUrl}-${index}`} index={index}>
@@ -773,50 +773,45 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                                   <div
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
-                                    className={`relative group rounded-lg border overflow-hidden bg-background ${
-                                      snapshot.isDragging ? 'border-auto-green bg-auto-green/10 shadow-lg scale-105' : 'border-border'
+                                    className={`relative group rounded-lg border overflow-hidden bg-background w-32 h-32 flex-shrink-0 ${
+                                      snapshot.isDragging ? 'border-auto-green bg-auto-green/10 shadow-lg scale-105 z-50' : 'border-border'
                                     } transition-all duration-200`}
                                   >
                                     {/* Drag Handle */}
                                     <div
                                       {...provided.dragHandleProps}
-                                      className="absolute top-2 left-2 z-10 cursor-grab active:cursor-grabbing p-1 rounded bg-background/80 hover:bg-background opacity-0 group-hover:opacity-100 transition-opacity"
+                                      className="absolute top-1 left-1 z-10 cursor-grab active:cursor-grabbing p-1 rounded bg-background/90 hover:bg-background opacity-0 group-hover:opacity-100 transition-opacity"
                                     >
-                                      <GripVertical className="h-4 w-4 text-muted-foreground" />
+                                      <GripVertical className="h-3 w-3 text-muted-foreground" />
                                     </div>
 
                                     {/* Remove Button */}
                                     <button
                                       type="button"
                                       onClick={() => removeImage(index)}
-                                      className="absolute top-2 right-2 z-10 bg-destructive text-destructive-foreground rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive/80"
+                                      className="absolute top-1 right-1 z-10 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive/80"
                                     >
-                                      <X className="h-3 w-3" />
+                                      <X className="h-2.5 w-2.5" />
                                     </button>
 
                                     {/* Main Badge */}
                                     {index === 0 && (
-                                      <div className="absolute top-2 left-1/2 transform -translate-x-1/2 z-10 bg-auto-green text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
-                                        <Star className="h-3 w-3" />
-                                        Principală
+                                      <div className="absolute top-1 left-1/2 transform -translate-x-1/2 z-10 bg-auto-green text-white text-xs px-1.5 py-0.5 rounded-full flex items-center gap-1">
+                                        <Star className="h-2.5 w-2.5" />
+                                        <span className="text-xs">Principală</span>
                                       </div>
                                     )}
 
                                     {/* Image */}
-                                    <div className="aspect-video">
-                                      <img
-                                        src={imageUrl}
-                                        alt={`Preview ${index + 1}`}
-                                        className="w-full h-full object-cover"
-                                      />
-                                    </div>
+                                    <img
+                                      src={imageUrl}
+                                      alt={`Preview ${index + 1}`}
+                                      className="w-full h-full object-cover"
+                                    />
 
-                                    {/* Image Info */}
-                                    <div className="p-3 bg-background border-t">
-                                      <p className="text-sm font-medium">Imagine {index + 1}</p>
-                                      <p className="text-xs text-muted-foreground">
-                                        {index === 0 ? 'Imaginea principală' : 'Imagine secundară'}
-                                      </p>
+                                    {/* Image Number */}
+                                    <div className="absolute bottom-1 left-1 bg-background/90 text-foreground text-xs px-1.5 py-0.5 rounded">
+                                      #{index + 1}
                                     </div>
                                   </div>
                                 )}
