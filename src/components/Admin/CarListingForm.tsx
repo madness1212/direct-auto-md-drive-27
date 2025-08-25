@@ -760,7 +760,7 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                     </div>
                     
                     <DragDropContext onDragEnd={handleDragEnd}>
-                      <Droppable droppableId="images" direction="horizontal">
+                      <Droppable droppableId="images">
                         {(provided) => (
                           <div
                             ref={provided.innerRef}
@@ -768,7 +768,7 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                             className="flex flex-wrap gap-3"
                           >
                             {uploadedImages.map((imageUrl, index) => (
-                              <Draggable key={`image-${imageUrl}-${index}`} draggableId={`image-${imageUrl}-${index}`} index={index}>
+                              <Draggable key={`image-${index}`} draggableId={`image-${index}`} index={index}>
                                 {(provided, snapshot) => (
                                   <div
                                     ref={provided.innerRef}
