@@ -760,12 +760,12 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                     </div>
                     
                     <DragDropContext onDragEnd={handleDragEnd}>
-                      <Droppable droppableId="images" direction="vertical">
+                      <Droppable droppableId="images" direction="horizontal">
                         {(provided) => (
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className="space-y-3"
+                            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
                           >
                             {uploadedImages.map((imageUrl, index) => (
                               <Draggable key={`image-${imageUrl}-${index}`} draggableId={`image-${imageUrl}-${index}`} index={index}>
@@ -773,46 +773,50 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                                   <div
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
-                                    className={`relative group rounded-md border p-3 bg-background ${
-                                      snapshot.isDragging ? 'border-auto-green bg-auto-green/10 shadow-lg' : 'border-border'
+                                    className={`relative group rounded-lg border overflow-hidden bg-background ${
+                                      snapshot.isDragging ? 'border-auto-green bg-auto-green/10 shadow-lg scale-105' : 'border-border'
                                     } transition-all duration-200`}
                                   >
-                                    <div className="flex items-center gap-4">
-                                      <div
-                                        {...provided.dragHandleProps}
-                                        className="flex-shrink-0 cursor-grab active:cursor-grabbing p-2 rounded hover:bg-muted/50 transition-colors"
-                                      >
-                                        <GripVertical className="h-5 w-5 text-muted-foreground" />
+                                    {/* Drag Handle */}
+                                    <div
+                                      {...provided.dragHandleProps}
+                                      className="absolute top-2 left-2 z-10 cursor-grab active:cursor-grabbing p-1 rounded bg-background/80 hover:bg-background opacity-0 group-hover:opacity-100 transition-opacity"
+                                    >
+                                      <GripVertical className="h-4 w-4 text-muted-foreground" />
+                                    </div>
+
+                                    {/* Remove Button */}
+                                    <button
+                                      type="button"
+                                      onClick={() => removeImage(index)}
+                                      className="absolute top-2 right-2 z-10 bg-destructive text-destructive-foreground rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive/80"
+                                    >
+                                      <X className="h-3 w-3" />
+                                    </button>
+
+                                    {/* Main Badge */}
+                                    {index === 0 && (
+                                      <div className="absolute top-2 left-1/2 transform -translate-x-1/2 z-10 bg-auto-green text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
+                                        <Star className="h-3 w-3" />
+                                        Principală
                                       </div>
-                                      
-                                      <div className="relative flex-shrink-0">
-                                        <img
-                                          src={imageUrl}
-                                          alt={`Preview ${index + 1}`}
-                                          className="w-20 h-20 object-cover rounded-md border"
-                                        />
-                                        {index === 0 && (
-                                          <div className="absolute -top-2 -left-2 bg-auto-green text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
-                                            <Star className="h-3 w-3" />
-                                            Principală
-                                          </div>
-                                        )}
-                                      </div>
-                                      
-                                      <div className="flex-1">
-                                        <p className="text-sm font-medium">Imagine {index + 1}</p>
-                                        <p className="text-xs text-muted-foreground">
-                                          {index === 0 ? 'Aceasta va fi imaginea principală' : 'Imagine secundară'}
-                                        </p>
-                                      </div>
-                                      
-                                      <button
-                                        type="button"
-                                        onClick={() => removeImage(index)}
-                                        className="flex-shrink-0 bg-destructive text-destructive-foreground rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive/80"
-                                      >
-                                        <X className="h-4 w-4" />
-                                      </button>
+                                    )}
+
+                                    {/* Image */}
+                                    <div className="aspect-video">
+                                      <img
+                                        src={imageUrl}
+                                        alt={`Preview ${index + 1}`}
+                                        className="w-full h-full object-cover"
+                                      />
+                                    </div>
+
+                                    {/* Image Info */}
+                                    <div className="p-3 bg-background border-t">
+                                      <p className="text-sm font-medium">Imagine {index + 1}</p>
+                                      <p className="text-xs text-muted-foreground">
+                                        {index === 0 ? 'Imaginea principală' : 'Imagine secundară'}
+                                      </p>
                                     </div>
                                   </div>
                                 )}

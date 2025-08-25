@@ -225,7 +225,7 @@ const CarDetails = () => {
   return (
     <Layout>
       <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 max-w-7xl overflow-x-hidden">
           {/* Breadcrumb */}
           <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-6">
             <Button 
@@ -244,7 +244,7 @@ const CarDetails = () => {
           </div>
 
           {/* Main Content */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
             {/* Left Column - Images and Gallery */}
             <div className="space-y-6">
               {/* Main Image */}
@@ -317,12 +317,12 @@ const CarDetails = () => {
 
               {/* Thumbnail Gallery */}
               {car.images && car.images.length > 1 && (
-                <div className="grid grid-cols-6 gap-2">
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 overflow-x-auto">
                   {car.images.map((image, index) => (
                     <button
                       key={index}
                       onClick={() => setCurrentImageIndex(index)}
-                      className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all ${
+                      className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 ${
                         index === currentImageIndex 
                           ? 'border-auto-green ring-2 ring-auto-green/30' 
                           : 'border-border hover:border-auto-green/50'
@@ -348,7 +348,7 @@ const CarDetails = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="aspect-video bg-muted rounded-lg overflow-hidden max-w-md">
+                    <div className="aspect-video bg-muted rounded-lg overflow-hidden w-full max-w-md">
                       {car.video_url.endsWith('.mp4') ? (
                         <video 
                           controls
