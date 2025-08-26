@@ -270,13 +270,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "fk_contracts_car_id"
-            columns: ["car_id"]
-            isOneToOne: false
-            referencedRelation: "cars"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "fk_contracts_client_id"
             columns: ["client_id"]
             isOneToOne: false
@@ -413,72 +406,7 @@ export type Database = {
       }
     }
     Views: {
-      cars: {
-        Row: {
-          an_fabricatie: number | null
-          capacitate_motor: string | null
-          culoare: string | null
-          greutatea_masinii: number | null
-          id: string | null
-          kilometraj: number | null
-          marca: string | null
-          model_masina: string | null
-          numar_usi: number | null
-          pret: number | null
-          pret_in_cuvinte: string | null
-          pret_total: number | null
-          putere_motor: number | null
-          sarcina_incarcata: number | null
-          status: string | null
-          tip_caroserie: string | null
-          tractiune: string | null
-          transmisie: string | null
-          vin: string | null
-        }
-        Insert: {
-          an_fabricatie?: number | null
-          capacitate_motor?: string | null
-          culoare?: never
-          greutatea_masinii?: never
-          id?: string | null
-          kilometraj?: number | null
-          marca?: string | null
-          model_masina?: never
-          numar_usi?: never
-          pret?: number | null
-          pret_in_cuvinte?: never
-          pret_total?: number | null
-          putere_motor?: never
-          sarcina_incarcata?: never
-          status?: string | null
-          tip_caroserie?: string | null
-          tractiune?: string | null
-          transmisie?: string | null
-          vin?: never
-        }
-        Update: {
-          an_fabricatie?: number | null
-          capacitate_motor?: string | null
-          culoare?: never
-          greutatea_masinii?: never
-          id?: string | null
-          kilometraj?: number | null
-          marca?: string | null
-          model_masina?: never
-          numar_usi?: never
-          pret?: number | null
-          pret_in_cuvinte?: never
-          pret_total?: number | null
-          putere_motor?: never
-          sarcina_incarcata?: never
-          status?: string | null
-          tip_caroserie?: string | null
-          tractiune?: string | null
-          transmisie?: string | null
-          vin?: never
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       cleanup_expired_codes: {
