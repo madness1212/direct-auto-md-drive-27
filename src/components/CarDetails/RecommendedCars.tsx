@@ -112,7 +112,7 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
 
   return (
     <section className="py-8 bg-background">
-      <div className="container mx-auto px-4 max-w-7xl">
+      <div className="w-screen px-4"> {/* full width edge-to-edge */}
         <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             Mașini Recomandate
@@ -134,14 +134,14 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
             </p>
           </div>
         ) : (
-          <div className="relative max-w-6xl mx-auto">
+          <div className="relative">
             {/* Carousel Container */}
             <div className="overflow-hidden" ref={emblaRef}>
-              <div className="flex">
+              <div className="flex w-full"> {/* removed gap here */}
                 {cars.map((car) => (
                    <div 
                      key={car.id} 
-                     className="flex-[0_0_90%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] xl:flex-[0_0_25%] min-w-0 px-2"
+                     className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] xl:flex-[0_0_25%] min-w-0 px-3"
                    >
                     <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 shadow-lg h-full">
                       <CardContent className="p-0">
@@ -232,11 +232,11 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
               </div>
             </div>
 
-            {/* Navigation Arrows - Visible and properly positioned */}
+            {/* Navigation Arrows - Visible on all screens */}
             <Button
               variant="outline"
               size="icon"
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 bg-background/95 backdrop-blur-sm border-auto-green text-auto-green hover:bg-auto-green hover:text-white z-10 shadow-lg"
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/90 backdrop-blur-sm border-auto-green text-auto-green hover:bg-auto-green hover:text-white z-10"
               onClick={scrollPrev}
             >
               <ChevronLeft className="h-4 w-4" />
@@ -244,7 +244,7 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
             <Button
               variant="outline"
               size="icon"
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 bg-background/95 backdrop-blur-sm border-auto-green text-auto-green hover:bg-auto-green hover:text-white z-10 shadow-lg"
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/90 backdrop-blur-sm border-auto-green text-auto-green hover:bg-auto-green hover:text-white z-10"
               onClick={scrollNext}
             >
               <ChevronRight className="h-4 w-4" />
