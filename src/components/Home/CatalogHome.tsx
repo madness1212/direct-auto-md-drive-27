@@ -60,6 +60,7 @@ const CatalogHome = () => {
   const [availableBodyTypes, setAvailableBodyTypes] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("newest");
+  const [hasComingSoonCars, setHasComingSoonCars] = useState(false);
 
   const transmissionTypes = [t('common.all'), "Automat", "Manual"];
   const carsPerPage = 12; // 3 cars x 4 rows for desktop
@@ -102,6 +103,24 @@ const CatalogHome = () => {
         })) || [];
         
         setCars(transformedCars);
+        
+        // Check if there are coming soon cars
+        const checkComingSoonCars = async () => {
+          const { data, error } = await supabase
+            .from('car_listings')
+            .select('id')
+            .eq('status', 'active')
+            .eq('is_coming_soon', true)
+            .limit(1);
+          
+          if (!error && data && data.length > 0) {
+            setHasComingSoonCars(true);
+          } else {
+            setHasComingSoonCars(false);
+          }
+        };
+        
+        checkComingSoonCars();
         
         // Extract unique values for filters
         const uniqueBrands = [t('common.all'), ...new Set(transformedCars.map(car => car.brand))];
@@ -656,10 +675,35 @@ const CatalogHome = () => {
           {/* Cars Grid */}
           <div className="lg:w-3/4">
             {/* Sort Options */}
-            <div className="flex justify-between items-center mb-6">
-              <p className="text-muted-foreground">
-                {filteredCars.length} automobile găsite
-              </p>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-4">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    const featuredSection = document.querySelector('[data-section="featured-cars"]');
+                    if (featuredSection) {
+                      featuredSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
+                >
+                  Oferte speciale
+                </Button>
+                {hasComingSoonCars && (
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      const comingSoonSection = document.querySelector('[data-section="coming-soon"]');
+                      if (comingSoonSection) {
+                        comingSoonSection.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                    className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
+                  >
+                    În curând
+                  </Button>
+                )}
+              </div>
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-48">
                   <SelectValue />

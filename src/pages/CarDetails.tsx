@@ -224,8 +224,8 @@ const CarDetails = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
+      <div className="min-h-screen bg-background overflow-x-hidden">
+        <div className="container mx-auto px-4 py-8 max-w-7xl">
           {/* Breadcrumb */}
           <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-6">
             <Button 

@@ -120,7 +120,7 @@ const ComingSoon = () => {
   }
 
   return (
-    <section className="py-8 bg-background">
+    <section className="py-8 bg-background" data-section="coming-soon">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center space-x-2 mb-4">

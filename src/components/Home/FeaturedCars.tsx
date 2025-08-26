@@ -124,7 +124,7 @@ const FeaturedCars = () => {
   };
 
   return (
-    <section className="py-8 bg-auto-gray">
+    <section className="py-8 bg-auto-gray" data-section="featured-cars">
       <div className="container mx-auto px-4">
         <div className="text-center space-y-4 mb-8">
           <div className="flex items-center justify-center space-x-2 mb-4">
