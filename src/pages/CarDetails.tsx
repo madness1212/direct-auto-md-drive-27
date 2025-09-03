@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { resetScrollToTop } from "@/utils/scrollUtils";
 import { supabase } from "@/integrations/supabase/client";
+import { useAnalytics } from "@/hooks/useAnalytics";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -57,6 +58,7 @@ const CarDetails = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { trackCarView } = useAnalytics();
   const [car, setCar] = useState<CarListing | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -90,6 +92,9 @@ const CarDetails = () => {
         }
         
         setCar(data);
+        
+        // Track car view
+        trackCarView(data.id, 'details');
       } catch (error) {
         console.error('Error:', error);
         navigate('/catalog');

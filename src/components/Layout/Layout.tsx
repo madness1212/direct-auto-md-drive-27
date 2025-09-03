@@ -1,6 +1,7 @@
 import Header from "./Header";
 import Footer from "./Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { usePageTracking } from "@/hooks/usePageTracking";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -8,6 +9,7 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const { currentLang, setCurrentLang } = useLanguage();
+  usePageTracking();
 
   const handleLanguageChange = (lang: string) => {
     console.log('Layout handleLanguageChange called with:', lang);

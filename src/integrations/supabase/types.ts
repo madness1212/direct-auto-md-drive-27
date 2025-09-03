@@ -161,6 +161,101 @@ export type Database = {
         }
         Relationships: []
       }
+      car_sales: {
+        Row: {
+          car_id: string
+          contract_id: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          notes: string | null
+          payment_method: string | null
+          sale_date: string
+          sale_price: number
+          updated_at: string | null
+        }
+        Insert: {
+          car_id: string
+          contract_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          payment_method?: string | null
+          sale_date: string
+          sale_price: number
+          updated_at?: string | null
+        }
+        Update: {
+          car_id?: string
+          contract_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          payment_method?: string | null
+          sale_date?: string
+          sale_price?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "car_sales_car_id_fkey"
+            columns: ["car_id"]
+            isOneToOne: false
+            referencedRelation: "car_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "car_sales_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      car_views: {
+        Row: {
+          car_id: string
+          id: string
+          ip_address: unknown | null
+          page_type: string | null
+          referrer: string | null
+          session_id: string | null
+          viewed_at: string | null
+          visitor_id: string
+        }
+        Insert: {
+          car_id: string
+          id?: string
+          ip_address?: unknown | null
+          page_type?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          viewed_at?: string | null
+          visitor_id: string
+        }
+        Update: {
+          car_id?: string
+          id?: string
+          ip_address?: unknown | null
+          page_type?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          viewed_at?: string | null
+          visitor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "car_views_car_id_fkey"
+            columns: ["car_id"]
+            isOneToOne: false
+            referencedRelation: "car_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       client_access_logs: {
         Row: {
           accessed_at: string
@@ -401,6 +496,48 @@ export type Database = {
           preferred_date?: string
           status?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      website_analytics: {
+        Row: {
+          city: string | null
+          country: string | null
+          created_at: string | null
+          id: string
+          ip_address: unknown | null
+          page_path: string
+          referrer: string | null
+          session_id: string | null
+          user_agent: string | null
+          visited_at: string | null
+          visitor_id: string
+        }
+        Insert: {
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          page_path: string
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          visited_at?: string | null
+          visitor_id: string
+        }
+        Update: {
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          page_path?: string
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          visited_at?: string | null
+          visitor_id?: string
         }
         Relationships: []
       }

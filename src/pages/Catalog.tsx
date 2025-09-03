@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { usePageTracking } from "@/hooks/usePageTracking";
+import { useAnalytics } from "@/hooks/useAnalytics";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -47,6 +49,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 const Catalog = () => {
   const { t } = useLanguage();
+  const { trackCarView } = useAnalytics();
+  usePageTracking();
   
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
@@ -581,13 +585,14 @@ const Catalog = () => {
                      <CardContent className="p-0">
                        {/* Image Container */}
                        <div className="relative overflow-hidden rounded-t-lg">
-                         <Link to={`/catalog/${generateSlug(car.brand, car.model, car.year, car.id)}`}>
-                           <img 
-                             src={car.image} 
-                             alt={`${car.brand} ${car.model}`}
-                             className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-                           />
-                         </Link>
+                          <Link to={`/catalog/${generateSlug(car.brand, car.model, car.year, car.id)}`}>
+                            <img 
+                              src={car.image} 
+                              alt={`${car.brand} ${car.model}`}
+                              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                              onClick={() => trackCarView(car.id, 'catalog')}
+                            />
+                          </Link>
                         {car.isTopOffer && (
                           <Badge className="absolute top-4 left-4 bg-auto-green hover:bg-auto-green text-white shadow-md">
                             TOP OFERTĂ
@@ -652,12 +657,15 @@ const Catalog = () => {
                          </div>
 
                         {/* Action Buttons */}
-                        <div className="flex space-x-2">
-                          <Link to={`/catalog/${generateSlug(car.brand, car.model, car.year, car.id)}`} className="flex-1">
-                            <Button className="w-full bg-auto-green hover:bg-auto-green-dark text-white">
-                              Vezi Detalii
-                            </Button>
-                          </Link>
+                         <div className="flex space-x-2">
+                           <Link to={`/catalog/${generateSlug(car.brand, car.model, car.year, car.id)}`} className="flex-1">
+                             <Button 
+                               className="w-full bg-auto-green hover:bg-auto-green-dark text-white"
+                               onClick={() => trackCarView(car.id, 'catalog')}
+                             >
+                               Vezi Detalii
+                             </Button>
+                           </Link>
                           <Button 
                             variant="outline" 
                             className="flex-1 border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
