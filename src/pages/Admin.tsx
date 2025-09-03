@@ -8,8 +8,6 @@ import { NotificationBell } from '@/components/Admin/NotificationBell';
 import { MobileAdminNav } from '@/components/Admin/MobileAdminNav';
 import { ContractGenerator } from '@/components/Admin/ContractGenerator';
 import { ContractsManager } from '@/components/Admin/ContractsManager';
-import AnalyticsDashboard from '@/components/Admin/AnalyticsDashboard';
-import SalesManager from '@/components/Admin/SalesManager';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -329,12 +327,8 @@ export default function Admin() {
               <span className="lg:hidden">Contracte</span>
               <span className="hidden lg:inline">Contracte</span>
             </TabsTrigger>
-            <TabsTrigger value="analytics" className="text-xs lg:text-sm">
-              <span className="lg:hidden">Stats</span>
-              <span className="hidden lg:inline">Statistici</span>
-            </TabsTrigger>
-            <TabsTrigger value="sales" className="text-xs lg:text-sm hidden lg:flex">
-              Vânzări
+            <TabsTrigger value="stats" className="text-xs lg:text-sm hidden lg:flex">
+              Statistici
             </TabsTrigger>
           </TabsList>
 
@@ -582,12 +576,40 @@ export default function Admin() {
             <ContractsManager />
           </TabsContent>
 
-          <TabsContent value="analytics">
-            <AnalyticsDashboard />
-          </TabsContent>
-
-          <TabsContent value="sales">
-            <SalesManager />
+          <TabsContent value="stats" className="space-y-6">
+            {/* Statistics */}
+            <div className="grid grid-cols-4 gap-4">
+              <Card>
+                <CardContent className="p-6">
+                  <div className="text-2xl font-bold">{carListings.length}</div>
+                  <p className="text-xs text-muted-foreground">Total anunțuri</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="text-2xl font-bold text-green-600">
+                    {carListings.filter(car => car.status === 'active').length}
+                  </div>
+                  <p className="text-xs text-muted-foreground">Anunțuri active</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="text-2xl font-bold text-yellow-600">
+                    {carListings.filter(car => car.status === 'inactive').length}
+                  </div>
+                  <p className="text-xs text-muted-foreground">Anunțuri inactive</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="text-2xl font-bold text-red-600">
+                    {carListings.filter(car => car.status === 'sold').length}
+                  </div>
+                  <p className="text-xs text-muted-foreground">Mașini vândute</p>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
