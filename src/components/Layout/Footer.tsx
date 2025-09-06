@@ -1,6 +1,6 @@
 import { Phone, Mail, MapPin, Clock, Facebook } from "lucide-react";
 import { FaTelegram, FaTiktok } from "react-icons/fa";
-import logo from "/lovable-uploads/4baf3b13-6bff-467c-92f9-2bdd6b9cb9a4.png";
+import logo from "/lovable-uploads/21462d59-8c74-456a-a6d1-a437d902f255.png";
 
 const Footer = () => {
   return (
