@@ -161,13 +161,108 @@ export type Database = {
         }
         Relationships: []
       }
+      car_sales: {
+        Row: {
+          car_id: string
+          contract_id: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          notes: string | null
+          payment_method: string | null
+          sale_date: string
+          sale_price: number
+          updated_at: string | null
+        }
+        Insert: {
+          car_id: string
+          contract_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          payment_method?: string | null
+          sale_date: string
+          sale_price: number
+          updated_at?: string | null
+        }
+        Update: {
+          car_id?: string
+          contract_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          payment_method?: string | null
+          sale_date?: string
+          sale_price?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "car_sales_car_id_fkey"
+            columns: ["car_id"]
+            isOneToOne: false
+            referencedRelation: "car_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "car_sales_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      car_views: {
+        Row: {
+          car_id: string
+          id: string
+          ip_address: unknown
+          page_type: string | null
+          referrer: string | null
+          session_id: string | null
+          viewed_at: string | null
+          visitor_id: string
+        }
+        Insert: {
+          car_id: string
+          id?: string
+          ip_address?: unknown
+          page_type?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          viewed_at?: string | null
+          visitor_id: string
+        }
+        Update: {
+          car_id?: string
+          id?: string
+          ip_address?: unknown
+          page_type?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          viewed_at?: string | null
+          visitor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "car_views_car_id_fkey"
+            columns: ["car_id"]
+            isOneToOne: false
+            referencedRelation: "car_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       client_access_logs: {
         Row: {
           accessed_at: string
           action: string
           client_id: string
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           user_agent: string | null
           user_id: string
         }
@@ -176,7 +271,7 @@ export type Database = {
           action: string
           client_id: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           user_agent?: string | null
           user_id: string
         }
@@ -185,7 +280,7 @@ export type Database = {
           action?: string
           client_id?: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           user_agent?: string | null
           user_id?: string
         }
@@ -343,7 +438,7 @@ export type Database = {
           accessed_at: string | null
           action: string
           id: string
-          ip_address: unknown | null
+          ip_address: unknown
           table_name: string
           user_id: string | null
         }
@@ -351,7 +446,7 @@ export type Database = {
           accessed_at?: string | null
           action: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           table_name: string
           user_id?: string | null
         }
@@ -359,7 +454,7 @@ export type Database = {
           accessed_at?: string | null
           action?: string
           id?: string
-          ip_address?: unknown | null
+          ip_address?: unknown
           table_name?: string
           user_id?: string | null
         }
@@ -404,39 +499,63 @@ export type Database = {
         }
         Relationships: []
       }
+      website_analytics: {
+        Row: {
+          city: string | null
+          country: string | null
+          created_at: string | null
+          id: string
+          ip_address: unknown
+          page_path: string
+          referrer: string | null
+          session_id: string | null
+          user_agent: string | null
+          visited_at: string | null
+          visitor_id: string
+        }
+        Insert: {
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown
+          page_path: string
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          visited_at?: string | null
+          visitor_id: string
+        }
+        Update: {
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown
+          page_path?: string
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          visited_at?: string | null
+          visitor_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      cleanup_expired_codes: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      is_admin: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      is_admin_for_sensitive_data: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
+      cleanup_expired_codes: { Args: never; Returns: undefined }
+      is_admin: { Args: never; Returns: boolean }
+      is_admin_for_sensitive_data: { Args: never; Returns: boolean }
       mask_sensitive_data: {
         Args: { original_text: string; show_length?: number }
         Returns: string
       }
-      number_to_words_ro: {
-        Args: { num: number }
-        Returns: string
-      }
-      validate_idnp_format: {
-        Args: { idnp_value: string }
-        Returns: boolean
-      }
-      validate_phone_format: {
-        Args: { phone_value: string }
-        Returns: boolean
-      }
+      number_to_words_ro: { Args: { num: number }; Returns: string }
+      validate_idnp_format: { Args: { idnp_value: string }; Returns: boolean }
+      validate_phone_format: { Args: { phone_value: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
