@@ -152,12 +152,12 @@ const ComingSoon = () => {
                      <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 mr-4 shadow-lg">
                        <CardContent className="p-0">
                           {/* Image Container */}
-                          <div className="relative overflow-hidden rounded-t-lg">
+                          <div className="relative overflow-hidden rounded-t-lg bg-muted">
                             <Link to={`/catalog/${generateSlug(car)}`}>
                               <img 
                                 src={car.images && car.images.length > 0 ? car.images[0] : "/placeholder.svg"} 
                                 alt={`${car.marca} ${car.model}`}
-                                className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                                className="w-full h-32 object-contain group-hover:scale-105 transition-transform duration-300 cursor-pointer"
                               />
                             </Link>
                             <Badge className="absolute top-2 left-2 bg-blue-600 hover:bg-blue-700 text-xs">
