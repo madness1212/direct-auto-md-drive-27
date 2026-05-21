@@ -146,12 +146,12 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
                     <Card className="group hover:shadow-hero transition-all duration-300 bg-background border-0 shadow-lg h-full">
                       <CardContent className="p-0">
                         {/* Image Container */}
-                        <div className="relative overflow-hidden rounded-t-lg bg-background">
+                        <div className="relative overflow-hidden rounded-t-lg">
                           <Link to={`/catalog/${generateSlug(car)}`}>
                             <img 
                               src={car.images && car.images.length > 0 ? car.images[0] : "/placeholder.svg"} 
                               alt={`${car.marca} ${car.model}`}
-                              className="w-full h-36 object-contain group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                              className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
                             />
                           </Link>
                           {car.is_top_offer && (

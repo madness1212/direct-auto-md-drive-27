@@ -738,12 +738,12 @@ const CatalogHome = () => {
                       <Card className="border-0 shadow-card hover:shadow-lg transition-all duration-300 group cursor-pointer">
                         <CardContent className="p-0">
                           {/* Image Container */}
-                           <div className="relative overflow-hidden rounded-t-lg bg-background">
-                             <img
-                               src={car.image}
-                               alt={`${car.brand} ${car.model}`}
-                               className="w-full h-40 object-contain group-hover:scale-105 transition-transform duration-300"
-                             />
+                          <div className="relative overflow-hidden rounded-t-lg">
+                            <img
+                              src={car.image}
+                              alt={`${car.brand} ${car.model}`}
+                              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
                             
                             {/* Badges */}
                             <div className="absolute top-2 left-2 flex flex-col gap-1">
