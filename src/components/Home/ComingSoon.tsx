@@ -157,7 +157,7 @@ const ComingSoon = () => {
                               <img 
                                 src={car.images && car.images.length > 0 ? car.images[0] : "/placeholder.svg"} 
                                 alt={`${car.marca} ${car.model}`}
-                                className="w-full h-32 object-contain group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                                className="w-full h-28 object-contain group-hover:scale-105 transition-transform duration-300 cursor-pointer"
                               />
                             </Link>
                             <Badge className="absolute top-2 left-2 bg-blue-600 hover:bg-blue-700 text-xs">

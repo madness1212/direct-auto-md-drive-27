@@ -742,7 +742,7 @@ const CatalogHome = () => {
                              <img
                                src={car.image}
                                alt={`${car.brand} ${car.model}`}
-                               className="w-full h-48 object-contain group-hover:scale-105 transition-transform duration-300"
+                               className="w-full h-40 object-contain group-hover:scale-105 transition-transform duration-300"
                              />
                             
                             {/* Badges */}
