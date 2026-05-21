@@ -738,7 +738,7 @@ const CatalogHome = () => {
                       <Card className="border-0 shadow-card hover:shadow-lg transition-all duration-300 group cursor-pointer">
                         <CardContent className="p-0">
                           {/* Image Container */}
-                           <div className="relative overflow-hidden rounded-t-lg bg-muted">
+                           <div className="relative overflow-hidden rounded-t-lg bg-background">
                              <img
                                src={car.image}
                                alt={`${car.brand} ${car.model}`}
