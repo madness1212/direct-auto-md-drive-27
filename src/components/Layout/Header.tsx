@@ -116,27 +116,25 @@ const Header = ({ currentLang, onLanguageChange }: HeaderProps) => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="/credit" className="text-foreground hover:text-auto-green transition-colors text-lg font-medium">
+            <a href="/credit" className="text-foreground hover:text-auto-green transition-colors">
               Credit
             </a>
-            <a href="/leasing" className="text-foreground hover:text-auto-green transition-colors text-lg font-medium">
+            <a href="/leasing" className="text-foreground hover:text-auto-green transition-colors">
               Leasing
             </a>
-            <a href="/trade-in" className="text-foreground hover:text-auto-green transition-colors text-lg font-medium">
+            <a href="/trade-in" className="text-foreground hover:text-auto-green transition-colors">
               Trade-In
             </a>
-            <a href="/contact" className="text-foreground hover:text-auto-green transition-colors text-lg font-medium">
+            <a href="/contact" className="text-foreground hover:text-auto-green transition-colors">
               {t('header.contact')}
             </a>
             <Button 
-              size="lg"
-              className="bg-gradient-primary hover:bg-auto-green-dark shadow-card text-base"
+              className="bg-gradient-primary hover:bg-auto-green-dark shadow-card"
               onClick={() => window.location.href = '/catalog'}
             >
               {t('header.viewStock')}
             </Button>
           </nav>
-
 
           {/* Mobile Language & Menu */}
           <div className="md:hidden flex items-center space-x-1">
