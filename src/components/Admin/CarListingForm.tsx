@@ -206,9 +206,14 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
     const newImageUrls: string[] = [];
 
     try {
-      for (const file of files) {
+      // Sortează fișierele după data salvării (cele mai vechi primele)
+      const sortedFiles = Array.from(files).sort(
+        (a, b) => a.lastModified - b.lastModified
+      );
+
+      for (const file of sortedFiles) {
         const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
+        const fileName = `${Date.now()}-${Math.random()}.${fileExt}`;
         const filePath = `${fileName}`;
 
         const { error: uploadError, data } = await supabase.storage
@@ -225,6 +230,7 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
 
         newImageUrls.push(publicUrl);
       }
+
 
       setUploadedImages([...uploadedImages, ...newImageUrls]);
       toast({
