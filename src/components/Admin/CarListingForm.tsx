@@ -145,7 +145,7 @@ const modelsByBrand: { [key: string]: string[] } = {
     "911", "Boxster", "Cayenne", "Cayman", "Macan", "Panamera", "Taycan", "924", "928", "944", "968"
   ],
   "Renault": [
-    "19", "21", "Captive", "Clio", "Duster", "Fluence", "Kadjar", "Kangoo", "Koleos", "Laguna",
+    "19", "21", "Captur", "Captive", "Clio", "Duster", "Fluence", "Kadjar", "Kangoo", "Koleos", "Laguna",
     "Latitude", "Logan", "Master", "Mégane", "Modus", "Scénic", "Symbol", "Taliant", "Twingo",
     "Zoe", "12", "9", "18", "25", "Fuego", "Safrane"
   ],
