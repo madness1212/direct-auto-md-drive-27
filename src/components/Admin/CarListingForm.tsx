@@ -123,7 +123,7 @@ const modelsByBrand: { [key: string]: string[] } = {
     "190", "W124", "W140", "W201", "W202", "W203", "W204", "W210", "W211", "W212", "W220", "W221"
   ],
   "Mitsubishi": [
-    "ASX", "Carisma", "Colt", "Eclipse", "Eclipse Cross", "Galant", "Grandis", "L200",
+    "ASX", "Attrage", "Carisma", "Colt", "Eclipse", "Eclipse Cross", "Galant", "Grandis", "L200",
     "Lancer", "Lancer Evolution", "Mirage", "Outlander", "Outlander PHEV", "Pajero", "Space Star",
     "Space Wagon", "L300", "Sigma"
   ],
