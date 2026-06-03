@@ -26,6 +26,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { TestDriveForm } from "@/components/TestDriveForm";
 import RecommendedCars from "@/components/CarDetails/RecommendedCars";
+import FinanceCalculator from "@/components/CarDetails/FinanceCalculator";
 
 interface CarListing {
   id: string;
@@ -561,6 +562,15 @@ const CarDetails = () => {
               </Card>
           </div>
           
+        {/* Finance Calculator */}
+        <div className="mt-12">
+          <FinanceCalculator
+            carPrice={car.pret}
+            carTitle={`${car.marca} ${car.model} ${car.an_fabricatie}`}
+            carId={car.id}
+          />
+        </div>
+
         {/* Recommended Cars Section */}
         <RecommendedCars currentCarId={car.id} />
         </div>
