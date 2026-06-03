@@ -26,6 +26,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { TestDriveForm } from "@/components/TestDriveForm";
 import RecommendedCars from "@/components/CarDetails/RecommendedCars";
+import FinanceCalculator from "@/components/CarDetails/FinanceCalculator";
 
 interface CarListing {
   id: string;
