@@ -327,10 +327,9 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <Tabs defaultValue="basic" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 md:grid-cols-6">
+            <TabsList className="grid w-full grid-cols-3 md:grid-cols-5">
               <TabsTrigger value="basic" className="text-xs md:text-sm">Info bază</TabsTrigger>
               <TabsTrigger value="details" className="text-xs md:text-sm">Tehnice</TabsTrigger>
-              <TabsTrigger value="additional" className="text-xs md:text-sm">Info extra</TabsTrigger>
               <TabsTrigger value="descriptions" className="text-xs md:text-sm">Descrieri</TabsTrigger>
               <TabsTrigger value="media" className="text-xs md:text-sm">Media</TabsTrigger>
               <TabsTrigger value="settings" className="text-xs md:text-sm">Setări</TabsTrigger>
