@@ -481,10 +481,12 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                     <SelectContent>
                       <SelectItem value="Benzină">Benzină</SelectItem>
                       <SelectItem value="Diesel">Diesel</SelectItem>
+                      <SelectItem value="Electric">Electric</SelectItem>
                       <SelectItem value="Gaz / Benzină (propan)">Gaz / Benzină (propan)</SelectItem>
                       <SelectItem value="Gaz / Benzină (metan)">Gaz / Benzină (metan)</SelectItem>
-                      <SelectItem value="Hybrid">Hybrid</SelectItem>
-                      <SelectItem value="Plug-In Hybrid">Plug-In Hybrid</SelectItem>
+                      <SelectItem value="Hybrid (benzină)">Hybrid (benzină)</SelectItem>
+                      <SelectItem value="Hybrid (diesel)">Hybrid (diesel)</SelectItem>
+                      <SelectItem value="Plug-in Hybrid (benzină)">Plug-in Hybrid (benzină)</SelectItem>
                       <SelectItem value="Diesel-Hybrid">Diesel-Hybrid</SelectItem>
                     </SelectContent>
                   </Select>
