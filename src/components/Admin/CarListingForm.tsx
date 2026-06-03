@@ -327,10 +327,9 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <Tabs defaultValue="basic" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 md:grid-cols-6">
+            <TabsList className="grid w-full grid-cols-3 md:grid-cols-5">
               <TabsTrigger value="basic" className="text-xs md:text-sm">Info bază</TabsTrigger>
               <TabsTrigger value="details" className="text-xs md:text-sm">Tehnice</TabsTrigger>
-              <TabsTrigger value="additional" className="text-xs md:text-sm">Info extra</TabsTrigger>
               <TabsTrigger value="descriptions" className="text-xs md:text-sm">Descrieri</TabsTrigger>
               <TabsTrigger value="media" className="text-xs md:text-sm">Media</TabsTrigger>
               <TabsTrigger value="settings" className="text-xs md:text-sm">Setări</TabsTrigger>
@@ -481,10 +480,12 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                     <SelectContent>
                       <SelectItem value="Benzină">Benzină</SelectItem>
                       <SelectItem value="Diesel">Diesel</SelectItem>
+                      <SelectItem value="Electric">Electric</SelectItem>
                       <SelectItem value="Gaz / Benzină (propan)">Gaz / Benzină (propan)</SelectItem>
                       <SelectItem value="Gaz / Benzină (metan)">Gaz / Benzină (metan)</SelectItem>
-                      <SelectItem value="Hybrid">Hybrid</SelectItem>
-                      <SelectItem value="Plug-In Hybrid">Plug-In Hybrid</SelectItem>
+                      <SelectItem value="Hybrid (benzină)">Hybrid (benzină)</SelectItem>
+                      <SelectItem value="Hybrid (diesel)">Hybrid (diesel)</SelectItem>
+                      <SelectItem value="Plug-in Hybrid (benzină)">Plug-in Hybrid (benzină)</SelectItem>
                       <SelectItem value="Diesel-Hybrid">Diesel-Hybrid</SelectItem>
                     </SelectContent>
                   </Select>
@@ -542,6 +543,7 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                       <SelectItem value="cabriolet">Cabriolet</SelectItem>
                       <SelectItem value="pickup">Pickup</SelectItem>
                       <SelectItem value="minivan">Minivan</SelectItem>
+                      <SelectItem value="microvan">Microvan</SelectItem>
                       <SelectItem value="monovolum">Monovolum</SelectItem>
                       <SelectItem value="roadster">Roadster</SelectItem>
                       <SelectItem value="limuzina">Limuzină</SelectItem>
@@ -591,108 +593,6 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
               </div>
             </TabsContent>
 
-            <TabsContent value="additional" className="space-y-4">
-              <div className="bg-muted/50 p-4 rounded-lg mb-4">
-                <h3 className="font-medium text-foreground mb-2">Informații adiționale pentru contracte</h3>
-                <p className="text-sm text-muted-foreground">
-                  Aceste informații sunt folosite pentru generarea automată a contractelor și nu vor fi afișate pe site.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="vin">VIN (Codul mașinii)</Label>
-                  <Input
-                    id="vin"
-                    {...register('vin')}
-                    placeholder="ex: WVWZZZ1JZ2W386752"
-                    className="font-mono"
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Codul de identificare al vehiculului (17 caractere)
-                  </p>
-                </div>
-                
-                <div>
-                  <Label htmlFor="culoare">Culoare</Label>
-                  <Input
-                    id="culoare"
-                    {...register('culoare')}
-                    placeholder="ex: Negru metallic, Alb perlat"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="categoria_vehicului">Categoria vehicului</Label>
-                  <Select onValueChange={(value) => setValue('categoria_vehicului', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selectează categoria" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="M1">M1 - Autoturisme până la 8 locuri</SelectItem>
-                      <SelectItem value="M2">M2 - Autobuze până la 5 tone</SelectItem>
-                      <SelectItem value="M3">M3 - Autobuze peste 5 tone</SelectItem>
-                      <SelectItem value="N1">N1 - Autovehicule marfă până la 3.5 tone</SelectItem>
-                      <SelectItem value="N2">N2 - Autovehicule marfă 3.5-12 tone</SelectItem>
-                      <SelectItem value="N3">N3 - Autovehicule marfă peste 12 tone</SelectItem>
-                      <SelectItem value="O1">O1 - Remorci până la 0.75 tone</SelectItem>
-                      <SelectItem value="O2">O2 - Remorci 0.75-3.5 tone</SelectItem>
-                      <SelectItem value="O3">O3 - Remorci 3.5-10 tone</SelectItem>
-                      <SelectItem value="O4">O4 - Remorci peste 10 tone</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div>
-                  <Label htmlFor="greutatea_masinii">Greutatea mașinii (kg)</Label>
-                  <Input
-                    id="greutatea_masinii"
-                    type="number"
-                    min="0"
-                    {...register('greutatea_masinii')}
-                    placeholder="ex: 1450"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="sarcina_incarcata">Sarcina încărcată (kg)</Label>
-                  <Input
-                    id="sarcina_incarcata"
-                    type="number"
-                    min="0"
-                    {...register('sarcina_incarcata')}
-                    placeholder="ex: 500"
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor="pret_total">Preț total pentru contract (EUR)</Label>
-                  <Input
-                    id="pret_total"
-                    type="number"
-                    min="0"
-                    {...register('pret_total')}
-                    placeholder="ex: 15000"
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Prețul va fi convertit automat în cuvinte pentru contract
-                  </p>
-                </div>
-              </div>
-
-              {watch('pret_total') && (
-                <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
-                  <Label className="text-green-800 font-medium">Preț în cuvinte (generat automat):</Label>
-                  <p className="text-green-700 mt-1 font-mono">
-                    {watch('pret_total') ? `${watch('pret_total')} EUR (va fi generat automat în română la salvare)` : 'Introduceți prețul total pentru a vedea conversia'}
-                  </p>
-                </div>
-              )}
-            </TabsContent>
 
             <TabsContent value="descriptions" className="space-y-4">
               <div>

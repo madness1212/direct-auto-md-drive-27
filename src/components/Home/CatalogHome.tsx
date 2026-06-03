@@ -675,8 +675,8 @@ const CatalogHome = () => {
           {/* Cars Grid */}
           <div className="lg:w-3/4">
             {/* Sort Options */}
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center space-x-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+              <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:space-x-4 sm:gap-0">
                 <Button
                   variant="outline"
                   onClick={() => {
@@ -685,7 +685,7 @@ const CatalogHome = () => {
                       featuredSection.scrollIntoView({ behavior: 'smooth' });
                     }
                   }}
-                  className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
+                  className="w-full sm:w-auto border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
                 >
                   Oferte speciale
                 </Button>
@@ -698,14 +698,14 @@ const CatalogHome = () => {
                         comingSoonSection.scrollIntoView({ behavior: 'smooth' });
                       }
                     }}
-                    className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
+                    className="w-full sm:w-auto border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
                   >
                     În curând
                   </Button>
                 )}
               </div>
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-48">
+                <SelectTrigger className="w-full sm:w-48">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
