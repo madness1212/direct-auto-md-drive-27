@@ -562,6 +562,15 @@ const CarDetails = () => {
               </Card>
           </div>
           
+        {/* Finance Calculator */}
+        <div className="mt-12">
+          <FinanceCalculator
+            carPrice={car.pret}
+            carTitle={`${car.marca} ${car.model} ${car.an_fabricatie}`}
+            carId={car.id}
+          />
+        </div>
+
         {/* Recommended Cars Section */}
         <RecommendedCars currentCarId={car.id} />
         </div>
