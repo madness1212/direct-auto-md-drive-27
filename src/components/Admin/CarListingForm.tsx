@@ -544,6 +544,7 @@ export function CarListingForm({ onSuccess, onCancel, initialData, isEditing = f
                       <SelectItem value="cabriolet">Cabriolet</SelectItem>
                       <SelectItem value="pickup">Pickup</SelectItem>
                       <SelectItem value="minivan">Minivan</SelectItem>
+                      <SelectItem value="microvan">Microvan</SelectItem>
                       <SelectItem value="monovolum">Monovolum</SelectItem>
                       <SelectItem value="roadster">Roadster</SelectItem>
                       <SelectItem value="limuzina">Limuzină</SelectItem>
