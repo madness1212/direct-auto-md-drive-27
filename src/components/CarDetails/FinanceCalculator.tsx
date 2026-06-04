@@ -3,12 +3,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Calculator, TrendingUp, Wallet, Calendar as CalendarIcon, ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Calculator, TrendingUp, Wallet, Calendar as CalendarIcon } from "lucide-react";
 
 // Rata dobânzii anuale (DAE) orientativă - poate fi modificată ulterior
-const ANNUAL_INTEREST_RATE = 0.15;
+const ANNUAL_INTEREST_RATE = 0.11;
 
 const CAR_VALUE_MIN = 2000;
 const CAR_VALUE_MAX = 50000;
