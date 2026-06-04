@@ -179,8 +179,8 @@ const FinanceCalculator = ({ carPrice, carTitle, carId }: FinanceCalculatorProps
           </div>
 
           {/* Results */}
-          <div className="lg:col-span-2">
-            <div className="bg-gradient-primary rounded-xl p-5 text-white flex flex-col gap-4">
+          <div className="lg:col-span-2 flex flex-col">
+            <div className="bg-gradient-primary rounded-xl p-6 text-white flex flex-col gap-4 flex-1 justify-center">
               <div>
                 <p className="text-sm text-white/80 mb-1">Rata lunară estimată</p>
                 <div className="flex items-baseline gap-2">
