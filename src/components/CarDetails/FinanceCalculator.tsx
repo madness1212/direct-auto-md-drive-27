@@ -3,12 +3,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Calculator, TrendingUp, Wallet, Calendar as CalendarIcon, ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Calculator, TrendingUp, Wallet, Calendar as CalendarIcon } from "lucide-react";
 
 // Rata dobânzii anuale (DAE) orientativă - poate fi modificată ulterior
-const ANNUAL_INTEREST_RATE = 0.15;
+const ANNUAL_INTEREST_RATE = 0.11;
 
 const CAR_VALUE_MIN = 2000;
 const CAR_VALUE_MAX = 50000;
@@ -27,12 +25,11 @@ const formatEUR = (value: number) =>
   new Intl.NumberFormat("ro-RO", { maximumFractionDigits: 0 }).format(Math.round(value));
 
 const FinanceCalculator = ({ carPrice, carTitle, carId }: FinanceCalculatorProps) => {
-  const navigate = useNavigate();
   const initialPrice = Math.min(Math.max(carPrice || CAR_VALUE_MIN, CAR_VALUE_MIN), CAR_VALUE_MAX);
 
   const [carValue, setCarValue] = useState<number>(initialPrice);
   const [downPaymentPct, setDownPaymentPct] = useState<number>(20);
-  const [termMonths, setTermMonths] = useState<number>(36);
+  const [termMonths, setTermMonths] = useState<number>(60);
 
   useEffect(() => {
     setCarValue(Math.min(Math.max(carPrice || CAR_VALUE_MIN, CAR_VALUE_MIN), CAR_VALUE_MAX));
@@ -56,20 +53,6 @@ const FinanceCalculator = ({ carPrice, carTitle, carId }: FinanceCalculatorProps
   const clamp = (v: number, min: number, max: number) =>
     isNaN(v) ? min : Math.min(Math.max(v, min), max);
 
-  const handleApply = () => {
-    navigate("/credit", {
-      state: {
-        carId,
-        carTitle,
-        carValue,
-        downPaymentEUR,
-        downPaymentPct,
-        termMonths,
-        monthlyPayment,
-        financedAmount,
-      },
-    });
-  };
 
   return (
     <Card className="border-auto-green/20 shadow-card overflow-hidden">
@@ -199,14 +182,16 @@ const FinanceCalculator = ({ carPrice, carTitle, carId }: FinanceCalculatorProps
 
           {/* Results */}
           <div className="lg:col-span-2">
-            <div className="bg-gradient-primary rounded-xl p-5 text-white h-full flex flex-col">
-              <p className="text-sm text-white/80 mb-1">Rata lunară estimată</p>
-              <div className="flex items-baseline gap-2 mb-5">
-                <span className="text-4xl font-bold">{formatEUR(monthlyPayment)}</span>
-                <span className="text-lg font-semibold text-white/90">€/lună</span>
+            <div className="bg-gradient-primary rounded-xl p-5 text-white flex flex-col gap-4">
+              <div>
+                <p className="text-sm text-white/80 mb-1">Rata lunară estimată</p>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-bold">{formatEUR(monthlyPayment)}</span>
+                  <span className="text-lg font-semibold text-white/90">€/lună</span>
+                </div>
               </div>
 
-              <div className="space-y-3 text-sm border-t border-white/20 pt-4 flex-1">
+              <div className="space-y-2.5 text-sm border-t border-white/20 pt-3">
                 <div className="flex justify-between">
                   <span className="text-white/80">Suma solicitată</span>
                   <span className="font-semibold">{formatEUR(financedAmount)} €</span>
@@ -225,23 +210,15 @@ const FinanceCalculator = ({ carPrice, carTitle, carId }: FinanceCalculatorProps
                 </div>
               </div>
 
-              <Button
-                onClick={handleApply}
-                className="w-full mt-5 bg-white text-auto-green hover:bg-white/90 font-semibold"
-                size="lg"
-              >
-                Aplică pentru finanțare
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
+              <p className="text-xs text-white/80 text-center border-t border-white/20 pt-3">
+                * Calculul este orientativ. Rata finală depinde de evaluarea instituției financiare.
+              </p>
             </div>
           </div>
         </div>
-
-        <p className="text-xs text-muted-foreground mt-4 text-center">
-          * Calculul este orientativ. Rata finală depinde de evaluarea instituției financiare.
-        </p>
       </CardContent>
     </Card>
+
   );
 };
 
