@@ -198,10 +198,6 @@ const FinanceCalculator = ({ carPrice, carTitle, carId }: FinanceCalculatorProps
                   <span className="text-white/80">Avans achitat</span>
                   <span className="font-semibold">{formatEUR(downPaymentEUR)} €</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-white/80">Total de plată</span>
-                  <span className="font-semibold">{formatEUR(totalPayment)} €</span>
-                </div>
                 <div className="flex justify-between text-xs text-white/70 pt-2 border-t border-white/20">
                   <span>DAE orientativ</span>
                   <span>{(ANNUAL_INTEREST_RATE * 100).toFixed(0)}%</span>
