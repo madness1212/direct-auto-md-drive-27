@@ -560,6 +560,7 @@ const CarDetails = () => {
                   </div>
                 </CardContent>
               </Card>
+            </div>
           </div>
           
         {/* Finance Calculator */}
@@ -573,7 +574,6 @@ const CarDetails = () => {
 
         {/* Recommended Cars Section */}
         <RecommendedCars currentCarId={car.id} />
-        </div>
       </div>
       </div>
 
