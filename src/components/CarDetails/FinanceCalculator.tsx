@@ -28,11 +28,13 @@ const FinanceCalculator = ({ carPrice, carTitle, carId }: FinanceCalculatorProps
   const initialPrice = Math.min(Math.max(carPrice || CAR_VALUE_MIN, CAR_VALUE_MIN), CAR_VALUE_MAX);
 
   const [carValue, setCarValue] = useState<number>(initialPrice);
-  const [downPaymentPct, setDownPaymentPct] = useState<number>(20);
+  const [downPaymentPct, setDownPaymentPct] = useState<number>(initialPrice > 30000 ? 5 : 0);
   const [termMonths, setTermMonths] = useState<number>(60);
 
   useEffect(() => {
-    setCarValue(Math.min(Math.max(carPrice || CAR_VALUE_MIN, CAR_VALUE_MIN), CAR_VALUE_MAX));
+    const newPrice = Math.min(Math.max(carPrice || CAR_VALUE_MIN, CAR_VALUE_MIN), CAR_VALUE_MAX);
+    setCarValue(newPrice);
+    setDownPaymentPct(newPrice > 30000 ? 5 : 0);
   }, [carPrice]);
 
   const downPaymentEUR = useMemo(() => (carValue * downPaymentPct) / 100, [carValue, downPaymentPct]);
