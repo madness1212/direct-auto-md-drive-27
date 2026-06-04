@@ -28,11 +28,13 @@ const FinanceCalculator = ({ carPrice, carTitle, carId }: FinanceCalculatorProps
   const initialPrice = Math.min(Math.max(carPrice || CAR_VALUE_MIN, CAR_VALUE_MIN), CAR_VALUE_MAX);
 
   const [carValue, setCarValue] = useState<number>(initialPrice);
-  const [downPaymentPct, setDownPaymentPct] = useState<number>(20);
+  const [downPaymentPct, setDownPaymentPct] = useState<number>(initialPrice > 30000 ? 5 : 0);
   const [termMonths, setTermMonths] = useState<number>(60);
 
   useEffect(() => {
-    setCarValue(Math.min(Math.max(carPrice || CAR_VALUE_MIN, CAR_VALUE_MIN), CAR_VALUE_MAX));
+    const newPrice = Math.min(Math.max(carPrice || CAR_VALUE_MIN, CAR_VALUE_MIN), CAR_VALUE_MAX);
+    setCarValue(newPrice);
+    setDownPaymentPct(newPrice > 30000 ? 5 : 0);
   }, [carPrice]);
 
   const downPaymentEUR = useMemo(() => (carValue * downPaymentPct) / 100, [carValue, downPaymentPct]);
@@ -45,10 +47,6 @@ const FinanceCalculator = ({ carPrice, carTitle, carId }: FinanceCalculatorProps
     return (financedAmount * r) / (1 - Math.pow(1 + r, -termMonths));
   }, [financedAmount, termMonths]);
 
-  const totalPayment = useMemo(
-    () => monthlyPayment * termMonths + downPaymentEUR,
-    [monthlyPayment, termMonths, downPaymentEUR]
-  );
 
   const clamp = (v: number, min: number, max: number) =>
     isNaN(v) ? min : Math.min(Math.max(v, min), max);
@@ -181,8 +179,8 @@ const FinanceCalculator = ({ carPrice, carTitle, carId }: FinanceCalculatorProps
           </div>
 
           {/* Results */}
-          <div className="lg:col-span-2">
-            <div className="bg-gradient-primary rounded-xl p-5 text-white flex flex-col gap-4">
+          <div className="lg:col-span-2 flex flex-col">
+            <div className="bg-gradient-primary rounded-xl p-6 text-white flex flex-col gap-4 flex-1 justify-center">
               <div>
                 <p className="text-sm text-white/80 mb-1">Rata lunară estimată</p>
                 <div className="flex items-baseline gap-2">
@@ -199,10 +197,6 @@ const FinanceCalculator = ({ carPrice, carTitle, carId }: FinanceCalculatorProps
                 <div className="flex justify-between">
                   <span className="text-white/80">Avans achitat</span>
                   <span className="font-semibold">{formatEUR(downPaymentEUR)} €</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-white/80">Total de plată</span>
-                  <span className="font-semibold">{formatEUR(totalPayment)} €</span>
                 </div>
                 <div className="flex justify-between text-xs text-white/70 pt-2 border-t border-white/20">
                   <span>DAE orientativ</span>
