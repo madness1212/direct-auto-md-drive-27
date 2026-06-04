@@ -25,12 +25,11 @@ const formatEUR = (value: number) =>
   new Intl.NumberFormat("ro-RO", { maximumFractionDigits: 0 }).format(Math.round(value));
 
 const FinanceCalculator = ({ carPrice, carTitle, carId }: FinanceCalculatorProps) => {
-  const navigate = useNavigate();
   const initialPrice = Math.min(Math.max(carPrice || CAR_VALUE_MIN, CAR_VALUE_MIN), CAR_VALUE_MAX);
 
   const [carValue, setCarValue] = useState<number>(initialPrice);
   const [downPaymentPct, setDownPaymentPct] = useState<number>(20);
-  const [termMonths, setTermMonths] = useState<number>(36);
+  const [termMonths, setTermMonths] = useState<number>(60);
 
   useEffect(() => {
     setCarValue(Math.min(Math.max(carPrice || CAR_VALUE_MIN, CAR_VALUE_MIN), CAR_VALUE_MAX));
@@ -54,20 +53,6 @@ const FinanceCalculator = ({ carPrice, carTitle, carId }: FinanceCalculatorProps
   const clamp = (v: number, min: number, max: number) =>
     isNaN(v) ? min : Math.min(Math.max(v, min), max);
 
-  const handleApply = () => {
-    navigate("/credit", {
-      state: {
-        carId,
-        carTitle,
-        carValue,
-        downPaymentEUR,
-        downPaymentPct,
-        termMonths,
-        monthlyPayment,
-        financedAmount,
-      },
-    });
-  };
 
   return (
     <Card className="border-auto-green/20 shadow-card overflow-hidden">
