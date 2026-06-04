@@ -47,10 +47,6 @@ const FinanceCalculator = ({ carPrice, carTitle, carId }: FinanceCalculatorProps
     return (financedAmount * r) / (1 - Math.pow(1 + r, -termMonths));
   }, [financedAmount, termMonths]);
 
-  const totalPayment = useMemo(
-    () => monthlyPayment * termMonths + downPaymentEUR,
-    [monthlyPayment, termMonths, downPaymentEUR]
-  );
 
   const clamp = (v: number, min: number, max: number) =>
     isNaN(v) ? min : Math.min(Math.max(v, min), max);
