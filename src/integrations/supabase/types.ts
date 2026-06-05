@@ -64,6 +64,7 @@ export type Database = {
           descriere_ru: string | null
           greutatea_masinii: number | null
           id: string
+          id_999: string | null
           images: string[] | null
           images_order: Json | null
           is_coming_soon: boolean | null
@@ -101,6 +102,7 @@ export type Database = {
           descriere_ru?: string | null
           greutatea_masinii?: number | null
           id?: string
+          id_999?: string | null
           images?: string[] | null
           images_order?: Json | null
           is_coming_soon?: boolean | null
@@ -138,6 +140,7 @@ export type Database = {
           descriere_ru?: string | null
           greutatea_masinii?: number | null
           id?: string
+          id_999?: string | null
           images?: string[] | null
           images_order?: Json | null
           is_coming_soon?: boolean | null
