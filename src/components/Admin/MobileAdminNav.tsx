@@ -11,7 +11,8 @@ import {
   BarChart3,
   Plus,
   X,
-  FileText
+  FileText,
+  RefreshCw
 } from 'lucide-react';
 
 interface MobileAdminNavProps {
@@ -36,6 +37,12 @@ export function MobileAdminNav({
       id: 'listings',
       label: 'Anunțuri Auto',
       icon: Car,
+      badge: null
+    },
+    {
+      id: 'sync999',
+      label: 'Sincronizare 999',
+      icon: RefreshCw,
       badge: null
     },
     {
