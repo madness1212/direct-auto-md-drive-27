@@ -112,7 +112,7 @@ const RecommendedCars = ({ currentCarId }: RecommendedCarsProps) => {
 
   return (
     <section className="py-8 bg-background">
-      <div className="w-screen px-4"> {/* full width edge-to-edge */}
+      <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             Mașini Recomandate
