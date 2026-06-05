@@ -11,7 +11,8 @@ import {
   BarChart3,
   Plus,
   X,
-  FileText
+  FileText,
+  RefreshCw
 } from 'lucide-react';
 
 interface MobileAdminNavProps {
