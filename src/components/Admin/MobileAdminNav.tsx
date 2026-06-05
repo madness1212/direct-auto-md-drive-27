@@ -40,6 +40,12 @@ export function MobileAdminNav({
       badge: null
     },
     {
+      id: 'sync999',
+      label: 'Sincronizare 999',
+      icon: RefreshCw,
+      badge: null
+    },
+    {
       id: 'import',
       label: 'Import 999.md',
       icon: Download,
