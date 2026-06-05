@@ -308,10 +308,13 @@ export default function Admin() {
 
         {/* Tabs pentru diferite secțiuni */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-6 gap-1">
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-7 gap-1">
             <TabsTrigger value="listings" className="text-xs lg:text-sm">
               <span className="lg:hidden">Anunțuri</span>
               <span className="hidden lg:inline">Anunțuri</span>
+            </TabsTrigger>
+            <TabsTrigger value="sync999" className="text-xs lg:text-sm hidden lg:flex">
+              Sincronizare 999
             </TabsTrigger>
             <TabsTrigger value="import" className="text-xs lg:text-sm hidden lg:flex">
               Import 999.md
