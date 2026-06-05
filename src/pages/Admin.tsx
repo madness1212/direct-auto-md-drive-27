@@ -568,6 +568,11 @@ export default function Admin() {
             <Import999Listings />
           </TabsContent>
 
+          <TabsContent value="sync999">
+            <Sync999Listings />
+          </TabsContent>
+
+
           <TabsContent value="offers">
             <TopOffersManager />
           </TabsContent>
