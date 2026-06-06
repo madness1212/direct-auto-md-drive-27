@@ -68,6 +68,8 @@ export default function Admin() {
   const [activeTab, setActiveTab] = useState('listings');
   const [pendingTestDrives, setPendingTestDrives] = useState(0);
   const [showContractGenerator, setShowContractGenerator] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkActing, setBulkActing] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
