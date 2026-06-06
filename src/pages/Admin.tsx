@@ -172,6 +172,67 @@ export default function Admin() {
     }
   };
 
+  const toggleSelectOne = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAllFiltered = () => {
+    setSelectedIds((prev) => {
+      const allSelected = filteredListings.length > 0 && filteredListings.every((c) => prev.has(c.id));
+      const next = new Set(prev);
+      if (allSelected) {
+        filteredListings.forEach((c) => next.delete(c.id));
+      } else {
+        filteredListings.forEach((c) => next.add(c.id));
+      }
+      return next;
+    });
+  };
+
+  const handleBulkStatus = async (newStatus: string) => {
+    const ids = Array.from(selectedIds);
+    if (ids.length === 0) return;
+    setBulkActing(true);
+    try {
+      const { error } = await supabase
+        .from('car_listings')
+        .update({ status: newStatus })
+        .in('id', ids);
+      if (error) throw error;
+      toast({ title: 'Status actualizat', description: `${ids.length} anunțuri actualizate.` });
+      setSelectedIds(new Set());
+      fetchCarListings();
+    } catch (error: any) {
+      toast({ title: 'Eroare', description: error.message, variant: 'destructive' });
+    } finally {
+      setBulkActing(false);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    const ids = Array.from(selectedIds);
+    if (ids.length === 0) return;
+    setBulkActing(true);
+    try {
+      const { error } = await supabase
+        .from('car_listings')
+        .delete()
+        .in('id', ids);
+      if (error) throw error;
+      toast({ title: 'Anunțuri șterse', description: `${ids.length} anunțuri șterse.` });
+      setCarListings((prev) => prev.filter((c) => !selectedIds.has(c.id)));
+      setSelectedIds(new Set());
+    } catch (error: any) {
+      toast({ title: 'Eroare la ștergere', description: error.message, variant: 'destructive' });
+    } finally {
+      setBulkActing(false);
+    }
+  };
+
   const handleCloneCar = async (car: CarListing) => {
     try {
       const { id, created_at, ...carData } = car;
