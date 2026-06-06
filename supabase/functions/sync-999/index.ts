@@ -201,6 +201,7 @@ Deno.serve(async (req) => {
         price: a.price?.value || 0,
         price_unit: a.price?.unit || "eur",
         state: a.state,
+        is_active_999: String(a.state || "").toLowerCase() === "active",
         thumbnail: a.images?.value?.[0]
           ? `https://i.simpalsmedia.com/999.md/BoardImages/320x240/${a.images.value[0]}`
           : null,
@@ -221,6 +222,14 @@ Deno.serve(async (req) => {
         local_id: existingMap.get(s.id_999)?.id || null,
         an_fabricatie: existingMap.get(s.id_999)?.an_fabricatie || null,
       }));
+
+      // Sort: active first, then by posted date desc (newest first)
+      result.sort((a, b) => {
+        if (a.is_active_999 !== b.is_active_999) return a.is_active_999 ? -1 : 1;
+        const da = new Date(a.posted || 0).getTime();
+        const db = new Date(b.posted || 0).getTime();
+        return db - da;
+      });
 
       return jsonResponse({ adverts: result });
     }
