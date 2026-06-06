@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
@@ -67,6 +68,8 @@ export default function Admin() {
   const [activeTab, setActiveTab] = useState('listings');
   const [pendingTestDrives, setPendingTestDrives] = useState(0);
   const [showContractGenerator, setShowContractGenerator] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkActing, setBulkActing] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -166,6 +169,67 @@ export default function Admin() {
         description: error.message,
         variant: 'destructive',
       });
+    }
+  };
+
+  const toggleSelectOne = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAllFiltered = () => {
+    setSelectedIds((prev) => {
+      const allSelected = filteredListings.length > 0 && filteredListings.every((c) => prev.has(c.id));
+      const next = new Set(prev);
+      if (allSelected) {
+        filteredListings.forEach((c) => next.delete(c.id));
+      } else {
+        filteredListings.forEach((c) => next.add(c.id));
+      }
+      return next;
+    });
+  };
+
+  const handleBulkStatus = async (newStatus: string) => {
+    const ids = Array.from(selectedIds);
+    if (ids.length === 0) return;
+    setBulkActing(true);
+    try {
+      const { error } = await supabase
+        .from('car_listings')
+        .update({ status: newStatus })
+        .in('id', ids);
+      if (error) throw error;
+      toast({ title: 'Status actualizat', description: `${ids.length} anunțuri actualizate.` });
+      setSelectedIds(new Set());
+      fetchCarListings();
+    } catch (error: any) {
+      toast({ title: 'Eroare', description: error.message, variant: 'destructive' });
+    } finally {
+      setBulkActing(false);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    const ids = Array.from(selectedIds);
+    if (ids.length === 0) return;
+    setBulkActing(true);
+    try {
+      const { error } = await supabase
+        .from('car_listings')
+        .delete()
+        .in('id', ids);
+      if (error) throw error;
+      toast({ title: 'Anunțuri șterse', description: `${ids.length} anunțuri șterse.` });
+      setCarListings((prev) => prev.filter((c) => !selectedIds.has(c.id)));
+      setSelectedIds(new Set());
+    } catch (error: any) {
+      toast({ title: 'Eroare la ștergere', description: error.message, variant: 'destructive' });
+    } finally {
+      setBulkActing(false);
     }
   };
 
@@ -384,6 +448,49 @@ export default function Admin() {
               </CardContent>
             </Card>
 
+            {/* Bulk actions bar */}
+            {selectedIds.size > 0 && (
+              <Card>
+                <CardContent className="py-3 flex items-center justify-between gap-3 flex-wrap">
+                  <span className="text-sm font-medium">
+                    {selectedIds.size} {selectedIds.size === 1 ? 'anunț selectat' : 'anunțuri selectate'}
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    <Button variant="outline" size="sm" onClick={() => setSelectedIds(new Set())} disabled={bulkActing}>
+                      Deselectează
+                    </Button>
+                    <Button variant="outline" size="sm" disabled={bulkActing} onClick={() => handleBulkStatus('active')}>
+                      <Eye className="h-4 w-4 mr-1" /> Activează
+                    </Button>
+                    <Button variant="outline" size="sm" disabled={bulkActing} onClick={() => handleBulkStatus('inactive')}>
+                      <EyeOff className="h-4 w-4 mr-1" /> Dezactivează
+                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="destructive" size="sm" disabled={bulkActing}>
+                          <Trash2 className="h-4 w-4 mr-1" /> Șterge selectate
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Confirmare ștergere în masă</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Ești sigur că vrei să ștergi {selectedIds.size} anunțuri? Această acțiune nu poate fi anulată.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Anulează</AlertDialogCancel>
+                          <AlertDialogAction onClick={handleBulkDelete} className="bg-destructive hover:bg-destructive/90">
+                            Șterge
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Listings Table */}
             <Card>
               <CardHeader>
@@ -396,6 +503,13 @@ export default function Admin() {
                   <Table>
                     <TableHeader>
                       <TableRow>
+                        <TableHead className="w-10">
+                          <Checkbox
+                            checked={filteredListings.length > 0 && filteredListings.every((c) => selectedIds.has(c.id))}
+                            onCheckedChange={toggleSelectAllFiltered}
+                            aria-label="Selectează toate"
+                          />
+                        </TableHead>
                         <TableHead className="hidden sm:table-cell">Imagine</TableHead>
                         <TableHead>Marcă / Model</TableHead>
                         <TableHead className="hidden lg:table-cell">An</TableHead>
@@ -407,19 +521,26 @@ export default function Admin() {
                   <TableBody>
                     {loading ? (
                       <TableRow>
-                        <TableCell colSpan={6} className="text-center py-8">
+                        <TableCell colSpan={7} className="text-center py-8">
                           Se încarcă...
                         </TableCell>
                       </TableRow>
                     ) : filteredListings.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={6} className="text-center py-8">
+                        <TableCell colSpan={7} className="text-center py-8">
                           Nu au fost găsite anunțuri
                         </TableCell>
                       </TableRow>
                     ) : (
                       filteredListings.map((car) => (
-                        <TableRow key={car.id}>
+                        <TableRow key={car.id} data-state={selectedIds.has(car.id) ? 'selected' : undefined}>
+                          <TableCell>
+                            <Checkbox
+                              checked={selectedIds.has(car.id)}
+                              onCheckedChange={() => toggleSelectOne(car.id)}
+                              aria-label={`Selectează ${car.marca} ${car.model}`}
+                            />
+                          </TableCell>
                           <TableCell className="hidden sm:table-cell">
                             {car.images && car.images.length > 0 ? (
                               <img

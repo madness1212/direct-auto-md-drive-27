@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -16,6 +17,7 @@ interface Advert999 {
   price: number;
   price_unit: string;
   state: string;
+  is_active_999: boolean;
   thumbnail: string | null;
   posted: string;
   imported: boolean;
@@ -51,6 +53,9 @@ export function Sync999Listings() {
   const [actingId, setActingId] = useState<string | null>(null);
   const [detail, setDetail] = useState<AdvertDetail | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [bulkLoading, setBulkLoading] = useState(false);
+  const [bulkProgress, setBulkProgress] = useState({ done: 0, total: 0 });
 
   const callFn = async (action: string, body: Record<string, unknown> = {}) => {
     const { data, error } = await supabase.functions.invoke('sync-999', {
@@ -66,6 +71,7 @@ export function Sync999Listings() {
     try {
       const data = await callFn('list');
       setAdverts(data.adverts || []);
+      setSelected(new Set());
     } catch (e: any) {
       toast({
         title: 'Eroare la conexiunea cu 999.md',
@@ -87,10 +93,7 @@ export function Sync999Listings() {
       if (filter === 'new' && a.imported) return false;
       if (filter === 'imported' && !a.imported) return false;
       if (!q) return true;
-      return (
-        a.title.toLowerCase().includes(q) ||
-        a.id_999.includes(q)
-      );
+      return a.title.toLowerCase().includes(q) || a.id_999.includes(q);
     });
   }, [adverts, filter, search]);
 
@@ -99,6 +102,25 @@ export function Sync999Listings() {
     new: adverts.filter((a) => !a.imported).length,
     imported: adverts.filter((a) => a.imported).length,
   }), [adverts]);
+
+  const allFilteredSelected = filtered.length > 0 && filtered.every((a) => selected.has(a.id_999));
+  const someFilteredSelected = filtered.some((a) => selected.has(a.id_999));
+
+  const toggleSelectAll = () => {
+    const next = new Set(selected);
+    if (allFilteredSelected) {
+      filtered.forEach((a) => next.delete(a.id_999));
+    } else {
+      filtered.forEach((a) => next.add(a.id_999));
+    }
+    setSelected(next);
+  };
+
+  const toggleOne = (id: string) => {
+    const next = new Set(selected);
+    if (next.has(id)) next.delete(id); else next.add(id);
+    setSelected(next);
+  };
 
   const openDetail = async (id_999: string) => {
     setDetail(null);
@@ -122,7 +144,6 @@ export function Sync999Listings() {
         title: advert.imported ? 'Anunț actualizat' : 'Anunț importat',
         description: advert.title,
       });
-      // Update local state without full re-fetch
       setAdverts((prev) =>
         prev.map((a) => (a.id_999 === advert.id_999 ? { ...a, imported: true } : a))
       );
@@ -131,6 +152,35 @@ export function Sync999Listings() {
     } finally {
       setActingId(null);
     }
+  };
+
+  const handleBulkImport = async () => {
+    const ids = Array.from(selected);
+    if (ids.length === 0) return;
+    setBulkLoading(true);
+    setBulkProgress({ done: 0, total: ids.length });
+    let success = 0;
+    let failed = 0;
+    for (let i = 0; i < ids.length; i++) {
+      const id = ids[i];
+      const adv = adverts.find((a) => a.id_999 === id);
+      if (!adv) continue;
+      try {
+        await callFn(adv.imported ? 'update' : 'import', { id_999: id });
+        success++;
+        setAdverts((prev) => prev.map((a) => (a.id_999 === id ? { ...a, imported: true } : a)));
+      } catch (e) {
+        failed++;
+      }
+      setBulkProgress({ done: i + 1, total: ids.length });
+    }
+    setBulkLoading(false);
+    setSelected(new Set());
+    toast({
+      title: 'Import în masă finalizat',
+      description: `${success} reușite, ${failed} eșuate din ${ids.length}`,
+      variant: failed > 0 ? 'destructive' : 'default',
+    });
   };
 
   return (
@@ -165,14 +215,44 @@ export function Sync999Listings() {
             </Tabs>
           </div>
 
+          {selected.size > 0 && (
+            <div className="flex items-center justify-between gap-3 p-3 bg-muted rounded-lg flex-wrap">
+              <span className="text-sm font-medium">
+                {selected.size} {selected.size === 1 ? 'anunț selectat' : 'anunțuri selectate'}
+                {bulkLoading && ` — procesare ${bulkProgress.done}/${bulkProgress.total}`}
+              </span>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" onClick={() => setSelected(new Set())} disabled={bulkLoading}>
+                  Deselectează
+                </Button>
+                <Button size="sm" onClick={handleBulkImport} disabled={bulkLoading}>
+                  {bulkLoading ? (
+                    <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                  ) : (
+                    <Download className="h-4 w-4 mr-1" />
+                  )}
+                  Importă selectate
+                </Button>
+              </div>
+            </div>
+          )}
+
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead className="w-10">
+                    <Checkbox
+                      checked={allFilteredSelected}
+                      onCheckedChange={toggleSelectAll}
+                      aria-label="Selectează toate"
+                    />
+                  </TableHead>
                   <TableHead className="hidden sm:table-cell">Imagine</TableHead>
                   <TableHead>Titlu</TableHead>
                   <TableHead className="hidden md:table-cell">ID 999</TableHead>
                   <TableHead>Preț</TableHead>
+                  <TableHead>Afișare 999</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Acțiuni</TableHead>
                 </TableRow>
@@ -180,20 +260,30 @@ export function Sync999Listings() {
               <TableBody>
                 {loading ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-12">
+                    <TableCell colSpan={8} className="text-center py-12">
                       <Loader2 className="h-6 w-6 animate-spin inline mr-2" />
                       Se încarcă din 999.md...
                     </TableCell>
                   </TableRow>
                 ) : filtered.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-12 text-muted-foreground">
+                    <TableCell colSpan={8} className="text-center py-12 text-muted-foreground">
                       Nu sunt mașini de afișat
                     </TableCell>
                   </TableRow>
                 ) : (
                   filtered.map((a) => (
-                    <TableRow key={a.id_999}>
+                    <TableRow
+                      key={a.id_999}
+                      className={!a.is_active_999 ? 'bg-red-50/60 hover:bg-red-50' : ''}
+                    >
+                      <TableCell>
+                        <Checkbox
+                          checked={selected.has(a.id_999)}
+                          onCheckedChange={() => toggleOne(a.id_999)}
+                          aria-label={`Selectează ${a.title}`}
+                        />
+                      </TableCell>
                       <TableCell className="hidden sm:table-cell">
                         {a.thumbnail ? (
                           <img src={a.thumbnail} alt={a.title} className="w-20 h-14 object-cover rounded" />
@@ -208,6 +298,15 @@ export function Sync999Listings() {
                       <TableCell className="hidden md:table-cell font-mono text-xs">{a.id_999}</TableCell>
                       <TableCell className="font-medium whitespace-nowrap">
                         {a.price.toLocaleString()} {a.price_unit.toUpperCase()}
+                      </TableCell>
+                      <TableCell>
+                        {a.is_active_999 ? (
+                          <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Activ</Badge>
+                        ) : (
+                          <Badge className="bg-red-100 text-red-800 hover:bg-red-100 border border-red-300">
+                            Inactiv
+                          </Badge>
+                        )}
                       </TableCell>
                       <TableCell>
                         {a.imported ? (
