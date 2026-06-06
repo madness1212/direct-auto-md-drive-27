@@ -108,7 +108,21 @@ function parseAdvertDetail(advert: any, features: any) {
   const images = imageIds.map((id) => `${IMG_PREFIX}${id}`);
 
   const marca = optionTitle(fMarca, fMarca?.value) || "Unknown";
-  const model = optionTitle(fModel, fModel?.value) || "Unknown";
+  // Model options are loaded dynamically by 999.md based on marca and are NOT
+  // included in the features payload, so optionTitle() returns null. Derive
+  // the model from advert.title by stripping the marca prefix.
+  let model = optionTitle(fModel, fModel?.value);
+  if (!model) {
+    const title = String(advert?.title || "").trim();
+    if (marca && marca !== "Unknown" && title.toLowerCase().startsWith(marca.toLowerCase())) {
+      model = title.slice(marca.length).trim();
+    } else {
+      // Fallback: take everything after the first word in the title
+      const parts = title.split(/\s+/);
+      model = parts.length > 1 ? parts.slice(1).join(" ") : title;
+    }
+  }
+  if (!model) model = "Unknown";
   const an = Number(fYear?.value) || new Date().getFullYear();
   const km = Number(fKm?.value) || 0;
   const pret = Number(advert?.price?.value) || 0;
