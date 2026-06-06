@@ -541,6 +541,7 @@ export default function Admin() {
                               aria-label={`Selectează ${car.marca} ${car.model}`}
                             />
                           </TableCell>
+                          <TableCell className="hidden sm:table-cell">
                             {car.images && car.images.length > 0 ? (
                               <img
                                 src={car.images[0]}
