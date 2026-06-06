@@ -448,6 +448,49 @@ export default function Admin() {
               </CardContent>
             </Card>
 
+            {/* Bulk actions bar */}
+            {selectedIds.size > 0 && (
+              <Card>
+                <CardContent className="py-3 flex items-center justify-between gap-3 flex-wrap">
+                  <span className="text-sm font-medium">
+                    {selectedIds.size} {selectedIds.size === 1 ? 'anunț selectat' : 'anunțuri selectate'}
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    <Button variant="outline" size="sm" onClick={() => setSelectedIds(new Set())} disabled={bulkActing}>
+                      Deselectează
+                    </Button>
+                    <Button variant="outline" size="sm" disabled={bulkActing} onClick={() => handleBulkStatus('active')}>
+                      <Eye className="h-4 w-4 mr-1" /> Activează
+                    </Button>
+                    <Button variant="outline" size="sm" disabled={bulkActing} onClick={() => handleBulkStatus('inactive')}>
+                      <EyeOff className="h-4 w-4 mr-1" /> Dezactivează
+                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="destructive" size="sm" disabled={bulkActing}>
+                          <Trash2 className="h-4 w-4 mr-1" /> Șterge selectate
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Confirmare ștergere în masă</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Ești sigur că vrei să ștergi {selectedIds.size} anunțuri? Această acțiune nu poate fi anulată.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Anulează</AlertDialogCancel>
+                          <AlertDialogAction onClick={handleBulkDelete} className="bg-destructive hover:bg-destructive/90">
+                            Șterge
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Listings Table */}
             <Card>
               <CardHeader>
@@ -460,6 +503,13 @@ export default function Admin() {
                   <Table>
                     <TableHeader>
                       <TableRow>
+                        <TableHead className="w-10">
+                          <Checkbox
+                            checked={filteredListings.length > 0 && filteredListings.every((c) => selectedIds.has(c.id))}
+                            onCheckedChange={toggleSelectAllFiltered}
+                            aria-label="Selectează toate"
+                          />
+                        </TableHead>
                         <TableHead className="hidden sm:table-cell">Imagine</TableHead>
                         <TableHead>Marcă / Model</TableHead>
                         <TableHead className="hidden lg:table-cell">An</TableHead>
@@ -471,20 +521,26 @@ export default function Admin() {
                   <TableBody>
                     {loading ? (
                       <TableRow>
-                        <TableCell colSpan={6} className="text-center py-8">
+                        <TableCell colSpan={7} className="text-center py-8">
                           Se încarcă...
                         </TableCell>
                       </TableRow>
                     ) : filteredListings.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={6} className="text-center py-8">
+                        <TableCell colSpan={7} className="text-center py-8">
                           Nu au fost găsite anunțuri
                         </TableCell>
                       </TableRow>
                     ) : (
                       filteredListings.map((car) => (
-                        <TableRow key={car.id}>
-                          <TableCell className="hidden sm:table-cell">
+                        <TableRow key={car.id} data-state={selectedIds.has(car.id) ? 'selected' : undefined}>
+                          <TableCell>
+                            <Checkbox
+                              checked={selectedIds.has(car.id)}
+                              onCheckedChange={() => toggleSelectOne(car.id)}
+                              aria-label={`Selectează ${car.marca} ${car.model}`}
+                            />
+                          </TableCell>
                             {car.images && car.images.length > 0 ? (
                               <img
                                 src={car.images[0]}
