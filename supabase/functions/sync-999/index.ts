@@ -201,7 +201,7 @@ Deno.serve(async (req) => {
         price: a.price?.value || 0,
         price_unit: a.price?.unit || "eur",
         state: a.state,
-        is_active_999: String(a.state || "").toLowerCase() === "active",
+        is_active_999: String(a.state || "").toLowerCase() === "public",
         thumbnail: a.images?.value?.[0]
           ? `https://i.simpalsmedia.com/999.md/BoardImages/320x240/${a.images.value[0]}`
           : null,
