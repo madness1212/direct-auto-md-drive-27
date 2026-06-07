@@ -93,15 +93,19 @@ export function Sync999Listings() {
     return adverts.filter((a) => {
       if (filter === 'new' && a.imported) return false;
       if (filter === 'imported' && !a.imported) return false;
+      if (visibility === 'public' && !a.is_active_999) return false;
+      if (visibility === 'private' && a.is_active_999) return false;
       if (!q) return true;
       return a.title.toLowerCase().includes(q) || a.id_999.includes(q);
     });
-  }, [adverts, filter, search]);
+  }, [adverts, filter, visibility, search]);
 
   const counts = useMemo(() => ({
     all: adverts.length,
     new: adverts.filter((a) => !a.imported).length,
     imported: adverts.filter((a) => a.imported).length,
+    public: adverts.filter((a) => a.is_active_999).length,
+    private: adverts.filter((a) => !a.is_active_999).length,
   }), [adverts]);
 
   const allFilteredSelected = filtered.length > 0 && filtered.every((a) => selected.has(a.id_999));
