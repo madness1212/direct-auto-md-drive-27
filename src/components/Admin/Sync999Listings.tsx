@@ -49,6 +49,7 @@ export function Sync999Listings() {
   const [loading, setLoading] = useState(false);
   const [adverts, setAdverts] = useState<Advert999[]>([]);
   const [filter, setFilter] = useState<'all' | 'new' | 'imported'>('all');
+  const [visibility, setVisibility] = useState<'all' | 'public' | 'private'>('public');
   const [search, setSearch] = useState('');
   const [actingId, setActingId] = useState<string | null>(null);
   const [detail, setDetail] = useState<AdvertDetail | null>(null);
@@ -92,15 +93,19 @@ export function Sync999Listings() {
     return adverts.filter((a) => {
       if (filter === 'new' && a.imported) return false;
       if (filter === 'imported' && !a.imported) return false;
+      if (visibility === 'public' && !a.is_active_999) return false;
+      if (visibility === 'private' && a.is_active_999) return false;
       if (!q) return true;
       return a.title.toLowerCase().includes(q) || a.id_999.includes(q);
     });
-  }, [adverts, filter, search]);
+  }, [adverts, filter, visibility, search]);
 
   const counts = useMemo(() => ({
     all: adverts.length,
     new: adverts.filter((a) => !a.imported).length,
     imported: adverts.filter((a) => a.imported).length,
+    public: adverts.filter((a) => a.is_active_999).length,
+    private: adverts.filter((a) => !a.is_active_999).length,
   }), [adverts]);
 
   const allFilteredSelected = filtered.length > 0 && filtered.every((a) => selected.has(a.id_999));
@@ -206,13 +211,45 @@ export function Sync999Listings() {
                 className="pl-10"
               />
             </div>
+            <Tabs value={visibility} onValueChange={(v) => setVisibility(v as any)}>
+              <TabsList>
+                <TabsTrigger value="public">Public ({counts.public})</TabsTrigger>
+                <TabsTrigger value="private">Privat ({counts.private})</TabsTrigger>
+                <TabsTrigger value="all">Toate ({counts.all})</TabsTrigger>
+              </TabsList>
+            </Tabs>
             <Tabs value={filter} onValueChange={(v) => setFilter(v as any)}>
               <TabsList>
-                <TabsTrigger value="all">Toate ({counts.all})</TabsTrigger>
+                <TabsTrigger value="all">Toate</TabsTrigger>
                 <TabsTrigger value="new">Noi ({counts.new})</TabsTrigger>
                 <TabsTrigger value="imported">Importate ({counts.imported})</TabsTrigger>
               </TabsList>
             </Tabs>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                const next = new Set(selected);
+                filtered.filter((a) => a.is_active_999).forEach((a) => next.add(a.id_999));
+                setSelected(next);
+              }}
+            >
+              Selectează toate publice ({filtered.filter((a) => a.is_active_999).length})
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                const next = new Set(selected);
+                filtered.filter((a) => a.is_active_999 && !a.imported).forEach((a) => next.add(a.id_999));
+                setSelected(next);
+              }}
+            >
+              Selectează publice neimportate ({filtered.filter((a) => a.is_active_999 && !a.imported).length})
+            </Button>
           </div>
 
           {selected.size > 0 && (
@@ -252,7 +289,7 @@ export function Sync999Listings() {
                   <TableHead>Titlu</TableHead>
                   <TableHead className="hidden md:table-cell">ID 999</TableHead>
                   <TableHead>Preț</TableHead>
-                  <TableHead>Afișare 999</TableHead>
+                  <TableHead>Vizibilitate 999</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Acțiuni</TableHead>
                 </TableRow>
@@ -301,10 +338,10 @@ export function Sync999Listings() {
                       </TableCell>
                       <TableCell>
                         {a.is_active_999 ? (
-                          <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Activ</Badge>
+                          <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Public</Badge>
                         ) : (
                           <Badge className="bg-red-100 text-red-800 hover:bg-red-100 border border-red-300">
-                            Inactiv
+                            Privat
                           </Badge>
                         )}
                       </TableCell>
