@@ -289,7 +289,7 @@ export function Sync999Listings() {
                   <TableHead>Titlu</TableHead>
                   <TableHead className="hidden md:table-cell">ID 999</TableHead>
                   <TableHead>Preț</TableHead>
-                  <TableHead>Afișare 999</TableHead>
+                  <TableHead>Vizibilitate 999</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Acțiuni</TableHead>
                 </TableRow>
