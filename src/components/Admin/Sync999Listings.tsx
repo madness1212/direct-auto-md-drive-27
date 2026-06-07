@@ -49,6 +49,7 @@ export function Sync999Listings() {
   const [loading, setLoading] = useState(false);
   const [adverts, setAdverts] = useState<Advert999[]>([]);
   const [filter, setFilter] = useState<'all' | 'new' | 'imported'>('all');
+  const [visibility, setVisibility] = useState<'all' | 'public' | 'private'>('public');
   const [search, setSearch] = useState('');
   const [actingId, setActingId] = useState<string | null>(null);
   const [detail, setDetail] = useState<AdvertDetail | null>(null);
