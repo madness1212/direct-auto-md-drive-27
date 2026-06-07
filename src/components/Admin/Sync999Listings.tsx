@@ -211,13 +211,45 @@ export function Sync999Listings() {
                 className="pl-10"
               />
             </div>
+            <Tabs value={visibility} onValueChange={(v) => setVisibility(v as any)}>
+              <TabsList>
+                <TabsTrigger value="public">Public ({counts.public})</TabsTrigger>
+                <TabsTrigger value="private">Privat ({counts.private})</TabsTrigger>
+                <TabsTrigger value="all">Toate ({counts.all})</TabsTrigger>
+              </TabsList>
+            </Tabs>
             <Tabs value={filter} onValueChange={(v) => setFilter(v as any)}>
               <TabsList>
-                <TabsTrigger value="all">Toate ({counts.all})</TabsTrigger>
+                <TabsTrigger value="all">Toate</TabsTrigger>
                 <TabsTrigger value="new">Noi ({counts.new})</TabsTrigger>
                 <TabsTrigger value="imported">Importate ({counts.imported})</TabsTrigger>
               </TabsList>
             </Tabs>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                const next = new Set(selected);
+                filtered.filter((a) => a.is_active_999).forEach((a) => next.add(a.id_999));
+                setSelected(next);
+              }}
+            >
+              Selectează toate publice ({filtered.filter((a) => a.is_active_999).length})
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                const next = new Set(selected);
+                filtered.filter((a) => a.is_active_999 && !a.imported).forEach((a) => next.add(a.id_999));
+                setSelected(next);
+              }}
+            >
+              Selectează publice neimportate ({filtered.filter((a) => a.is_active_999 && !a.imported).length})
+            </Button>
           </div>
 
           {selected.size > 0 && (
