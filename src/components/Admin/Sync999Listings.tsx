@@ -338,10 +338,10 @@ export function Sync999Listings() {
                       </TableCell>
                       <TableCell>
                         {a.is_active_999 ? (
-                          <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Activ</Badge>
+                          <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Public</Badge>
                         ) : (
                           <Badge className="bg-red-100 text-red-800 hover:bg-red-100 border border-red-300">
-                            Inactiv
+                            Privat
                           </Badge>
                         )}
                       </TableCell>
