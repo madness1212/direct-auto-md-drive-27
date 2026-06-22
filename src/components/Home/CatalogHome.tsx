@@ -58,7 +58,15 @@ const CatalogHome = () => {
   const [availableModels, setAvailableModels] = useState<string[]>([]);
   const [availableFuelTypes, setAvailableFuelTypes] = useState<string[]>([]);
   const [availableBodyTypes, setAvailableBodyTypes] = useState<string[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(() => {
+    if (typeof window === 'undefined') return 1;
+    const saved = sessionStorage.getItem('catalogHome:page');
+    return saved ? Math.max(1, parseInt(saved, 10) || 1) : 1;
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem('catalogHome:page', String(currentPage));
+  }, [currentPage]);
   const [sortBy, setSortBy] = useState("newest");
   const [hasComingSoonCars, setHasComingSoonCars] = useState(false);
 
@@ -122,14 +130,48 @@ const CatalogHome = () => {
         
         checkComingSoonCars();
         
-        // Extract unique values for filters
-        const uniqueBrands = [t('common.all'), ...new Set(transformedCars.map(car => car.brand))];
+        // Helpers
+        const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+        const dedupeCaseInsensitive = (values: string[]) => {
+          const map = new Map<string, string>();
+          values.forEach((v) => {
+            if (!v) return;
+            const trimmed = v.trim();
+            if (!trimmed) return;
+            const norm = capitalize(trimmed);
+            const key = norm.toLowerCase();
+            if (!map.has(key)) map.set(key, norm);
+          });
+          return [...map.values()].sort((a, b) => a.localeCompare(b));
+        };
+
+        // Brands: remove "(copie)" variants, sort alphabetically
+        const cleanBrands = [
+          ...new Set(
+            transformedCars
+              .map((car) => car.brand)
+              .filter((b): b is string => !!b && !/\(?\s*copie\s*\)?/i.test(b))
+          ),
+        ].sort((a, b) => a.localeCompare(b));
+        const uniqueBrands = [t('common.all'), ...cleanBrands];
         setAvailableBrands(uniqueBrands);
-        
-        const uniqueFuelTypes = [t('common.all'), ...new Set(transformedCars.map(car => car.fuel).filter(Boolean))];
+
+        // Fuel types: dedupe case-insensitively, capitalize first letter
+        const uniqueFuelTypes = [
+          t('common.all'),
+          ...dedupeCaseInsensitive(transformedCars.map((car) => car.fuel)),
+        ];
         setAvailableFuelTypes(uniqueFuelTypes);
-        
-        const uniqueBodyTypes = [t('common.all'), ...new Set(transformedCars.map(car => car.bodyType).filter(Boolean))];
+
+        // Body types: capitalize, remove "N/A"
+        const uniqueBodyTypes = [
+          t('common.all'),
+          ...dedupeCaseInsensitive(
+            transformedCars
+              .map((car) => car.bodyType)
+              .filter((b) => b && b.toLowerCase().replace(/[^a-z]/g, '') !== 'na')
+          ),
+        ];
         if (!uniqueBodyTypes.includes('Universal')) {
           uniqueBodyTypes.splice(1, 0, 'Universal');
         }
