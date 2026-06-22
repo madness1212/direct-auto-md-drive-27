@@ -280,6 +280,126 @@ const Catalog = () => {
     return `${cleanString(brand)}-${cleanString(model)}-${year}-${id}`;
   };
 
+  const renderPagination = () => {
+    if (totalPages <= 1) return null;
+
+    const pages = [];
+    const maxVisiblePages = 5;
+    
+    let startPage = Math.max(1, safePage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage < maxVisiblePages - 1) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    if (safePage > 1) {
+      pages.push(
+        <Button
+          key="prev"
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setCurrentPage(safePage - 1);
+            resetScrollToTop();
+          }}
+          className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </Button>
+      );
+    }
+
+    if (startPage > 1) {
+      pages.push(
+        <Button
+          key={1}
+          variant={safePage === 1 ? "default" : "outline"}
+          size="sm"
+          onClick={() => {
+            setCurrentPage(1);
+            resetScrollToTop();
+          }}
+          className={safePage === 1 
+            ? "bg-auto-green text-white" 
+            : "border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
+          }
+        >
+          1
+        </Button>
+      );
+      if (startPage > 2) {
+        pages.push(<span key="dots1" className="px-2">...</span>);
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <Button
+          key={i}
+          variant={safePage === i ? "default" : "outline"}
+          size="sm"
+          onClick={() => {
+            setCurrentPage(i);
+            resetScrollToTop();
+          }}
+          className={safePage === i 
+            ? "bg-auto-green text-white" 
+            : "border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
+          }
+        >
+          {i}
+        </Button>
+      );
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pages.push(<span key="dots2" className="px-2">...</span>);
+      }
+      pages.push(
+        <Button
+          key={totalPages}
+          variant={safePage === totalPages ? "default" : "outline"}
+          size="sm"
+          onClick={() => {
+            setCurrentPage(totalPages);
+            resetScrollToTop();
+          }}
+          className={safePage === totalPages 
+            ? "bg-auto-green text-white" 
+            : "border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
+          }
+        >
+          {totalPages}
+        </Button>
+      );
+    }
+
+    if (safePage < totalPages) {
+      pages.push(
+        <Button
+          key="next"
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setCurrentPage(safePage + 1);
+            resetScrollToTop();
+          }}
+          className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+      );
+    }
+
+    return (
+      <div className="flex justify-center items-center space-x-2 mt-8">
+        {pages}
+      </div>
+    );
+  };
+
   return (
     <Layout>
       <div className="min-h-screen bg-auto-gray">
