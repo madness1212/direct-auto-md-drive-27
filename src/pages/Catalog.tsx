@@ -38,7 +38,9 @@ import {
   Phone,
   Mail,
   Car,
-  X
+  X,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 
 import Layout from "@/components/Layout/Layout";
