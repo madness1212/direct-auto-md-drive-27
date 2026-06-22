@@ -119,6 +119,12 @@ const Catalog = () => {
         
         // Helpers
         const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+        const normalizeDiacritics = (s: string) =>
+          s
+            .replace(/[ăâ]/gi, 'a')
+            .replace(/[î]/gi, 'i')
+            .replace(/[șş]/gi, 's')
+            .replace(/[țţ]/gi, 't');
         const dedupeCaseInsensitive = (values: string[]) => {
           const map = new Map<string, string>();
           values.forEach((v) => {
@@ -126,7 +132,7 @@ const Catalog = () => {
             const trimmed = v.trim();
             if (!trimmed) return;
             const norm = capitalize(trimmed);
-            const key = norm.toLowerCase();
+            const key = normalizeDiacritics(norm).toLowerCase();
             if (!map.has(key)) map.set(key, norm);
           });
           return [...map.values()].sort((a, b) => a.localeCompare(b));
