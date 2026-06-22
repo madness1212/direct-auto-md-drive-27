@@ -65,6 +65,12 @@ const Catalog = () => {
   const [availableFuelTypes, setAvailableFuelTypes] = useState<string[]>([]);
   const [availableBodyTypes, setAvailableBodyTypes] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("newest");
+  const [currentPage, setCurrentPage] = useState(() => {
+    if (typeof window === 'undefined') return 1;
+    const saved = sessionStorage.getItem('catalog:page');
+    return saved ? Math.max(1, parseInt(saved, 10) || 1) : 1;
+  });
+  const carsPerPage = 12;
 
   const transmissionTypes = [t('common.all'), "Automat", "Manual"];
   
