@@ -242,6 +242,7 @@ const Catalog = () => {
     setSelectedBodyType("");
     setPriceRange([0, 100000]);
     setMileageRange([0, 400000]);
+    setCurrentPage(1);
   };
 
   const handleFiltersApply = () => {
