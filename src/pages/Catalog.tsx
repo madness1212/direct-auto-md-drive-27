@@ -234,6 +234,23 @@ const Catalog = () => {
     }
   });
 
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedBrand, selectedModel, selectedYear, selectedFuel, selectedTransmission, selectedBodyType, sortBy]);
+
+  // Save current page to sessionStorage
+  useEffect(() => {
+    sessionStorage.setItem('catalog:page', String(currentPage));
+  }, [currentPage]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredCars.length / carsPerPage);
+  const safePage = Math.min(currentPage, Math.max(1, totalPages));
+  const startIndex = (safePage - 1) * carsPerPage;
+  const endIndex = startIndex + carsPerPage;
+  const currentCars = filteredCars.slice(startIndex, endIndex);
+
   const clearFilters = () => {
     setSelectedBrand("");
     setSelectedModel("");
