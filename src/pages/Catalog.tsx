@@ -46,6 +46,7 @@ import {
 
 import Layout from "@/components/Layout/Layout";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { normalizeDiacritics } from "@/lib/utils";
 
 
 const Catalog = () => {
