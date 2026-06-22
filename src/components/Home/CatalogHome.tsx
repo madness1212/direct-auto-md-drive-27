@@ -140,7 +140,7 @@ const CatalogHome = () => {
             const trimmed = v.trim();
             if (!trimmed) return;
             const norm = capitalize(trimmed);
-            const key = norm.toLowerCase();
+            const key = normalizeDiacritics(norm).toLowerCase();
             if (!map.has(key)) map.set(key, norm);
           });
           return [...map.values()].sort((a, b) => a.localeCompare(b));
