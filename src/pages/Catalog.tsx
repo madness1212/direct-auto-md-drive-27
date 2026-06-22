@@ -762,7 +762,7 @@ const Catalog = () => {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-                  {filteredCars.map((car) => (
+                  {currentCars.map((car) => (
                    <Card key={car.id} className="group hover:shadow-xl transition-all duration-300 bg-background border-0 shadow-lg">
                      <CardContent className="p-0">
                        {/* Image Container */}
