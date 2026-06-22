@@ -58,7 +58,15 @@ const CatalogHome = () => {
   const [availableModels, setAvailableModels] = useState<string[]>([]);
   const [availableFuelTypes, setAvailableFuelTypes] = useState<string[]>([]);
   const [availableBodyTypes, setAvailableBodyTypes] = useState<string[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(() => {
+    if (typeof window === 'undefined') return 1;
+    const saved = sessionStorage.getItem('catalogHome:page');
+    return saved ? Math.max(1, parseInt(saved, 10) || 1) : 1;
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem('catalogHome:page', String(currentPage));
+  }, [currentPage]);
   const [sortBy, setSortBy] = useState("newest");
   const [hasComingSoonCars, setHasComingSoonCars] = useState(false);
 
