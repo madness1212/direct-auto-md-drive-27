@@ -208,7 +208,7 @@ const Catalog = () => {
     const matchesBrand = !selectedBrand || selectedBrand === t('common.all') || car.brand === selectedBrand;
     const matchesModel = !selectedModel || selectedModel === t('common.all') || car.model === selectedModel;
     const matchesYear = !selectedYear || selectedYear === t('common.all') || car.year.toString() === selectedYear;
-    const matchesFuel = !selectedFuel || selectedFuel === t('common.all') || car.fuel.toLowerCase() === selectedFuel.toLowerCase();
+    const matchesFuel = !selectedFuel || selectedFuel === t('common.all') || normalizeDiacritics(car.fuel).toLowerCase() === normalizeDiacritics(selectedFuel).toLowerCase();
     const matchesTransmission = !selectedTransmission || selectedTransmission === t('common.all') || 
       car.transmission.toLowerCase().includes(selectedTransmission.toLowerCase()) ||
       (selectedTransmission.toLowerCase() === 'automat' && car.transmission.toLowerCase().includes('automat')) ||
