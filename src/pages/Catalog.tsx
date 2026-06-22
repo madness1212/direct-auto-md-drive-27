@@ -108,18 +108,50 @@ const Catalog = () => {
         
         setCars(transformedCars);
         
-        // Extract unique brands and models from actual data
-        const uniqueBrands = [t('common.all'), ...new Set(transformedCars.map(car => car.brand))];
+        // Helpers
+        const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+        const dedupeCaseInsensitive = (values: string[]) => {
+          const map = new Map<string, string>();
+          values.forEach((v) => {
+            if (!v) return;
+            const trimmed = v.trim();
+            if (!trimmed) return;
+            const norm = capitalize(trimmed);
+            const key = norm.toLowerCase();
+            if (!map.has(key)) map.set(key, norm);
+          });
+          return [...map.values()].sort((a, b) => a.localeCompare(b));
+        };
+
+        // Brands: remove "(copie)" duplicates, sort alphabetically
+        const cleanBrands = [
+          ...new Set(
+            transformedCars
+              .map((car) => car.brand)
+              .filter((b): b is string => !!b && !/\(?\s*copie\s*\)?/i.test(b))
+          ),
+        ].sort((a, b) => a.localeCompare(b));
+        const uniqueBrands = [t('common.all'), ...cleanBrands];
         setAvailableBrands(uniqueBrands);
-        
-        // Extract unique fuel types from actual data
-        const uniqueFuelTypes = [t('common.all'), ...new Set(transformedCars.map(car => car.fuel).filter(Boolean))];
+
+        // Fuel types: dedupe case-insensitively
+        const uniqueFuelTypes = [
+          t('common.all'),
+          ...dedupeCaseInsensitive(transformedCars.map((car) => car.fuel)),
+        ];
         setAvailableFuelTypes(uniqueFuelTypes);
-        
-        // Extract unique body types from actual data and add Universal
-        const uniqueBodyTypes = [t('common.all'), ...new Set(transformedCars.map(car => car.bodyType).filter(Boolean))];
+
+        // Body types: capitalize, remove "N/A"
+        const uniqueBodyTypes = [
+          t('common.all'),
+          ...dedupeCaseInsensitive(
+            transformedCars
+              .map((car) => car.bodyType)
+              .filter((b) => b && b.toLowerCase().replace(/[^a-z]/g, '') !== 'na')
+          ),
+        ];
         if (!uniqueBodyTypes.includes('Universal')) {
-          uniqueBodyTypes.splice(1, 0, 'Universal'); // Add Universal after "All"
+          uniqueBodyTypes.splice(1, 0, 'Universal');
         }
         setAvailableBodyTypes(uniqueBodyTypes);
         
