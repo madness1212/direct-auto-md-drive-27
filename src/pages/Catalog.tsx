@@ -860,14 +860,8 @@ const Catalog = () => {
                 </div>
               )}
 
-              {/* Load More - doar dacă avem rezultate */}
-              {!loading && filteredCars.length > 0 && (
-                <div className="text-center mt-12">
-                  <Button size="lg" variant="outline" className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white px-8">
-                    Încarcă Mai Multe Automobile
-                  </Button>
-                </div>
-              )}
+              {/* Pagination */}
+              {!loading && filteredCars.length > 0 && renderPagination()}
             </div>
           </div>
         </div>
