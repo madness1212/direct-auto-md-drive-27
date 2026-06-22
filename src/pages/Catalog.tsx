@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { resetScrollToTop } from "@/utils/scrollUtils";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,11 +39,14 @@ import {
   Phone,
   Mail,
   Car,
-  X
+  X,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 
 import Layout from "@/components/Layout/Layout";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { normalizeDiacritics } from "@/lib/utils";
 
 
 const Catalog = () => {
@@ -65,6 +69,12 @@ const Catalog = () => {
   const [availableFuelTypes, setAvailableFuelTypes] = useState<string[]>([]);
   const [availableBodyTypes, setAvailableBodyTypes] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState("newest");
+  const [currentPage, setCurrentPage] = useState(() => {
+    if (typeof window === 'undefined') return 1;
+    const saved = sessionStorage.getItem('catalog:page');
+    return saved ? Math.max(1, parseInt(saved, 10) || 1) : 1;
+  });
+  const carsPerPage = 12;
 
   const transmissionTypes = [t('common.all'), "Automat", "Manual"];
   
@@ -110,6 +120,12 @@ const Catalog = () => {
         
         // Helpers
         const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+        const normalizeDiacritics = (s: string) =>
+          s
+            .replace(/[ăâ]/gi, 'a')
+            .replace(/[î]/gi, 'i')
+            .replace(/[șş]/gi, 's')
+            .replace(/[țţ]/gi, 't');
         const dedupeCaseInsensitive = (values: string[]) => {
           const map = new Map<string, string>();
           values.forEach((v) => {
@@ -117,7 +133,7 @@ const Catalog = () => {
             const trimmed = v.trim();
             if (!trimmed) return;
             const norm = capitalize(trimmed);
-            const key = norm.toLowerCase();
+            const key = normalizeDiacritics(norm).toLowerCase();
             if (!map.has(key)) map.set(key, norm);
           });
           return [...map.values()].sort((a, b) => a.localeCompare(b));
@@ -192,7 +208,7 @@ const Catalog = () => {
     const matchesBrand = !selectedBrand || selectedBrand === t('common.all') || car.brand === selectedBrand;
     const matchesModel = !selectedModel || selectedModel === t('common.all') || car.model === selectedModel;
     const matchesYear = !selectedYear || selectedYear === t('common.all') || car.year.toString() === selectedYear;
-    const matchesFuel = !selectedFuel || selectedFuel === t('common.all') || car.fuel.toLowerCase() === selectedFuel.toLowerCase();
+    const matchesFuel = !selectedFuel || selectedFuel === t('common.all') || normalizeDiacritics(car.fuel).toLowerCase() === normalizeDiacritics(selectedFuel).toLowerCase();
     const matchesTransmission = !selectedTransmission || selectedTransmission === t('common.all') || 
       car.transmission.toLowerCase().includes(selectedTransmission.toLowerCase()) ||
       (selectedTransmission.toLowerCase() === 'automat' && car.transmission.toLowerCase().includes('automat')) ||
@@ -218,6 +234,23 @@ const Catalog = () => {
     }
   });
 
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedBrand, selectedModel, selectedYear, selectedFuel, selectedTransmission, selectedBodyType, sortBy]);
+
+  // Save current page to sessionStorage
+  useEffect(() => {
+    sessionStorage.setItem('catalog:page', String(currentPage));
+  }, [currentPage]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredCars.length / carsPerPage);
+  const safePage = Math.min(currentPage, Math.max(1, totalPages));
+  const startIndex = (safePage - 1) * carsPerPage;
+  const endIndex = startIndex + carsPerPage;
+  const currentCars = filteredCars.slice(startIndex, endIndex);
+
   const clearFilters = () => {
     setSelectedBrand("");
     setSelectedModel("");
@@ -227,6 +260,7 @@ const Catalog = () => {
     setSelectedBodyType("");
     setPriceRange([0, 100000]);
     setMileageRange([0, 400000]);
+    setCurrentPage(1);
   };
 
   const handleFiltersApply = () => {
@@ -244,6 +278,126 @@ const Catalog = () => {
     
     // Păstrează ID-ul la sfârșit, separat de restul informațiilor
     return `${cleanString(brand)}-${cleanString(model)}-${year}-${id}`;
+  };
+
+  const renderPagination = () => {
+    if (totalPages <= 1) return null;
+
+    const pages = [];
+    const maxVisiblePages = 5;
+    
+    let startPage = Math.max(1, safePage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage < maxVisiblePages - 1) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    if (safePage > 1) {
+      pages.push(
+        <Button
+          key="prev"
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setCurrentPage(safePage - 1);
+            resetScrollToTop();
+          }}
+          className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </Button>
+      );
+    }
+
+    if (startPage > 1) {
+      pages.push(
+        <Button
+          key={1}
+          variant={safePage === 1 ? "default" : "outline"}
+          size="sm"
+          onClick={() => {
+            setCurrentPage(1);
+            resetScrollToTop();
+          }}
+          className={safePage === 1 
+            ? "bg-auto-green text-white" 
+            : "border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
+          }
+        >
+          1
+        </Button>
+      );
+      if (startPage > 2) {
+        pages.push(<span key="dots1" className="px-2">...</span>);
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <Button
+          key={i}
+          variant={safePage === i ? "default" : "outline"}
+          size="sm"
+          onClick={() => {
+            setCurrentPage(i);
+            resetScrollToTop();
+          }}
+          className={safePage === i 
+            ? "bg-auto-green text-white" 
+            : "border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
+          }
+        >
+          {i}
+        </Button>
+      );
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pages.push(<span key="dots2" className="px-2">...</span>);
+      }
+      pages.push(
+        <Button
+          key={totalPages}
+          variant={safePage === totalPages ? "default" : "outline"}
+          size="sm"
+          onClick={() => {
+            setCurrentPage(totalPages);
+            resetScrollToTop();
+          }}
+          className={safePage === totalPages 
+            ? "bg-auto-green text-white" 
+            : "border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
+          }
+        >
+          {totalPages}
+        </Button>
+      );
+    }
+
+    if (safePage < totalPages) {
+      pages.push(
+        <Button
+          key="next"
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setCurrentPage(safePage + 1);
+            resetScrollToTop();
+          }}
+          className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+      );
+    }
+
+    return (
+      <div className="flex justify-center items-center space-x-2 mt-8">
+        {pages}
+      </div>
+    );
   };
 
   return (
@@ -608,7 +762,7 @@ const Catalog = () => {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-                  {filteredCars.map((car) => (
+                  {currentCars.map((car) => (
                    <Card key={car.id} className="group hover:shadow-xl transition-all duration-300 bg-background border-0 shadow-lg">
                      <CardContent className="p-0">
                        {/* Image Container */}
@@ -706,14 +860,8 @@ const Catalog = () => {
                 </div>
               )}
 
-              {/* Load More - doar dacă avem rezultate */}
-              {!loading && filteredCars.length > 0 && (
-                <div className="text-center mt-12">
-                  <Button size="lg" variant="outline" className="border-auto-green text-auto-green hover:bg-auto-green hover:text-white px-8">
-                    Încarcă Mai Multe Automobile
-                  </Button>
-                </div>
-              )}
+              {/* Pagination */}
+              {!loading && filteredCars.length > 0 && renderPagination()}
             </div>
           </div>
         </div>

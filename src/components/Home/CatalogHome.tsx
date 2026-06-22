@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { resetScrollToTop } from "@/utils/scrollUtils";
+import { normalizeDiacritics } from "@/lib/utils";
 
 const CatalogHome = () => {
   const { t } = useLanguage();
@@ -139,7 +140,7 @@ const CatalogHome = () => {
             const trimmed = v.trim();
             if (!trimmed) return;
             const norm = capitalize(trimmed);
-            const key = norm.toLowerCase();
+            const key = normalizeDiacritics(norm).toLowerCase();
             if (!map.has(key)) map.set(key, norm);
           });
           return [...map.values()].sort((a, b) => a.localeCompare(b));
@@ -212,7 +213,7 @@ const CatalogHome = () => {
     const matchesBrand = !selectedBrand || selectedBrand === t('common.all') || car.brand === selectedBrand;
     const matchesModel = !selectedModel || selectedModel === t('common.all') || car.model === selectedModel;
     const matchesYear = !selectedYear || selectedYear === t('common.all') || car.year.toString() === selectedYear;
-    const matchesFuel = !selectedFuel || selectedFuel === t('common.all') || car.fuel.toLowerCase() === selectedFuel.toLowerCase();
+    const matchesFuel = !selectedFuel || selectedFuel === t('common.all') || normalizeDiacritics(car.fuel).toLowerCase() === normalizeDiacritics(selectedFuel).toLowerCase();
     const matchesTransmission = !selectedTransmission || selectedTransmission === t('common.all') || 
       car.transmission.toLowerCase().includes(selectedTransmission.toLowerCase()) ||
       (selectedTransmission.toLowerCase() === 'automat' && car.transmission.toLowerCase().includes('automat')) ||
